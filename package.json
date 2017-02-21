@@ -1,0 +1,49 @@
+{
+  "name": "nikita-arch",
+  "version": "0.0.1",
+  "description": "Install a development computer based on Arch Linux.",
+  "homepage": "https://github.com/adaltas/node-nikita-arch",
+  "bugs": "https://github.com/wdavidw/node-nikita-arch/issues",
+  "author": "David Worms <david@adaltas.com>",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/adaltas/node-nikita-arch.git"
+  },
+  "homepage": "https://github.com/adaltas/node-nikita-arch",
+  "license": "BSD-3-Clause",
+  "keywords": [
+    "deployment",
+    "os"
+  ],
+  "contributors": [
+    {
+      "name": "Cesar Berezowski",
+      "email": "cesar@adaltas.com"
+    },
+    {
+      "name": "Younès Yassine",
+      "email": "younes@adaltas.com"
+    },
+    {
+      "name": "Pierre Sauvage",
+      "email": "pierre@adaltas.com"
+    },
+    {
+      "name": "Joris Rummens",
+      "email": "joris@adaltas.com"
+    }
+  ],
+  "dependencies": {
+    "coffee-script": "~1.11.1",
+    "mecano": "~0.5.5"
+  },
+  "devDependencies": {
+  },
+  "main": "./run",
+  "bin": {
+    "nikita-arch": "npm start"
+  },
+  "scripts": {
+    "start": "coffee run.coffee"
+  }
+}
