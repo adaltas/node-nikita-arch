@@ -1,6 +1,9 @@
 
 module.exports = header: "System Install", handler: (options) ->
   options.locale ?= 'en_US.UTF-8'
+  for username, user of options.users
+    user.name ?= username
+    user.home ?= "/home/#{username}"
   # `umount --recursive /mnt` to exit and enter with `arch-chroot /mnt /bin/bash`
   @system.execute
     cmd: """
@@ -93,58 +96,38 @@ module.exports = header: "System Install", handler: (options) ->
     [ -f /boot/loader/entries/arch.conf ] && exit 3
     # Get UUID of /boot partition
     uuid=`blkid -s UUID -o value /dev/nvme0n1p2`
-    echo >/boot/loader/entries/arch.conf <<CONF
+    cat >/boot/loader/entries/arch.conf <<CONF
     title Archy ## Replace the name as you want
     linux /vmlinuz-linux
     initrd /intel-ucode.img
     initrd /initramfs-linux.img
-    options cryptdevice=UUID=$uid:volume root=/dev/mapper/volume-root resume=/dev/mapper/volume-swap quiet rw pcie_port_pm=off rcutree.rcu_idle_gp_delay=1 intel_idle.max_cstate=1 pcie_port_pm=off
+    options cryptdevice=UUID=$uuid:volume root=/dev/mapper/volume-root resume=/dev/mapper/volume-swap quiet rw pcie_port_pm=off rcutree.rcu_idle_gp_delay=1 intel_idle.max_cstate=1 i915.preliminary_hw_support=1
     CONF
     """
     code_skipped: 3
   for username, user of options.users
-    useradd = 'useradd'
-    useradd += " -d #{user.home}" if user.home
-    useradd += " -s #{user.shell}" if user.shell
-    useradd += " -c #{string.escapeshellarg user.comment}" if user.comment?
-    useradd += " -g #{user.gid}" if user.gid
-    useradd += " -G #{user.groups.join ','}" if user.groups
-    useradd += " -u #{user.uid}" if user.uid
-    useradd += " #{username}"
-    @system.execute
-      header: 'User Entry'
+    @system.user user,
+      no_home_ownership: true
       arch_chroot: true
       chroot_dir: '/mnt'
-      cmd: """
-      id "#{username}" >/dev/null && exit 3
-      #{useradd}
-      """
-      code_skipped: 3 # Status not based on full diff
-    @system.execute
-      header: 'User Password'
-      arch_chroot: true
-      chroot_dir: '/mnt'
-      cmd: """
-      id "#{username}" >/dev/null || #{useradd}
-      digest=`openssl passwd -1 #{user.password}`
-      echo "#{username}:$digest" | chpasswd -e
-      """
-      shy: true # Status not implemented
     @system.execute
       header: 'User Sudoer'
       arch_chroot: true
       chroot_dir: '/mnt'
       cmd: """
-      sudoer=#{user.sudoer or ''}
-      [ ! -n $sudoer ] || ! cat /etc/sudoers | grep "#{username}" exit 3
+      sudoer=#{if user.sudoer then '1' else ''}
+      ([ -z $sudoer ] || cat /etc/sudoers | grep "#{username}") && exit 3
       echo "#{username} ALL=(ALL) ALL" >> /etc/sudoers
       """
       code_skipped: 3
   @file.types.pacman_conf
     target: '/mnt/etc/pacman.conf'
-    content: 'archlinuxfr':
-      'SigLevel': 'Never'
-      'Server': 'http://repo.archlinux.fr/$arch'
+    content:
+      'archlinuxfr':
+        'SigLevel': 'Never'
+        'Server': 'http://repo.archlinux.fr/$arch'
+      'multilib':
+        'Include': '/etc/pacman.d/mirrorlist'
     merge: true
     backup: true
   @system.execute
@@ -163,12 +146,13 @@ module.exports = header: "System Install", handler: (options) ->
     name: 'yaourt'
   (
     @service.install
-      header: "Packages Graphic"
+      header: "Packages #{pck}"
       arch_chroot: true
       chroot_dir: '/mnt'
     , pck
   ) for pck in [ # , "nvme-cli"
-    "nvidia", "xf86-video-intel", "intel-ucode", "bumblebee", "bbswitch"
+    "nvidia", "xf86-video-intel", "intel-ucode", "bumblebee", "bbswitch",
+    "primus", "lib32-primus", "lib32-virtualgl", "lib32-nvidia-utils", "lib32-mesa-libgl"
   ]
   @system.arch_chroot
     header: 'mkinitcpio'
@@ -187,7 +171,7 @@ module.exports = header: "System Install", handler: (options) ->
   ) for pck in [ # , "nvme-cli"
     "acpi", "atom", "gnome", "gdm", "gnome-extra", "system-config-printer", "networkmanager", 
     "rhythmbox", "xorg-server", "xorg-xinit", "xorg-utils", "xorg-server-utils", "xorg-twm", 
-    "xorg-xclock", "xterm", "firefox", "thunderbird"
+    "xorg-xclock", "xterm" #, "firefox", "thunderbird"
   ]
   # @file
   #   header: 'xinit'
