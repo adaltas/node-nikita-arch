@@ -1,6 +1,6 @@
 
 module.exports = header: "System Information", handler: (options) ->
-  @execute """
+  @system.execute """
   hostname
   ip addr show
   """, (err, status, stdout) ->

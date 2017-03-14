@@ -1,6 +1,6 @@
 
 module.exports = header: "Partitions Creation", handler: (options) ->
-  @execute """
+  @system.execute """
   # to create the partitions programatically (rather than manually)
   # we're going to simulate the manual input to fdisk
   # The sed script strips off all the comments so that we can 

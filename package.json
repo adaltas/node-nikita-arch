@@ -9,7 +9,6 @@
     "type": "git",
     "url": "git://github.com/adaltas/node-nikita-arch.git"
   },
-  "homepage": "https://github.com/adaltas/node-nikita-arch",
   "license": "BSD-3-Clause",
   "keywords": [
     "deployment",
@@ -35,10 +34,10 @@
   ],
   "dependencies": {
     "coffee-script": "~1.11.1",
-    "mecano": "~0.5.5"
+    "nikita": "~0.6.1",
+    "ssh2-fs": "^0.2.3"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "main": "./run",
   "bin": {
     "nikita-arch": "npm start"
