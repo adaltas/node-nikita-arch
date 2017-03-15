@@ -26,22 +26,32 @@ module.exports = header: "System Install", handler: (options) ->
     genfstab -U -p /mnt > /mnt/etc/fstab
     """
     shy: true # Status not handled for now
-  @system.execute
-    header: 'Locale'
-    arch_chroot: true
-    chroot_dir: '/mnt'
-    cmd: """
-    cat /etc/locale.conf | grep 'LANG=#{options.locale}' && exit 3
-    if ! cat /etc/locale.gen | grep "#{options.locale}"; then exit 1; fi
-    locale-gen
-    echo 'LANG=#{options.locale}' >> /etc/locale.conf
-    exit
-    """
-    code_skipped: 3
+  @file.types.locale_gen
+    header: 'Locale gen'
+    rootdir: '/mnt'
+    locales: options.locales
+    locale: options.locale
+    generate: true
+  @file
+    header: 'Locale conf'
+    target: '/mnt/etc/locale.conf'
+    content: "LANG=#{options.locale}"
+  # @system.execute
+  #   header: 'Locale'
+  #   arch_chroot: true
+  #   rootdir: '/mnt'
+  #   cmd: """
+  #   cat /etc/locale.conf | grep 'LANG=#{options.locale}' && exit 3
+  #   if ! cat /etc/locale.gen | grep "#{options.locale}"; then exit 1; fi
+  #   locale-gen
+  #   echo 'LANG=#{options.locale}' >> /etc/locale.conf
+  #   exit
+  #   """
+  #   code_skipped: 3
   @system.execute
     header: 'Timezone'
     arch_chroot: true
-    chroot_dir: '/mnt'
+    rootdir: '/mnt'
     cmd: """
     [ "$(readlink /etc/localtime)" = "/usr/share/zoneinfo/#{options.timezone}" ] && exit 3
     [ -f /usr/share/zoneinfo/#{options.timezone} ] || exit 1
@@ -70,7 +80,7 @@ module.exports = header: "System Install", handler: (options) ->
   @system.execute
     header: 'mkinitcpio'
     arch_chroot: true
-    chroot_dir: '/mnt'
+    rootdir: '/mnt'
     cmd: """
     [ -f /boot/vmlinuz-linux ] && exit 3
     mkinitcpio -p linux
@@ -81,7 +91,7 @@ module.exports = header: "System Install", handler: (options) ->
   @system.execute
     header: 'Boot loader'
     arch_chroot: true
-    chroot_dir: '/mnt'
+    rootdir: '/mnt'
     cmd: """
     [ -f /boot/loader/loader.conf ] && exit 3
     bootctl install
@@ -91,7 +101,7 @@ module.exports = header: "System Install", handler: (options) ->
   @system.execute
     header: 'Boot arch loader'
     arch_chroot: true
-    chroot_dir: '/mnt'
+    rootdir: '/mnt'
     cmd: """
     [ -f /boot/loader/entries/arch.conf ] && exit 3
     # Get UUID of /boot partition
@@ -109,11 +119,11 @@ module.exports = header: "System Install", handler: (options) ->
     @system.user user,
       no_home_ownership: true
       arch_chroot: true
-      chroot_dir: '/mnt'
+      rootdir: '/mnt'
     @system.execute
       header: 'User Sudoer'
       arch_chroot: true
-      chroot_dir: '/mnt'
+      rootdir: '/mnt'
       cmd: """
       sudoer=#{if user.sudoer then '1' else ''}
       ([ -z $sudoer ] || cat /etc/sudoers | grep "#{username}") && exit 3
@@ -133,7 +143,7 @@ module.exports = header: "System Install", handler: (options) ->
   @system.execute
     header: 'User'
     arch_chroot: true
-    chroot_dir: '/mnt'
+    rootdir: '/mnt'
     cmd: """
     # Update database
     pacman -Syy
@@ -142,13 +152,13 @@ module.exports = header: "System Install", handler: (options) ->
   @service.install
     header: "Package yaourt"
     arch_chroot: true
-    chroot_dir: '/mnt'
+    rootdir: '/mnt'
     name: 'yaourt'
   (
     @service.install
       header: "Packages #{pck}"
       arch_chroot: true
-      chroot_dir: '/mnt'
+      rootdir: '/mnt'
     , pck
   ) for pck in [ # , "nvme-cli"
     "nvidia", "xf86-video-intel", "intel-ucode", "bumblebee", "bbswitch",
@@ -158,7 +168,7 @@ module.exports = header: "System Install", handler: (options) ->
     header: 'mesa'
     if: -> @status -1
     arch_chroot: true
-    chroot_dir: '/mnt'
+    rootdir: '/mnt'
     cmd: """
     pacman -S lib32-mesa lib32-mesa-libg
     """
@@ -167,7 +177,7 @@ module.exports = header: "System Install", handler: (options) ->
     header: 'mkinitcpio'
     if: -> @status -1
     arch_chroot: true
-    chroot_dir: '/mnt'
+    rootdir: '/mnt'
     cmd: """
     mkinitcpio -p linux
     """
@@ -176,7 +186,7 @@ module.exports = header: "System Install", handler: (options) ->
     @service.install
       header: "Package #{pck}"
       arch_chroot: true
-      chroot_dir: '/mnt'
+      rootdir: '/mnt'
     , pck
   ) for pck in [ # , "nvme-cli"
     "acpi", "atom", "gnome", "gdm", "gnome-extra", "system-config-printer", "networkmanager", 
@@ -194,7 +204,7 @@ module.exports = header: "System Install", handler: (options) ->
         eof: true
       @system.arch_chroot
         if: -> @status -1
-        chroot_dir: '/mnt'
+        rootdir: '/mnt'
         cmd: """
         chown #{user.home}/.xinitrc
         chmod 644 #{user.home}/.xinitrc
@@ -209,7 +219,7 @@ module.exports = header: "System Install", handler: (options) ->
     @system.execute
       header: "Bumblebee for #{username}"
       arch_chroot: true
-      chroot_dir: '/mnt'
+      rootdir: '/mnt'
       cmd: """
       id wdavidw | grep \\(bumblebee\\) && exit 3
       gpasswd -a #{username} bumblebee
@@ -218,7 +228,7 @@ module.exports = header: "System Install", handler: (options) ->
   @system.execute
     header: "Video Card"
     arch_chroot: true
-    chroot_dir: '/mnt'
+    rootdir: '/mnt'
     cmd: 'lspci | grep -E "VGA|3D"'
   @file
     target: '/mnt/etc/X11/xorg.conf'
@@ -291,18 +301,22 @@ module.exports = header: "System Install", handler: (options) ->
   @service.startup
     header: 'Startup gdm'
     arch_chroot: true
-    chroot_dir: '/mnt'
+    rootdir: '/mnt'
     name: 'gdm'
   @service.startup
     header: 'Startup NetworkManager'
     arch_chroot: true
-    chroot_dir: '/mnt'
+    rootdir: '/mnt'
     name: 'NetworkManager'
   @service.startup
     header: 'Startup bumblebeed'
     arch_chroot: true
-    chroot_dir: '/mnt'
+    rootdir: '/mnt'
     name: 'bumblebeed'
+  @service
+    name: 'openssh'
+    srv_name: 'sshd'
+    startup: true
 
 ## Dependencies
 

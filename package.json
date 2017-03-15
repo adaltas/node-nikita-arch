@@ -34,8 +34,8 @@
   ],
   "dependencies": {
     "coffee-script": "~1.11.1",
-    "nikita": "~0.6.1",
-    "ssh2-fs": "^0.2.3"
+    "nikita": "git+https://github.com/adaltas/node-nikita.git#master",
+    "ssh2-fs": "~0.2.3"
   },
   "devDependencies": {},
   "main": "./run",
@@ -43,6 +43,7 @@
     "nikita-arch": "npm start"
   },
   "scripts": {
-    "start": "coffee run.coffee"
+    "bootstrap": "coffee run.coffee ./conf/bootstrap",
+    "system": "coffee run.coffee ./conf/system"
   }
 }

@@ -1,0 +1,15 @@
+Entering ssh.open (DEBUG, written by nikita/lib/ssh/open)
+
+# Locale gen
+
+Entering file.types.local_gen (DEBUG, written by nikita/lib/file/types/local_gen)
+
+# Locale conf
+
+Entering file (DEBUG, written by nikita/lib/file)
+Source is "undefined" (DEBUG, written by nikita/lib/file)
+Destination is "/etc/locale.conf" (DEBUG, written by nikita/lib/file)
+Stat target (DEBUG, written by nikita/lib/file)
+Destination is a file (INFO, written by nikita/lib/file)
+Reading target (DEBUG, written by nikita/lib/file)
+Entering ssh.close (DEBUG, written by nikita/lib/ssh/close)
