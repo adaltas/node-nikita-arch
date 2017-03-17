@@ -189,7 +189,7 @@ module.exports = header: "System Install", handler: (options) ->
       rootdir: '/mnt'
     , pck
   ) for pck in [ # , "nvme-cli"
-    "acpi", "atom", "gnome", "gdm", "gnome-extra", "system-config-printer", "networkmanager", 
+    "acpi", "gnome", "gdm", "gnome-extra", "system-config-printer", "networkmanager", 
     "rhythmbox", "xorg-server", "xorg-xinit", "xorg-utils", "xorg-server-utils", "xorg-twm", 
     "xorg-xclock", "xterm" #, "firefox", "thunderbird"
   ]

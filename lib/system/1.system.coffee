@@ -20,4 +20,7 @@ module.exports = (options) ->
     header: 'Locale conf'
     target: '/etc/locale.conf'
     content: "LANG=#{options.locale}"
+  @service.install
+    header: "Package atom"
+    name: 'atom'
   
