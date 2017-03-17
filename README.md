@@ -3,7 +3,7 @@
 
 ## Bootstrap
 
-From the drive containing the Arch installation media 
+From the drive containing the Arch installation media
 
 ```
 # Internet Connection
