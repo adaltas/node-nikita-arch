@@ -36,18 +36,6 @@ module.exports = header: "System Install", handler: (options) ->
     header: 'Locale conf'
     target: '/mnt/etc/locale.conf'
     content: "LANG=#{options.locale}"
-  # @system.execute
-  #   header: 'Locale'
-  #   arch_chroot: true
-  #   rootdir: '/mnt'
-  #   cmd: """
-  #   cat /etc/locale.conf | grep 'LANG=#{options.locale}' && exit 3
-  #   if ! cat /etc/locale.gen | grep "#{options.locale}"; then exit 1; fi
-  #   locale-gen
-  #   echo 'LANG=#{options.locale}' >> /etc/locale.conf
-  #   exit
-  #   """
-  #   code_skipped: 3
   @system.execute
     header: 'Timezone'
     arch_chroot: true
@@ -189,8 +177,8 @@ module.exports = header: "System Install", handler: (options) ->
       rootdir: '/mnt'
     , pck
   ) for pck in [ # , "nvme-cli"
-    "acpi", "gnome", "gdm", "gnome-extra", "system-config-printer", "networkmanager", 
-    "rhythmbox", "xorg-server", "xorg-xinit", "xorg-utils", "xorg-server-utils", "xorg-twm", 
+    "acpi", "gnome", "gdm", "gnome-extra", "system-config-printer", "networkmanager",
+    "rhythmbox", "xorg-server", "xorg-xinit", "xorg-utils", "xorg-server-utils", "xorg-twm",
     "xorg-xclock", "xterm" #, "firefox", "thunderbird"
   ]
   for username, user of options.users
@@ -321,4 +309,3 @@ module.exports = header: "System Install", handler: (options) ->
 ## Dependencies
 
 fs = require 'ssh2-fs'
-    
