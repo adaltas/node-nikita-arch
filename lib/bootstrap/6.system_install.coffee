@@ -99,7 +99,8 @@ module.exports = header: "System Install", handler: (options) ->
     linux /vmlinuz-linux
     initrd /intel-ucode.img
     initrd /initramfs-linux.img
-    options cryptdevice=UUID=$uuid:volume root=/dev/mapper/volume-root resume=/dev/mapper/volume-swap quiet rw pcie_port_pm=off rcutree.rcu_idle_gp_delay=1 intel_idle.max_cstate=1 i915.preliminary_hw_support=1
+    # i915.preliminary_hw_support=1 Remove ACPI error at boot time, no longer required after latest BIOS update (march 2017c)
+    options cryptdevice=UUID=$uuid:volume root=/dev/mapper/volume-root resume=/dev/mapper/volume-swap quiet rw pcie_port_pm=off rcutree.rcu_idle_gp_delay=1 intel_idle.max_cstate=1 acpi_osi=! acpi_osi="Windows 2009" acpi_backlight=native i8042.noloop i8042.nomux i8042.nopnp i8042.reset
     CONF
     """
     code_skipped: 3
@@ -203,6 +204,7 @@ module.exports = header: "System Install", handler: (options) ->
     target: "/mnt/etc/bumblebee/bumblebee.conf"
     match: /^Bridge=.*$/m
     replace: "Bridge=primus"
+    backup: true
   for username, user of options.users
     @system.execute
       header: "Bumblebee for #{username}"
