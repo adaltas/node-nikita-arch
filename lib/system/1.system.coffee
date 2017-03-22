@@ -82,6 +82,9 @@ module.exports = (options) ->
     @service.install
       header: 'Package pantheon-files-plugin-dropbox-bzr'
       name: 'pantheon-files-plugin-dropbox-bzr'
+    @service.install
+      header: 'Package libreoffice-fresh'
+      name: 'libreoffice-fresh'
   @call header: 'Docker', ->
     @service
       header: 'Package docker'
