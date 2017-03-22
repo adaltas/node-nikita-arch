@@ -15,6 +15,8 @@ module.exports = (options) ->
     user.name ?= username
     user.home ?= "/home/#{username}"
     user.aliases ?= {}
+    user.atom_default ?= {}
+    user.atom_config ?= {}
   @system.execute
     cmd: """
     yaourt --noconfirm -Syyu
@@ -71,6 +73,15 @@ module.exports = (options) ->
     @service.install
       header: 'Package gitkraken'
       name: 'gitkraken'
+    @service.install
+      header: 'Package chromium'
+      name: 'chromium'
+    @service.install
+      header: 'Package opera'
+      name: 'opera'
+    @service.install
+      header: 'Package pantheon-files-plugin-dropbox-bzr'
+      name: 'pantheon-files-plugin-dropbox-bzr'
   @call header: 'Docker', ->
     @service
       header: 'Package docker'
@@ -94,49 +105,78 @@ module.exports = (options) ->
   #   @service.install (
   #     header: "Required Package #{name}"
   #     name: name
-  #   ) for name in ['cerbere-bzr', 'gala-bzrA', 'wingpanel-bzr', 'slingshot-launcher-bzr', 'plank-bzr']
+  #   ) for name in ['cerbere-bzr', 'gala-bzr', 'wingpanel-bzr', 'switchboard', 'slingshot-launcher-bzr', 'plank-bzr']
   #   pcks =
-  #     'audience-bzr': false
-  #     'contractor-bzr': false
-  #     'dexter-contacts-bzr': false
-  #     'eidete-bzr': false
+  #     'audience-bzr': false # Video player
+  #     'contractor-bzr': false # Service for sharing data between apps
+  #     'dexter-contacts-bzr': false # Contacts manager (does not build)
+  #     'eidete-bzr': false # Simple screencaster
   #     'elementary-icon-theme-bzr': true
-  #     'elementary-scan-bzr': true
-  #     'elementary-wallpapers-bzr'
-  #     'gtk-theme-elementary-bzr'
-  #     'feedler-bzr'
-  #     'footnote-bzr'
-  #     'geary'
-  #     'indicator-pantheon-session-bzr'
-  #     'lightdm-pantheon-greeter-bzr'
-  #     'maya-calendar-bzr'
-  #     'midori-granite-bzr'
-  #     'noise-player-bzr'
-  #     'pantheon-backgrounds-bzr'
-  #     'pantheon-calculator-bzr'
-  #     'pantheon-default-settings-bzr'
-  #     'pantheon-files-bzr'
-  #     'pantheon-notify-bzr'
-  #     'pantheon-print-bzr'
-  #     'pantheon-terminal-bzr'
-  #     'plank-theme-pantheon-bzr'
-  #     'scratch-text-editor-bzr'
-  #     'snap-photobooth-bzr'
-  #     'switchboard-bzr'
+  #     'elementary-scan-bzr': false
+  #     'elementary-wallpapers-bzr': true
+  #     'gtk-theme-elementary-bzr': true
+  #     'feedler-bzr': false
+  #     'footnote-bzr': false
+  #     'geary': false
+  #     'indicator-pantheon-session-bzr': false
+  #     'lightdm-pantheon-greeter-bzr': false
+  #     'maya-calendar-bzr': false
+  #     'midori-granite-bzr': false
+  #     'noise-player-bzr': false
+  #     'pantheon-backgrounds-bzr': true
+  #     'pantheon-calculator-bzr': false
+  #     'pantheon-default-settings-bzr': true
+  #     'pantheon-files-bzr': true
+  #     'pantheon-notify-bzr': true
+  #     'pantheon-print-bzr': false
+  #     'pantheon-terminal-bzr': true
+  #     'plank-theme-pantheon-bzr': true
+  #     'scratch-text-editor-bzr': true
+  #     'snap-photobooth-bzr': true
+  #     'switchboard-bzr': true
   #   @service.install (
   #     header: "Outils Package #{name}"
   #     name: name
   #   ) for name in Object.keys(pcks).filter (pck) -> pcks[pck]
   #   pcks =
-  #     'ttf-opensansA'
-  #     'ttf-raleway-font-family'
-  #     'ttf-dejavu'
-  #     'ttf-droid'
-  #     'ttf-freefont'
-  #     'ttf-liberation'
+  #     'ttf-opensans': true
+  #     'ttf-raleway-font-family': true
+  #     'ttf-dejavu': true
+  #     'ttf-droid': true
+  #     'ttf-freefont': true
+  #     'ttf-liberation': true
   #   @service.install (
   #     header: "Font Package #{name}"
   #     name: name
   #   ) for name in Object.keys(pcks).filter (pck) -> pcks[pck]
   #   @service.install 'pantheon-session-bzr'
   #   @service.install 'contractor-bzr'
+  @system.npm
+    header: 'Node.js Global Packages'
+    name: ['coffee-script', 'mocha']
+    global: true
+    sudo: true
+  @system.apm
+    header: 'Atom Packages'
+    name: [
+      'stylus', 'sublime-style-column-selection', 'atom-monokai-dark',
+      'atom-typescript', 'chester-atom-syntax', 'color-picker', 'git-plus',
+      'git-time-machine', 'highlight-selected', 'indent-guide-improved',
+      'language-coffee-script', 'language-docker', 'language-jade',
+      'language-jade', 'language-log', 'language-scala', 'linter', 'markdown-toc',
+      'material-syntax', 'minimap', 'minimap-find-and-replace', 'minimap-highlight-selected',
+      'minimap-selection', 'monokai', 'pretty-json', 'project-manager', 'react', 'tail']
+    upgrade: true
+  @call (_, callback) ->
+    for username, user of options.users then do (user) =>
+      season.readFile "#{user.home}/.atom/config.cson", (err, config) =>
+        config = merge {}, user.atom_default, config, user.atom_config
+        @file
+          header: 'Atom Configuration'
+          target: "#{user.home}/.atom/config.cson"
+          content: season.stringify config
+
+## Dependencies
+
+season = require 'season'
+{merge} = require 'nikita/lib/misc'

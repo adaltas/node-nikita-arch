@@ -17,5 +17,46 @@ module.exports =
     users: wdavidw:
       shell: '/bin/zsh'
       aliases: 'll': 'ls -l'
+      atom_default:
+        "*":
+          "core":
+            "disabledPackages": [ "indent-guide-improved" ]
+            "excludeVcsIgnoredPaths": false
+            "ignoreNames": [".hg", ".svn", ".DS_Store", "._*", "Thumbs.db", ".git"]
+            "telemetryConsent": "no"
+          "editor":
+            "scrollPastEnd": true
+          "language-log":
+            "tail": true
+          "minimap":
+            "plugins":
+              "find-and-replace": true
+              "find-and-replaceDecorationsZIndex": 0
+              "highlight-selected": true
+              "highlight-selectedDecorationsZIndex": 0
+              "selection": true
+              "selectionDecorationsZIndex": 0
+          "welcome":
+            "showOnStartup": false
+          "whitespace":
+            "removeTrailingWhitespace": false
+        ".basic.html.text":
+          "editor":
+            "preferredLIneLength": 81
+          "multi-wrap-guid": "column": [81]
+        ".coffee.md":
+          "whitespace":
+            "removeTrailingWhitespace": false
+        ".coffee.source":
+          "editor":
+            "autoIndent": true
+            "autoIndentOnPaste": false
+        ".jade.source":
+          "editor":
+            "autoIndent": true
+            "autoIndentOnPaste": false
+        ".md":
+          "whitespace":
+            "removeTrailingWhitespace": false
   'nikita/lib/ssh/close':
     disabled: true

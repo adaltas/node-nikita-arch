@@ -3,6 +3,7 @@ module.exports = header: "System Install", handler: (options) ->
   options.locale ?= 'en_US.UTF-8'
   for username, user of options.users
     user.name ?= username
+    user.group ?= user.name
     user.home ?= "/home/#{username}"
   # `umount --recursive /mnt` to exit and enter with `arch-chroot /mnt /bin/bash`
   @system.execute
@@ -195,7 +196,7 @@ module.exports = header: "System Install", handler: (options) ->
         if: -> @status -1
         rootdir: '/mnt'
         cmd: """
-        chown #{user.home}/.xinitrc
+        chown #{user.username}:#{user.group} #{user.home}/.xinitrc
         chmod 644 #{user.home}/.xinitrc
         """
         code_skipped: 3
