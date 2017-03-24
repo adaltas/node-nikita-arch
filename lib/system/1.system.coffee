@@ -36,6 +36,10 @@ module.exports = (options) ->
       name: 'openssh'
       srv_name: 'sshd'
     @service.install 'rsync'
+    @service.install 'gnome-session-properties'
+    @system.dconf
+      header: 'Gnome Session Save'
+      properties: '/org/gnome/gnome-session/auto-save-session': 'true'
   for username, user of options.users
     @system.user user, sudo: true
     @service.install
@@ -101,7 +105,7 @@ module.exports = (options) ->
       header: 'Package docker'
       name: 'docker'
       action: 'start'
-      startup: true
+      startup: true 
     @service.install
       header: 'Package docker-compose'
       name: 'docker-compose'

@@ -22,6 +22,7 @@ Install Node.js packages with NPM.
       @system.execute
         cmd: "npm list --outdated --json #{global}"
         code: [0, 1]
+        stdout_log: false
         shy: true
       , (err, _, pkgs) ->
         throw err if err
@@ -36,6 +37,7 @@ Install Node.js packages with NPM.
       @system.execute
         cmd: "npm list --installed --json #{global}"
         code: [0, 1]
+        stdout_log: false
         shy: true
       , (err, _, pkgs) ->
         throw err if err
