@@ -70,6 +70,17 @@ module.exports = (options) ->
     @service.install
       header: 'Package atom'
       name: 'atom'
+    for username, user of options.users
+      @file.cson
+        target: "#{user.home}/.atom/keymap.cson"
+        content:
+          'atom-workspace':
+            "alt-f7": "find-and-replace:select-all"
+            "ctrl-f7": "find-and-replace:find-next-selected"
+            "ctrl-shift-f7": "find-and-replace:find-previous-selected"
+            "f7": "find-and-replace:find-next"
+            "shift-f7": "find-and-replace:find-previous"
+      merge: true
     @service.install
       header: 'Package gitkraken'
       name: 'gitkraken'
