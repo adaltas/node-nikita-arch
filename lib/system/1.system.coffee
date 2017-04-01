@@ -38,6 +38,7 @@ module.exports = (options) ->
       srv_name: 'sshd'
     @service.install 'rsync'
     @service.install 'gnome-session-properties'
+    @service.install 'dconf-editor'
     @system.dconf
       header: 'Gnome Session Save'
       properties: '/org/gnome/gnome-session/auto-save-session': 'true'
