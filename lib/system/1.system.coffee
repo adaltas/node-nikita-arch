@@ -139,6 +139,9 @@ module.exports = (options) ->
     @system.mod 'vboxnetadp'
     @system.mod 'vboxnetflt'
     @system.mod 'vboxpci'
+  @service
+    header: 'Vagrant'
+    name: 'vagrant'
   # @call header: 'Pantheon', ->
   #   # Pantheon is the default desktop environment originally created for the elementary OS distribution. It is written from scratch using Vala and the GTK3 toolkit. With regards to usability and appearance, the desktop has some similarities with GNOME Shell and macOS.
   #   @service.install (
