@@ -114,6 +114,13 @@ module.exports = (options) ->
     @service.install
       header: 'SFTP client filezilla'
       name: 'filezilla'
+  @call header: 'Office', ->
+    @service.install
+      header: 'Package firefox'
+      name: 'firefox'
+    @service.install
+      header: 'Package thunderbird'
+      name: 'thunderbird'
   @call header: 'Docker', ->
     @service
       header: 'Package docker'
