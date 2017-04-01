@@ -111,6 +111,9 @@ module.exports = (options) ->
     @service.install
       header: 'Package libreoffice-fresh'
       name: 'libreoffice-fresh'
+    @service.install
+      header: 'SFTP client filezilla'
+      name: 'filezilla'
   @call header: 'Docker', ->
     @service
       header: 'Package docker'
