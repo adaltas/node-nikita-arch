@@ -11,7 +11,7 @@ module.exports =
     password: 'secret'
   './lib/system/1.system':
     disabled: false
-    no_upgrade: true
+    upgrade: false
     locales: ['fr_FR.UTF-8', 'en_US.UTF-8']
     locale: 'en_US.UTF-8'
     users: wdavidw:

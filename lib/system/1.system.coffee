@@ -21,7 +21,7 @@ module.exports = (options) ->
     cmd: """
     yaourt --noconfirm -Syyu
     """
-    unless: options.no_upgrade
+    if: options.upgrade
   @call header: 'System', ->
     @file.types.locale_gen
       header: 'Locale gen'
