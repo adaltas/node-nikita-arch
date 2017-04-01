@@ -15,6 +15,7 @@ module.exports =
     locales: ['fr_FR.UTF-8', 'en_US.UTF-8']
     locale: 'en_US.UTF-8'
     users: wdavidw:
+      groups: ['bumblebee', 'docker']
       shell: '/bin/zsh'
       aliases: 'll': 'ls -l'
       atom_default:

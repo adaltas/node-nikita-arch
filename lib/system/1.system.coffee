@@ -22,6 +22,7 @@ module.exports = (options) ->
     yaourt --noconfirm -Syyu
     """
     if: options.upgrade
+  @system.user user, sudo: true
   @call header: 'System', ->
     @file.types.locale_gen
       header: 'Locale gen'
