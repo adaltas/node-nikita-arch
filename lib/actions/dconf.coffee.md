@@ -1,7 +1,9 @@
 
 `nikita.system.dconf`
 
-dconf is a low-level configuration system and settings management used by Gnome.
+dconf is a low-level configuration system and settings management used by 
+Gnome. It is a replacemet of gconf, replacing its XML based database with a 
+BLOB based database.
 
 ## Options
 
@@ -22,5 +24,5 @@ require('nikita').system.dconf({
       for key, value of options.properties
         @system.execute """
         dconf read #{key} | grep -x "#{value}" && exit 3
-        dconf write /org/gnome/gnome-session/auto-save-session "#{value}"
+        dconf write #{key} "#{value}"
         """, code_skipped: 3
