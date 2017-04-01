@@ -42,6 +42,15 @@ module.exports = (options) ->
     @system.dconf
       header: 'Gnome Session Save'
       properties: '/org/gnome/gnome-session/auto-save-session': 'true'
+    @system.dconf
+      header: 'Gnome Session LANG'
+      properties: '/org/gnome/desktop/input-sources/sources': '[(\'xkb\', \'us\'), (\'xkb\', \'fr\')]'
+    @system.dconf
+      header: 'Gnome Session Invert Alt/CTL'
+      properties: '/org/gnome/desktop/input-sources/xkb-options': '[\'ctrl:swap_lalt_lctl\']'
+    @system.dconf
+      header: 'Gnome Session TouchPad'
+      properties: '/org/gnome/desktop/peripherals/touchpad/click-method': '\'fingers\''
   for username, user of options.users
     @system.user user, sudo: true
     @service.install
