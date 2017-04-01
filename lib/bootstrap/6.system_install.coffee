@@ -181,7 +181,7 @@ module.exports = header: "System Install", handler: (options) ->
   ) for pck in [ # , "nvme-cli"
     "acpi", "gnome", "gdm", "gnome-extra", "system-config-printer", "networkmanager",
     "rhythmbox", "xorg-server", "xorg-xinit", "xorg-utils", "xorg-server-utils", "xorg-twm",
-    "xorg-xclock", "xterm" #, "firefox", "thunderbird"
+    "xorg-xclock", "xterm"
   ]
   for username, user of options.users
     @call header: 'xinit', ->
