@@ -93,15 +93,17 @@ module.exports = header: "System Install", handler: (options) ->
     rootdir: '/mnt'
     cmd: """
     [ -f /boot/loader/entries/arch.conf ] && exit 3
-    # Get UUID of /boot partition
-    uuid=`blkid -s UUID -o value /dev/nvme0n1p2`
+    # Get UUID of /boot, root, and swap partition
+    uuid_boot=`blkid -s UUID -o value /dev/nvme0n1p2`
+    uuid_root=`blkid -s UUID -o value /dev/mapper/volume-root`
+    uuid_swap=`blkid -s UUID -o value /dev/mapper/volume-swap`
     cat >/boot/loader/entries/arch.conf <<CONF
     title Archy ## Replace the name as you want
     linux /vmlinuz-linux
     initrd /intel-ucode.img
     initrd /initramfs-linux.img
     # i915.preliminary_hw_support=1 Remove ACPI error at boot time, no longer required after latest BIOS update (march 2017c)
-    options cryptdevice=UUID=$uuid:volume root=/dev/mapper/volume-root resume=/dev/mapper/volume-swap quiet rw pcie_port_pm=off rcutree.rcu_idle_gp_delay=1 intel_idle.max_cstate=1 acpi_osi=! acpi_osi="Windows 2009" acpi_backlight=native i8042.noloop i8042.nomux i8042.nopnp i8042.reset
+    options cryptdevice=UUID=$uuid_boot:volume root=UUID=$uuid_root resume=UUID=$uuid_swap quiet rw pcie_port_pm=off rcutree.rcu_idle_gp_delay=1 intel_idle.max_cstate=1 acpi_osi=! acpi_osi="Windows 2009" acpi_backlight=native i8042.noloop i8042.nomux i8042.nopnp i8042.reset
     CONF
     """
     code_skipped: 3
