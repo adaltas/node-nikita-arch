@@ -114,8 +114,17 @@ module.exports = (options) ->
       header: 'Package libreoffice-fresh'
       name: 'libreoffice-fresh'
     @service.install
+      header: 'Package typora'
+      name: 'typora'
+    @service.install
+      header: 'SFTP client gftp'
+      name: 'gftp'
+    @service.install
       header: 'SFTP client filezilla'
       name: 'filezilla'
+    @service.install
+      header: 'Package sqlectron-gui'
+      name: 'sqlectron-gui'
   @call header: 'Office', ->
     @service.install
       header: 'Package firefox'
