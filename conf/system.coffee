@@ -21,6 +21,7 @@ module.exports =
       atom_default:
         "*":
           "core":
+            "autoHideMenuBar": true
             "disabledPackages": [ "indent-guide-improved" ]
             "excludeVcsIgnoredPaths": false
             "ignoreNames": [".hg", ".svn", ".DS_Store", "._*", "Thumbs.db", ".git"]
