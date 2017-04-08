@@ -15,8 +15,6 @@ module.exports = (options) ->
     user.name ?= username
     user.home ?= "/home/#{username}"
     user.aliases ?= {}
-    user.atom_default ?= {}
-    user.atom_config ?= {}
   @system.execute
     cmd: """
     yaourt --noconfirm -Syyu
@@ -169,14 +167,12 @@ module.exports = (options) ->
       'material-syntax', 'minimap', 'minimap-find-and-replace', 'minimap-highlight-selected',
       'minimap-selection', 'monokai', 'pretty-json', 'project-manager', 'react', 'tail']
     upgrade: true
-  @call (_, callback) ->
-    for username, user of options.users then do (user) =>
-      season.readFile "#{user.home}/.atom/config.cson", (err, config) =>
-        config = merge {}, user.atom_default, config, user.atom_config
-        @file
-          header: 'Atom Configuration'
-          target: "#{user.home}/.atom/config.cson"
-          content: season.stringify config
+  @file.cson
+    header: 'Atom Configuration'
+    target: "~/.atom/config.cson"
+    content: options.atom_config
+    merge: true
+    
 
 ## Dependencies
 
