@@ -142,57 +142,6 @@ module.exports = (options) ->
   @service
     header: 'Vagrant'
     name: 'vagrant'
-  # @call header: 'Pantheon', ->
-  #   # Pantheon is the default desktop environment originally created for the elementary OS distribution. It is written from scratch using Vala and the GTK3 toolkit. With regards to usability and appearance, the desktop has some similarities with GNOME Shell and macOS.
-  #   @service.install (
-  #     header: "Required Package #{name}"
-  #     name: name
-  #   ) for name in ['cerbere-bzr', 'gala-bzr', 'wingpanel-bzr', 'switchboard', 'slingshot-launcher-bzr', 'plank-bzr']
-  #   pcks =
-  #     'audience-bzr': false # Video player
-  #     'contractor-bzr': false # Service for sharing data between apps
-  #     'dexter-contacts-bzr': false # Contacts manager (does not build)
-  #     'eidete-bzr': false # Simple screencaster
-  #     'elementary-icon-theme-bzr': true
-  #     'elementary-scan-bzr': false
-  #     'elementary-wallpapers-bzr': true
-  #     'gtk-theme-elementary-bzr': true
-  #     'feedler-bzr': false
-  #     'footnote-bzr': false
-  #     'geary': false
-  #     'indicator-pantheon-session-bzr': false
-  #     'lightdm-pantheon-greeter-bzr': false
-  #     'maya-calendar-bzr': false
-  #     'midori-granite-bzr': false
-  #     'noise-player-bzr': false
-  #     'pantheon-backgrounds-bzr': true
-  #     'pantheon-calculator-bzr': false
-  #     'pantheon-default-settings-bzr': true
-  #     'pantheon-files-bzr': true
-  #     'pantheon-notify-bzr': true
-  #     'pantheon-print-bzr': false
-  #     'pantheon-terminal-bzr': true
-  #     'plank-theme-pantheon-bzr': true
-  #     'scratch-text-editor-bzr': true
-  #     'snap-photobooth-bzr': true
-  #     'switchboard-bzr': true
-  #   @service.install (
-  #     header: "Outils Package #{name}"
-  #     name: name
-  #   ) for name in Object.keys(pcks).filter (pck) -> pcks[pck]
-  #   pcks =
-  #     'ttf-opensans': true
-  #     'ttf-raleway-font-family': true
-  #     'ttf-dejavu': true
-  #     'ttf-droid': true
-  #     'ttf-freefont': true
-  #     'ttf-liberation': true
-  #   @service.install (
-  #     header: "Font Package #{name}"
-  #     name: name
-  #   ) for name in Object.keys(pcks).filter (pck) -> pcks[pck]
-  #   @service.install 'pantheon-session-bzr'
-  #   @service.install 'contractor-bzr'
   @system.npm
     header: 'Node.js Global Packages'
     name: ['coffee-script', 'mocha']
