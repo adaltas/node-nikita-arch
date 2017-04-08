@@ -53,8 +53,6 @@ module.exports = (options) ->
     @system.dconf
       header: 'Gnome Session TouchPad'
       properties: '/org/gnome/desktop/peripherals/touchpad/click-method': '\'fingers\''
-  for username, user of options.users
-    @system.user user, sudo: true
     @service.install
       header: 'oh-my-zsh Install'
       name: 'oh-my-zsh-git'
@@ -62,7 +60,9 @@ module.exports = (options) ->
       header: 'oh-my-zsh Init'
       unless_exists: true
       source: "/usr/share/oh-my-zsh/zshrc"
-      target: "#{user.home}/.zshrc"
+      target: "~/.zshrc"
+  for username, user of options.users
+    @system.user user, sudo: true
     @file
       header: 'Profile in Bash'
       if_exists: true
