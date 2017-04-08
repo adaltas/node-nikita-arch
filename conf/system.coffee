@@ -14,10 +14,10 @@ module.exports =
     upgrade: false
     locales: ['fr_FR.UTF-8', 'en_US.UTF-8']
     locale: 'en_US.UTF-8'
-    users: wdavidw:
+    user:
       groups: ['bumblebee', 'docker']
       shell: '/bin/zsh'
-      aliases: 'll': 'ls -l'
+    aliases: 'll': 'ls -l'
     atom_config:
       "*":
         "core":

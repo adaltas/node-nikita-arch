@@ -11,16 +11,12 @@
 module.exports = (options) ->
   throw Error "Required option: locales" unless options.locales
   options.locale ?= options.locales[0]
-  for username, user of options.users
-    user.name ?= username
-    user.home ?= "/home/#{username}"
-    user.aliases ?= {}
   @system.execute
     cmd: """
     yaourt --noconfirm -Syyu
     """
     if: options.upgrade
-  @system.user user, sudo: true
+  @system.user options.user, name: process.env.USER, sudo: true
   @call header: 'System', ->
     @file.types.locale_gen
       header: 'Locale gen'
@@ -35,6 +31,35 @@ module.exports = (options) ->
       name: 'openssh'
       srv_name: 'sshd'
     @service.install 'rsync'
+  @call header: 'Environnment', ->
+    @file
+      header: 'Bash Profile'
+      if_exists: true
+      target: "~/.bashrc"
+      match: /^\. ~\/.profile$/m
+      replace: '. ~/.profile'
+      append: true
+      backup: true
+      eof: true
+    # @file
+    #   header: 'ZSH Profile'
+    #   if_exists: true
+    #   target: "~/.zshrc"
+    #   match: /^source ~\/.profile$/m
+    #   replace: 'source ~/.zshrc'
+    #   append: true
+    #   backup: true
+    #   eof: true
+    @file
+      header: "Profile Alias"
+      if: !!options.aliases
+      replace: Object.keys(options.aliases).map((k) -> "alias #{k}='#{options.aliases[k]}'").join '\n'
+      target: "~.profile"
+      from: '#START ALIAS'
+      to: '#END ALIAS'
+      append: true
+      eof: true
+      backup: true
   @call header: 'Gnome', ->
     @service.install 'gnome-session-properties'
     @service.install 'dconf-editor'
@@ -59,28 +84,6 @@ module.exports = (options) ->
       unless_exists: true
       source: "/usr/share/oh-my-zsh/zshrc"
       target: "~/.zshrc"
-  for username, user of options.users
-    @system.user user, sudo: true
-    @file
-      header: 'Profile in Bash'
-      if_exists: true
-      target: "#{user.home}/.bashrc"
-      match: /^\. ~\/.profile$/m
-      replace: '. ~/.profile'
-      chown: "#{username}"
-      append: true
-      backup: true
-      eof: true
-    @file
-      header: "Profile Alias"
-      if: !!user.aliases
-      replace: Object.keys(user.aliases).map((k) -> "alias #{k}='#{user.aliases[k]}'").join '\n'
-      target: "#{user.home}/.profile"
-      from: '#START ALIAS'
-      to: '#END ALIAS'
-      append: true
-      eof: true
-      backup: true
   @call header: 'Atom', ->
     @service.install
       header: 'Package'
