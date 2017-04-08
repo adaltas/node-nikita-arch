@@ -37,8 +37,10 @@ module.exports = (options) ->
       name: 'openssh'
       srv_name: 'sshd'
     @service.install 'rsync'
+  @call header: 'Gnome', ->
     @service.install 'gnome-session-properties'
     @service.install 'dconf-editor'
+    @service.install 'gtk-theme-arc-git'
     @system.dconf
       header: 'Gnome Session Save'
       properties: '/org/gnome/gnome-session/auto-save-session': 'true'
