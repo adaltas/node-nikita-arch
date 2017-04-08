@@ -81,21 +81,40 @@ module.exports = (options) ->
       append: true
       eof: true
       backup: true
-  @call header: 'Productivity', ->
+  @call header: 'Atom', ->
     @service.install
-      header: 'Package atom'
+      header: 'Package'
       name: 'atom'
-    for username, user of options.users
-      @file.cson
-        target: "#{user.home}/.atom/keymap.cson"
-        content:
-          'atom-workspace':
-            "alt-f7": "find-and-replace:select-all"
-            "ctrl-f7": "find-and-replace:find-next-selected"
-            "ctrl-shift-f7": "find-and-replace:find-previous-selected"
-            "f7": "find-and-replace:find-next"
-            "shift-f7": "find-and-replace:find-previous"
+    @system.apm
+      header: 'APM Packages'
+      name: [
+        'stylus', 'sublime-style-column-selection', 'atom-monokai-dark',
+        'atom-typescript', 'chester-atom-syntax', 'color-picker', 'git-plus',
+        'git-time-machine', 'highlight-selected', 'indent-guide-improved',
+        'language-coffee-script', 'language-docker', 'language-jade',
+        'language-jade', 'language-log', 'language-scala', 'linter', 'markdown-toc',
+        'material-syntax', 'minimap', 'minimap-find-and-replace', 'minimap-highlight-selected',
+        'minimap-selection', 'monokai', 'pretty-json', 'project-manager', 'react', 'tail']
+      upgrade: true
+    @file.cson
+      header: 'Configuration'
+      target: "~/.atom/config.cson"
+      content: options.atom_config
       merge: true
+    @file.cson
+      header: 'Keymap'
+      target: "~/.atom/keymap.cson"
+      content:
+        'atom-workspace':
+          "alt-f7": "find-and-replace:select-all"
+          "ctrl-f7": "find-and-replace:find-next-selected"
+          "ctrl-shift-f7": "find-and-replace:find-previous-selected"
+          "f7": "find-and-replace:find-next"
+          "ctrl-g": "find-and-replace:find-next"
+          "shift-ctrl-g": "find-and-replace:find-next"
+          "shift-f7": "find-and-replace:find-previous"
+      merge: true
+  @call header: 'Productivity', ->
     @service.install
       header: 'Package gitkraken'
       name: 'gitkraken'
@@ -156,22 +175,6 @@ module.exports = (options) ->
     name: ['coffee-script', 'mocha']
     global: true
     sudo: true
-  @system.apm
-    header: 'Atom Packages'
-    name: [
-      'stylus', 'sublime-style-column-selection', 'atom-monokai-dark',
-      'atom-typescript', 'chester-atom-syntax', 'color-picker', 'git-plus',
-      'git-time-machine', 'highlight-selected', 'indent-guide-improved',
-      'language-coffee-script', 'language-docker', 'language-jade',
-      'language-jade', 'language-log', 'language-scala', 'linter', 'markdown-toc',
-      'material-syntax', 'minimap', 'minimap-find-and-replace', 'minimap-highlight-selected',
-      'minimap-selection', 'monokai', 'pretty-json', 'project-manager', 'react', 'tail']
-    upgrade: true
-  @file.cson
-    header: 'Atom Configuration'
-    target: "~/.atom/config.cson"
-    content: options.atom_config
-    merge: true
     
 
 ## Dependencies
