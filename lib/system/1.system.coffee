@@ -112,10 +112,10 @@ module.exports = (options) ->
           "alt-f7": "find-and-replace:select-all"
           "ctrl-f7": "find-and-replace:find-next-selected"
           "ctrl-shift-f7": "find-and-replace:find-previous-selected"
+          "shift-f7": "find-and-replace:find-previous"
           "f7": "find-and-replace:find-next"
           "ctrl-g": "find-and-replace:find-next"
-          "shift-ctrl-g": "find-and-replace:find-next"
-          "shift-f7": "find-and-replace:find-previous"
+          "ctrl-shift-G": "find-and-replace:find-previous"
       merge: true
   @call header: 'Productivity', ->
     @service.install
