@@ -84,6 +84,19 @@ module.exports = (options) ->
       unless_exists: true
       source: "/usr/share/oh-my-zsh/zshrc"
       target: "~/.zshrc"
+  @call header: 'Nodejs', ->
+    @system.execute
+      cmd: """
+      [[ `npm config get prefix` == "/usr/local" ]] && exit 3
+      chown -R `whoami`. /usr/local
+      npm config set prefix /usr/local
+      """
+      code_skipped: 3
+    @system.npm
+      header: 'Global Packages'
+      name: ['coffee-script', 'mocha']
+      global: true
+      sudo: true
   @call header: 'Atom', ->
     @service.install
       header: 'Package'
@@ -173,11 +186,6 @@ module.exports = (options) ->
   @service
     header: 'Vagrant'
     name: 'vagrant'
-  @system.npm
-    header: 'Node.js Global Packages'
-    name: ['coffee-script', 'mocha']
-    global: true
-    sudo: true
     
 
 ## Dependencies
