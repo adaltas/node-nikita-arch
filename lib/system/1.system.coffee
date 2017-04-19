@@ -84,6 +84,7 @@ module.exports = (options) ->
       unless_exists: true
       source: "/usr/share/oh-my-zsh/zshrc"
       target: "~/.zshrc"
+    @service.install 'networkmanager-openvpn'
   @call header: 'Nodejs', ->
     @system.execute
       cmd: """

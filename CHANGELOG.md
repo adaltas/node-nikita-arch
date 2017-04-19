@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* system: install networkmanager-openvpn
 * nodejs: install npm package in /usr/local
 * zsh: source profile
 * package: changelog
