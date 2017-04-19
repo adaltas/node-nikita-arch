@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* environnement: move oh-my-zsh
 * system: install networkmanager-openvpn
 * nodejs: install npm package in /usr/local
 * zsh: source profile

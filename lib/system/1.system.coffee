@@ -32,6 +32,14 @@ module.exports = (options) ->
       srv_name: 'sshd'
     @service.install 'rsync'
   @call header: 'Environnment', ->
+    @service.install
+      header: 'oh-my-zsh Install'
+      name: 'oh-my-zsh-git'
+    @system.copy
+      header: 'oh-my-zsh Init'
+      unless_exists: true
+      source: "/usr/share/oh-my-zsh/zshrc"
+      target: "~/.zshrc"
     @file
       header: 'Bash Profile'
       if_exists: true
@@ -76,14 +84,6 @@ module.exports = (options) ->
     @system.dconf
       header: 'Gnome Session TouchPad'
       properties: '/org/gnome/desktop/peripherals/touchpad/click-method': '\'fingers\''
-    @service.install
-      header: 'oh-my-zsh Install'
-      name: 'oh-my-zsh-git'
-    @system.copy
-      header: 'oh-my-zsh Init'
-      unless_exists: true
-      source: "/usr/share/oh-my-zsh/zshrc"
-      target: "~/.zshrc"
     @service.install 'networkmanager-openvpn'
   @call header: 'Nodejs', ->
     @system.execute
