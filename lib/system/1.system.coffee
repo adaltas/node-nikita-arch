@@ -41,15 +41,15 @@ module.exports = (options) ->
       append: true
       backup: true
       eof: true
-    # @file
-    #   header: 'ZSH Profile'
-    #   if_exists: true
-    #   target: "~/.zshrc"
-    #   match: /^source ~\/.profile$/m
-    #   replace: 'source ~/.zshrc'
-    #   append: true
-    #   backup: true
-    #   eof: true
+    @file
+      header: 'ZSH Profile'
+      if_exists: true
+      target: "~/.zshrc"
+      match: /^source ~\/.profile$/m
+      replace: 'source ~/.profile'
+      append: true
+      backup: true
+      eof: true
     @file
       header: "Profile Alias"
       if: !!options.aliases

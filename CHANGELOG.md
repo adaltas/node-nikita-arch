@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* zsh: source profile
 * package: changelog
 * atom: improve find/replace keyma
 * remove username
