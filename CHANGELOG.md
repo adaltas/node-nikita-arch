@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* docker: commented exemple of local registry
 * environnement: move oh-my-zsh
 * system: install networkmanager-openvpn
 * nodejs: install npm package in /usr/local

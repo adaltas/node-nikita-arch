@@ -174,7 +174,26 @@ module.exports = (options) ->
       startup: true 
     @service.install
       header: 'Package docker-compose'
-      name: 'docker-compose'
+      name: 'docker-compose'    
+    # Installation is based on  the official documentation
+    # [Deploying a registry server](https://docs.docker.com/registry/deploying/)
+    # @system.execute
+    #   cmd: """
+    #   docker run -d -p 5000:5000 --restart=always --name registry \
+    #     -v `pwd`/data:/var/lib/registry \
+    #     registry:2
+    #   """
+    #   code_skipped: 3
+    # @system.execute (
+    #   header: "Push #{image}"
+    #   cmd: """
+    #   # Get any image from the hub and tag it to point to your registry
+    #   docker pull #{image}
+    #   docker tag #{image} localhost:5000/#{image}
+    #   # then push it to your registry
+    #   docker push localhost:5000/ubuntu
+    #   """
+    # ) for image in ['centos']
   @call header: 'VirtualBox', ->
     @service.install 'linux-headers'
     @service.install 'virtualbox'
