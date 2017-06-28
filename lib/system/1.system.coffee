@@ -174,6 +174,9 @@ module.exports = (options) ->
     @service.install
       header: 'Package sqlectron-gui'
       name: 'sqlectron-gui'
+    @service.install
+      header: 'Package Apache Directory Studio'
+      name: 'apachedirectorystudio'
   @call header: 'Office', ->
     @service.install
       header: 'Package firefox'
