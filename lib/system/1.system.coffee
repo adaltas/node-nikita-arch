@@ -74,6 +74,16 @@ module.exports = (options) ->
       append: true
       eof: true
       backup: true
+    @file
+      header: "Profile Alias"
+      if: !!options.aliases
+      replace: Object.keys(options.aliases).map((k) -> "alias #{k}='#{options.aliases[k]}'").join '\n'
+      target: "~/.profile"
+      from: '#START ALIAS'
+      to: '#END ALIAS'
+      append: true
+      eof: true
+      backup: true
   @call header: 'Gnome', ->
     @service.install 'gnome-session-properties'
     @service.install 'dconf-editor'
