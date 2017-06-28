@@ -144,6 +144,10 @@ module.exports = (options) ->
     @service.install
       header: 'Package pantheon-files-plugin-dropbox-bzr'
       name: 'pantheon-files-plugin-dropbox-bzr'
+    @system.gsettings
+      header: 'Pantheon Single Click', 
+      properties:
+        'org.pantheon.files.preferences': 'single-click': 'false'
     @service.install
       header: 'Package libreoffice-fresh'
       name: 'libreoffice-fresh'

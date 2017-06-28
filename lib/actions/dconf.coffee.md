@@ -1,5 +1,5 @@
 
-`nikita.system.dconf`
+# `nikita.system.dconf`
 
 dconf is a low-level configuration system and settings management used by 
 Gnome. It is a replacemet of gconf, replacing its XML based database with a 
