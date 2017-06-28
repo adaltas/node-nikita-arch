@@ -59,12 +59,15 @@ module.exports = (options) ->
       backup: true
       eof: true
     @file
-      header: "Profile Alias"
-      if: !!options.aliases
-      replace: Object.keys(options.aliases).map((k) -> "alias #{k}='#{options.aliases[k]}'").join '\n'
-      target: "~.profile"
-      from: '#START ALIAS'
-      to: '#END ALIAS'
+      header: "Profile CWD"
+      target: "~/.profile"
+      from: '#START TERM CWD'
+      to: '#END TERM CWD'
+      replace: """
+      # make new terminals start in the working directory of the current terminal?
+      # https://wiki.gnome.org/Apps/Terminal/FAQ#How_can_I_make_new_terminals_start_in_the_working_directory_of_the_current_terminal.3F
+      . /etc/profile.d/vte.sh
+      """
       append: true
       eof: true
       backup: true
