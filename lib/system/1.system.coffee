@@ -95,6 +95,7 @@ module.exports = (options) ->
     @service.install 'gnome-shell-extension-battery-percentage-git'
     @service.install 'gnome-shell-extension-simple-net-speed-git'
     # @service.install 'gnome-shell-extension-refresh-wifi-git'
+    @service.install 'gnome-system-monitor'
   @call header: 'Nodejs', ->
     @system.execute
       cmd: """
