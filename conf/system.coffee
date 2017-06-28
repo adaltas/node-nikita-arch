@@ -22,12 +22,17 @@ module.exports =
       "*":
         "core":
           "autoHideMenuBar": true
+          "closeDeletedFileTabs": true
           "disabledPackages": [ "indent-guide-improved" ]
           "excludeVcsIgnoredPaths": false
           "ignoreNames": [".hg", ".svn", ".DS_Store", "._*", "Thumbs.db", ".git"]
           "telemetryConsent": "no"
         "editor":
+          "fontSize": 13
           "scrollPastEnd": true
+        "git-plus":
+          "remoteInteractions":
+            "pullRebase": true
         "language-log":
           "tail": true
         "minimap":
@@ -38,6 +43,8 @@ module.exports =
             "highlight-selectedDecorationsZIndex": 0
             "selection": true
             "selectionDecorationsZIndex": 0
+        "tree-view":
+          "hideVcsIgnoredFiles": false
         "welcome":
           "showOnStartup": false
         "whitespace":
