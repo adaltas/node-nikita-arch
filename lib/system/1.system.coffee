@@ -80,7 +80,7 @@ module.exports = (options) ->
     @service.install 'gtk-theme-arc-git'
     @system.dconf
       header: 'Gnome Session Save'
-      properties: '/org/gnome/gnome-session/auto-save-session': 'true'
+      properties: '/org/gnome/gnome-session/auto-save-session': 'false'
     @system.dconf
       header: 'Gnome Session LANG'
       properties: '/org/gnome/desktop/input-sources/sources': '[(\'xkb\', \'us\'), (\'xkb\', \'fr\')]'
