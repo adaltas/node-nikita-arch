@@ -30,7 +30,10 @@ module.exports = (options) ->
     @service
       name: 'openssh'
       srv_name: 'sshd'
+    @service
+      name: 'wine'
     @service.install 'rsync'
+    @service.install 'dosfstools'
   @call header: 'Environnment', ->
     @service.install
       header: 'oh-my-zsh Install'
