@@ -34,6 +34,10 @@ module.exports = (options) ->
       name: 'wine'
     @service.install 'rsync'
     @service.install 'dosfstools'
+    @service.install 'Printer',
+      name: 'cups'
+      srv_name: 'org.cups.cupd.service'
+      chk_name: 'org.cups.cupd.service'
   @call header: 'Environnment', ->
     @service.install
       header: 'oh-my-zsh Install'
@@ -152,6 +156,10 @@ module.exports = (options) ->
           "ctrl-g": "find-and-replace:find-next"
           "ctrl-shift-G": "find-and-replace:find-previous"
       merge: true
+  @call header: 'Programming', ->
+    @service.install
+      header: 'Dart'
+      name: 'dart'
   @call header: 'Productivity', ->
     @service.install
       header: 'Package gitkraken'
@@ -187,6 +195,9 @@ module.exports = (options) ->
     @service.install
       header: 'Package Apache Directory Studio'
       name: 'apachedirectorystudio'
+    @service.install
+      header: 'tcpdump'
+      name: 'tcpdump'
   @call header: 'Office', ->
     @service.install
       header: 'Package firefox'
