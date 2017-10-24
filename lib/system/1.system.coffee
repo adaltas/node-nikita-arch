@@ -206,6 +206,12 @@ module.exports = (options) ->
       properties:
         'org.pantheon.files.preferences': 'single-click': 'false'
     @service.install
+      header: 'Package Skype'
+      name: 'skypeforlinux-bin'
+    @service
+      name: 'org.cups.cupsd.service'
+      started: true
+    @service.install
       header: 'Package libreoffice-fresh'
       name: 'libreoffice-fresh'
     @service.install
