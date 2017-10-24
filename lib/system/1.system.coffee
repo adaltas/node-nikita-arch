@@ -38,6 +38,13 @@ module.exports = (options) ->
       name: 'cups'
       srv_name: 'org.cups.cupd.service'
       chk_name: 'org.cups.cupd.service'
+  @call header: 'Virtualization', ->
+    @service.install
+      header: 'oh-my-zsh Install'
+      name: 'libvirt'
+    # Virtio modules are not loaded, can't find a solution for now
+    # @system.execute
+    #   cmd: "lsmod | grep virtio"
   @call header: 'Environnment', ->
     @service.install
       header: 'oh-my-zsh Install'
