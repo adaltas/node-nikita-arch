@@ -88,6 +88,16 @@ module.exports = (options) ->
       append: true
       eof: true
       backup: true
+    @service.install
+      header: 'Oracle JDK 7'
+      name: 'jdk7'
+    @service.install
+      header: 'Oracle JDK 8'
+      name: 'jdk8'
+    @system.execute
+      header: 'Java Default'
+      if: -> @status -1
+      cmd: 'archlinux-java set java-9-jdk'
   @call header: 'Gnome', ->
     @service.install 'gnome-session-properties'
     @service.install 'dconf-editor'
