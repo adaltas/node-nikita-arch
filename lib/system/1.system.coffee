@@ -137,9 +137,20 @@ module.exports = (options) ->
       code_skipped: 3
     @system.npm
       header: 'Global Packages'
-      name: ['coffee-script', 'mocha']
+      name: ['n', 'coffee-script', 'mocha']
       global: true
       sudo: true
+    @file
+      header: "N"
+      target: "~/.profile"
+      from: '#START N'
+      to: '#END N'
+      replace: """
+      n 8.7.0
+      """
+      append: true
+      eof: true
+      backup: true
   @call header: 'Atom', ->
     @service.install
       header: 'Package'
