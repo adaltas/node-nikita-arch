@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* arc: update theme package
 * cupsd: fix installation
 * nikita: reflect registry isolation
 * package: ignore yarn lock

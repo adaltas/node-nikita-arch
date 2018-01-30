@@ -37,6 +37,7 @@ module.exports = (options) ->
       target: '/etc/locale.conf'
       content: "LANG=#{options.locale}"
     @service
+      header: 'SSH'
       name: 'openssh'
       srv_name: 'sshd'
     @service
@@ -121,7 +122,7 @@ module.exports = (options) ->
   @call header: 'Gnome', ->
     @service.install 'gnome-session-properties'
     @service.install 'dconf-editor'
-    @service.install 'gtk-theme-arc-git'
+    @service.install 'arc-gtk-theme'
     @system.dconf
       header: 'Gnome Session Save'
       properties: '/org/gnome/gnome-session/auto-save-session': 'false'
