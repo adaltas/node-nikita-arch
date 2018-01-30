@@ -204,9 +204,9 @@ module.exports = (options) ->
       header: 'Dart'
       name: 'dart'
   @call header: 'Productivity', ->
-    @service.install
-      header: 'Package gitkraken'
-      name: 'gitkraken'
+    # @service.install
+    #   header: 'Package gitkraken'
+    #   name: 'gitkraken'
     @service.install
       header: 'Package chromium'
       name: 'chromium'
