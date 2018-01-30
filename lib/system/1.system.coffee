@@ -34,10 +34,14 @@ module.exports = (options) ->
       name: 'wine'
     @service.install 'rsync'
     @service.install 'dosfstools'
-    @service.install 'Printer',
+    # Brother brother-mfc-l2720dw
+    @service
+      header: 'Printer',
       name: 'cups'
-      srv_name: 'org.cups.cupd.service'
-      chk_name: 'org.cups.cupd.service'
+      srv_name: 'org.cups.cupsd.service'
+      chk_name: 'org.cups.cupsd.service'
+      startup: true
+      action: 'start'
   @call header: 'Virtualization', ->
     @service.install
       header: 'oh-my-zsh Install'
@@ -208,9 +212,6 @@ module.exports = (options) ->
     @service.install
       header: 'Package Skype'
       name: 'skypeforlinux-bin'
-    @service
-      name: 'org.cups.cupsd.service'
-      started: true
     @service.install
       header: 'Package libreoffice-fresh'
       name: 'libreoffice-fresh'

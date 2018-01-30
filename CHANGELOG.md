@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* cupsd: fix installation
 * nikita: reflect registry isolation
 * package: ignore yarn lock
 * docker: commented exemple of local registry
