@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* mailstrping: install
 * libreoffice: fr pack
 * gravit: install
 * gitkraken: desactivate

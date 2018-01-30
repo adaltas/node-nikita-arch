@@ -257,6 +257,9 @@ module.exports = (options) ->
     @service.install
       header: 'Package thunderbird'
       name: 'thunderbird'
+    @service.install
+      header: 'Package mailspring'
+      name: 'mailspring'
   @call header: 'Docker', ->
     @service
       header: 'Package docker'
@@ -301,5 +304,6 @@ module.exports = (options) ->
 
 ## Dependencies
 
+path = require 'path'
 season = require 'season'
 {merge} = require 'nikita/lib/misc'
