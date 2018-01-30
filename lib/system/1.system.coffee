@@ -244,6 +244,9 @@ module.exports = (options) ->
     @service.install
       header: 'tcpdump'
       name: 'tcpdump'
+    @service.install
+      header: 'Gravit'
+      name: 'gravit-designer-bin'
   @call header: 'Office', ->
     @service.install
       header: 'Package firefox'

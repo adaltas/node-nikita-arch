@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* gravit: install
 * gitkraken: desactivate
 * atom: add teletype
 * arc: update theme package
