@@ -227,6 +227,9 @@ module.exports = (options) ->
       header: 'Package libreoffice-fresh'
       name: 'libreoffice-fresh'
     @service.install
+      header: 'Package libreoffice-fresh-fr'
+      name: 'libreoffice-fresh-fr'
+    @service.install
       header: 'Package typora'
       name: 'typora'
     @service.install

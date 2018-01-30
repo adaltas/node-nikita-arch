@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* libreoffice: fr pack
 * gravit: install
 * gitkraken: desactivate
 * atom: add teletype
