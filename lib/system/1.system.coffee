@@ -1,10 +1,19 @@
 
 ###
 
-*   `locale` (string)
-    System locale, default to the first locale in "locales" options.
-*   `locales` (string)
-    List of supported locales, required.
+* `locale` (string)
+  System locale, default to the first locale in "locales" options.
+* `locales` (string)
+  List of supported locales, required.
+
+Interesting commands
+
+* `yaourt -Ssq ${name}`   
+  Search packages by name
+* `pacman -Rns ${name}`   
+  Remove a package
+* `pacman -Qdtq | pacman -Rcsn -`   
+  Remove all the packages that were installed as a dependency and are no longer needed
 
 ###
 
