@@ -33,10 +33,10 @@
     }
   ],
   "dependencies": {
-    "coffee-script": "~1.11.1",
+    "coffeescript": "~2.1.1",
     "nikita": "git+https://github.com/adaltas/node-nikita.git#master",
-    "season": "^6.0.0",
-    "ssh2-fs": "~0.2.3"
+    "season": "^6.0.2",
+    "ssh2-fs": "~0.3.0"
   },
   "devDependencies": {},
   "main": "./run",

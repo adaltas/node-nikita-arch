@@ -3,6 +3,8 @@
 
 ## Trunk
 
+* nikita: reflect registry isolation
+* package: ignore yarn lock
 * docker: commented exemple of local registry
 * environnement: move oh-my-zsh
 * system: install networkmanager-openvpn
