@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* atom: add teletype
 * arc: update theme package
 * cupsd: fix installation
 * nikita: reflect registry isolation

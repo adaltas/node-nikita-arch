@@ -178,7 +178,8 @@ module.exports = (options) ->
         'language-coffee-script', 'language-docker', 'language-jade',
         'language-jade', 'language-log', 'language-scala', 'linter', 'markdown-toc',
         'material-syntax', 'minimap', 'minimap-find-and-replace', 'minimap-highlight-selected',
-        'minimap-selection', 'monokai', 'pretty-json', 'project-manager', 'react', 'tail']
+        'minimap-selection', 'monokai', 'pretty-json', 'project-manager', 'react', 
+        'tail', 'teletype']
       upgrade: true
     @file.cson
       header: 'Configuration'
