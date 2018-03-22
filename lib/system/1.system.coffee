@@ -52,6 +52,14 @@ module.exports = (options) ->
       chk_name: 'org.cups.cupsd.service'
       startup: true
       action: 'start'
+    @system.execute
+      header: "Journalctl access"
+      cmd: """
+      id `whoami` | grep \\(systemd-journal\\) && exit 3
+      gpasswd -a `whoami` systemd-journal
+      """
+      code_skipped: 3
+      sudo: true
   @call header: 'Virtualization', ->
     @service.install
       header: 'oh-my-zsh Install'
