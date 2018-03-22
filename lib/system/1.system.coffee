@@ -266,6 +266,22 @@ module.exports = (options) ->
     @service.install
       header: 'Gravit'
       name: 'gravit-designer-bin'
+  @call header: 'Font', ->
+    @service.install
+      header: 'Liberation'
+      name: 'ttf-liberation'
+    @service.install
+      header: 'Dejavu'
+      name: 'ttf-dejavu'
+    @service.install
+      header: 'Roboto'
+      name: 'ttf-roboto'
+    @service.install
+      header: 'Noto'
+      name: 'noto-fonts'
+    @service.install
+      header: 'ttf-ms-fonts (Arial, Courier New, Georgia, Verdana, ...)'
+      name: 'ttf-ms-fonts'
   @call header: 'Office', ->
     @service.install
       header: 'Package firefox'
