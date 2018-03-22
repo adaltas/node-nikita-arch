@@ -147,6 +147,10 @@ module.exports = (options) ->
     @system.dconf
       header: 'Gnome Session TouchPad'
       properties: '/org/gnome/desktop/peripherals/touchpad/click-method': '\'fingers\''
+    # Note, could not find the property for "> settings > Date & Time > Automatic Date & Time"
+    @system.dconf
+      header: 'Automatic update timezone'
+      properties: '/org/gnome/desktop/datetime/automatic-timezone': '\'true\''
     @service.install 'networkmanager-openvpn'
     @service.install 'chrome-gnome-shell-git'
     @service.install 'gnome-shell-extension-battery-percentage-git'
