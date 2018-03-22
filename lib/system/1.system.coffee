@@ -60,6 +60,10 @@ module.exports = (options) ->
       """
       code_skipped: 3
       sudo: true
+  @call header: 'File System', ->
+    @service
+      header: 'NTFS',
+      name: 'ntfs-3g'
   @call header: 'Virtualization', ->
     @service.install
       header: 'oh-my-zsh Install'
