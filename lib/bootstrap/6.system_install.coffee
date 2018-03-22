@@ -214,7 +214,7 @@ module.exports = header: "System Install", handler: (options) ->
       arch_chroot: true
       rootdir: '/mnt'
       cmd: """
-      id wdavidw | grep \\(bumblebee\\) && exit 3
+      id #{username} | grep \\(bumblebee\\) && exit 3
       gpasswd -a #{username} bumblebee
       """
       code_skipped: 3
