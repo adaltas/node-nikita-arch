@@ -60,6 +60,20 @@ module.exports = (options) ->
       """
       code_skipped: 3
       sudo: true
+    @file
+      target: "/lib/udev/rules.d/39-usbmuxd.rules"
+      content: """
+      # systemd should receive all events relating to device
+      SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ENV{PRODUCT}=="5ac/12[9a][0-9a-f]/*", TAG+="systemd"
+      # Initialize iOS devices into "deactivated" USB configuration state and activate usbmuxd
+      SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ENV{PRODUCT}=="5ac/12[9a][0-9a-f]/*", ACTION=="add", ENV{USBMUX_SUPPORTED}="1", ATTR{bConfigurationValue}="0", OWNER="usbmux", ENV{SYSTEMD_WANTS}="usbmuxd.service"
+      # Exit usbmuxd when the last device is removed
+      SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ENV{PRODUCT}=="5ac/12[9a][0-9a-f]/*", ACTION=="remove", RUN+="/usr/bin/usbmuxd -x"
+      """
+      sudo: true
+      uid: 'root'
+      gid: 'root'
+      mode: 0o0551
   @call header: 'File System', ->
     @service
       header: 'NTFS',
