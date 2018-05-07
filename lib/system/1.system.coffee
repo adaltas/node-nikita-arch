@@ -21,12 +21,23 @@ module.exports = (options) ->
   throw Error "Required option: locales" unless options.locales
   options.locale ?= options.locales[0]
   @system.execute
+    header: 'System '
     cmd: """
     yaourt --noconfirm -Syyu
     """
     if: options.upgrade
-  @system.user options.user, name: process.env.USER, sudo: true
   @call header: 'System', ->
+    @system.user options.user,
+      name: process.env.USER
+      sudo: true
+    @system.execute
+      header: "Journalctl access"
+      cmd: """
+      id `whoami` | grep \\(systemd-journal\\) && exit 3
+      gpasswd -a `whoami` systemd-journal
+      """
+      code_skipped: 3
+      sudo: true
     @file.types.locale_gen
       header: 'Locale gen'
       locales: options.locales
@@ -52,14 +63,6 @@ module.exports = (options) ->
       chk_name: 'org.cups.cupsd.service'
       startup: true
       action: 'start'
-    @system.execute
-      header: "Journalctl access"
-      cmd: """
-      id `whoami` | grep \\(systemd-journal\\) && exit 3
-      gpasswd -a `whoami` systemd-journal
-      """
-      code_skipped: 3
-      sudo: true
     @file
       target: "/lib/udev/rules.d/39-usbmuxd.rules"
       content: """
