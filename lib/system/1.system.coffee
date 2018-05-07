@@ -324,6 +324,9 @@ module.exports = (options) ->
       name: 'ttf-ms-fonts'
   @call header: 'Office', ->
     @service.install
+      header: 'Master PDF Editor'
+      name: 'masterpdfeditor'
+    @service.install
       header: 'Package firefox'
       name: 'firefox'
     @service.install
