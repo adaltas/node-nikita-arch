@@ -77,11 +77,26 @@ module.exports = (options) ->
       uid: 'root'
       gid: 'root'
       mode: 0o0551
+    @tools.sysctl
+      header: 'Sysctl'
+      target: '/etc/sysctl.d/99-sysctl.conf'
+      properties:
+        # Fix bug with node.js exiting with "ENOSPC" error
+        'fs.inotify.max_user_watches': '524288'
+      sudo: true
+    # Fix bug with node.js exiting with "EMFILE" error
+    # No working for unkown reasons, temp solution: `ulimit -n 4096`
+    @system.limits
+      header: 'File descriptors'
+      system: true
+      nofile: 64000
+      sudo: true
   @call header: 'File System', ->
     @service
       header: 'NTFS',
       name: 'ntfs-3g'
   @call header: 'Virtualization', ->
+    # ebtables dnsmasq firewalld vde2
     @service.install
       header: 'oh-my-zsh Install'
       name: 'libvirt'
