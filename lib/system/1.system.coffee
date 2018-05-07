@@ -163,6 +163,14 @@ module.exports = (options) ->
       header: 'Java Default'
       if: -> @status -1
       cmd: 'archlinux-java set java-9-jdk'
+    @file.yaml
+      target: '~/.gitconfig'
+      merge: true
+      content: color: ui: 'true'
+    @file.yaml
+      target: '~/.gitconfig'
+      merge: true
+      content: alias: lgb: "log --graph --abbrev-commit --oneline --date=relative --branches --pretty=format:'%C(bold green)%h %d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'"
   @call header: 'Gnome', ->
     @service.install 'gnome-session-properties'
     @service.install 'dconf-editor'
