@@ -8,4 +8,5 @@ nikita.registry.register ['system', 'npm'], require './lib/actions/npm'
 
 config = require process.argv[2]
 
-nikita().call (Object.assign handler: k, v for k, v of config)
+n = nikita()
+n.call k, v for k, v of config

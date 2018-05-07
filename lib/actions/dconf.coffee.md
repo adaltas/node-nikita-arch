@@ -18,6 +18,12 @@ require('nikita').system.dconf({
   }
 })
 
+## Note
+
+Run the command "dconf-editor" to navigate the database with a UI.
+
+## Source Code
+
     module.exports = (options) ->
       options.properties = options.argument if options.argument?
       options.properties ?= {}
