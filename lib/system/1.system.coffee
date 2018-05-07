@@ -216,7 +216,7 @@ module.exports = (options) ->
       from: '#START N'
       to: '#END N'
       replace: """
-      n 8.7.0
+      n 10.0.0
       """
       append: true
       eof: true
