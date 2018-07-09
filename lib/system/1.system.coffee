@@ -259,6 +259,9 @@ module.exports = (options) ->
     @service.install
       header: 'Dart'
       name: 'dart'
+    @service.install
+      header: 'GIT Crypt'
+      name: 'git-crypt'
     # @system.execute
     #   header: 'K8S kubectl'
     #   cmd: """
