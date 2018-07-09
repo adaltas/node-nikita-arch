@@ -259,6 +259,51 @@ module.exports = (options) ->
     @service.install
       header: 'Dart'
       name: 'dart'
+    # @system.execute
+    #   header: 'K8S kubectl'
+    #   cmd: """
+    #   version=`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`
+    #   if [ -f /usr/local/bin/kubectl ]; then
+    #     current_version=`kubectl version --client -o=json | grep gitVersion | sed 's/.*"\\(.*\\)".*/\\1/'`
+    #     [[ $version == $current_version ]] && exit 3
+    #   fi
+    #   curl -L https://storage.googleapis.com/kubernetes-release/release/${version}/bin/linux/amd64/kubectl -o /tmp/kubectl
+    #   chmod +x /tmp/kubectl
+    #   sudo mv ./kubectl /usr/local/bin/kubectl
+    #   kubectl cluster-info
+    #   kubectl completion -h
+    #   """
+    #   code_skipped: 3
+    # @file
+    #   target: '~/.zshrc'
+    #   from: '#START KUBECTL'
+    #   to: '#END KUBECTL'
+    #   replace: """
+    #   if [ $commands[kubectl] ]; then
+    #     source <(kubectl completion zsh)
+    #   fi
+    #   """
+    # @system.execute
+    #   cmd: """
+    #   version=`curl -s https://raw.githubusercontent.com/kubernetes/minikube/master/Makefile | grep '^ISO_VERSION ' | sed 's/.* \\(.*\\)/\\1/'`
+    #   if [ -f /usr/local/bin/minikube ]; then
+    #     current_version=`minikube version | sed 's/.* \\(.*\\)/\\1/'`
+    #     [[ $version == $current_version ]] && exit 3
+    #   fi
+    #   curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.23.0/minikube-linux-amd64
+    #   chmod +x minikube
+    #   sudo mv minikube /usr/local/bin/
+    #   """
+    #   trap: true
+    #   code_skipped: 3
+    @call header: 'K8S Helm', ->
+      @service.install
+        name: 'kubernetes-helm'
+      @system.execute
+        if: -> @status -1
+        cmd: 'helm init'
+      @system.execute
+        cmd: 'helm repo update'
   @call header: 'Productivity', ->
     # @service.install
     #   header: 'Package gitkraken'
