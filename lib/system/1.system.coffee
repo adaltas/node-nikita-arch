@@ -20,12 +20,20 @@ Interesting commands
 module.exports = (options) ->
   throw Error "Required option: locales" unless options.locales
   options.locale ?= options.locales[0]
-  @system.execute
-    header: 'System '
-    cmd: """
-    yaourt --noconfirm -Syyu
-    """
+  @call
+    header: 'System'
     if: options.upgrade
+  , ->
+    @system.execute
+      header: 'Upgrade'
+      cmd: """
+      yaourt --noconfirm -Syyu
+      """
+    @system.execute
+      header: 'Cleanup Orphan'
+      cmd: """
+      yaourt --noconfirm -Rns $(yaourt -Qtdq)
+      """
   @call header: 'System', ->
     @system.user options.user,
       name: process.env.USER
