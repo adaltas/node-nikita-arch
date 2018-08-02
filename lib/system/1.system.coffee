@@ -106,8 +106,16 @@ module.exports = (options) ->
   @call header: 'Virtualization', ->
     # ebtables dnsmasq firewalld vde2
     @service.install
-      header: 'oh-my-zsh Install'
+      header: 'qemu'
+      name: ' qemu'
+    @service.install
+      header: 'libvirt'
       name: 'libvirt'
+      started: true
+      action: 'start'
+    @service.install
+      header: 'libvirt manager'
+      name: ' virt-manager'
     # Virtio modules are not loaded, can't find a solution for now
     # @system.execute
     #   cmd: "lsmod | grep virtio"
