@@ -270,6 +270,35 @@ module.exports = (options) ->
     @service.install
       header: 'GIT Crypt'
       name: 'git-crypt'
+    @call
+      header: 'SublimeText'
+    , ->
+      @system.execute
+        header: 'GPG keys'
+        sudo: true
+        cmd: """
+        curl -O https://download.sublimetext.com/sublimehq-pub.gpg
+        pacman-key --add sublimehq-pub.gpg
+        pacman-key --lsign-key 8A8F901A
+        rm sublimehq-pub.gpg
+        """
+        trap: true
+        shy: true # todo: add status discovery
+      @file.types.pacman_conf
+        header: 'Stable channel'
+        sudo: true
+        # target: '/etc/pacman.conf'
+        content: 'sublime-text': 'Server': 'https://download.sublimetext.com/arch/stable/x86_64'
+        merge: true
+        backup: true
+      # @system.execute
+      #   if: -> @status -1
+      #   cmd: 'pacman -Syu sublime-text'
+      #   sudo: true
+      @service.install
+        header: 'Package'
+        name: 'sublime-text'
+        yaourt_flags: ['u', 'y']
     # @system.execute
     #   header: 'K8S kubectl'
     #   cmd: """
