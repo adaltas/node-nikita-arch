@@ -20,9 +20,9 @@ Install Atom packages with APM.
       @system.execute
         cmd: "apm outdated --json"
         shy: true
-      , (err, _, pkgs) ->
+      , (err, {stdout}) ->
         throw err if err
-        pkgs = JSON.parse pkgs
+        pkgs = JSON.parse stdout
         outdated = pkgs.map (pkg) -> pkg.name.toLowerCase()
       @system.execute
         cmd: "apm upgrade --no-confirm"
@@ -33,9 +33,9 @@ Install Atom packages with APM.
       @system.execute
         cmd: "apm list --installed --json"
         shy: true
-      , (err, _, pkgs) ->
+      , (err, {stdout}) ->
         throw err if err
-        pkgs = JSON.parse pkgs
+        pkgs = JSON.parse stdout
         pkgs = pkgs.user.map (pkg) -> pkg.name.toLowerCase()
         installed = pkgs
       @call ->
@@ -44,10 +44,10 @@ Install Atom packages with APM.
         @system.execute
           cmd: "apm upgrade #{upgrade.join ' '}"
           if: upgrade.length
-        , (err) ->
-          options.log message: "APM Updated Packages: #{upgrade.join ', '}"
+        , (err) =>
+          @log message: "APM Updated Packages: #{upgrade.join ', '}"
         @system.execute
           cmd: "apm install #{install.join ' '}"
           if: install.length
-        , (err) ->
-          options.log message: "APM Installed Packages: #{install.join ', '}"
+        , (err) =>
+          @log message: "APM Installed Packages: #{install.join ', '}"

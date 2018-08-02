@@ -24,9 +24,9 @@ Install Node.js packages with NPM.
         code: [0, 1]
         stdout_log: false
         shy: true
-      , (err, _, pkgs) ->
+      , (err, {stdout}) ->
         throw err if err
-        pkgs = JSON.parse pkgs
+        pkgs = JSON.parse stdout
         outdated = Object.keys pkgs.dependencies
       @system.execute
         if: -> options.upgrade and outdated.length
@@ -39,9 +39,9 @@ Install Node.js packages with NPM.
         code: [0, 1]
         stdout_log: false
         shy: true
-      , (err, _, pkgs) ->
+      , (err, {stdout}) ->
         throw err if err
-        pkgs = JSON.parse pkgs
+        pkgs = JSON.parse stdout
         pkgs = Object.keys pkgs.dependencies
         installed = pkgs
       @call ->
@@ -51,11 +51,11 @@ Install Node.js packages with NPM.
           if: upgrade.length
           cmd: "npm update #{global} #{upgrade.join ' '}"
           sudo: options.sudo
-        , (err) ->
-          options.log message: "NPM Updated Packages: #{upgrade.join ', '}"
+        , (err) =>
+          @log message: "NPM Updated Packages: #{upgrade.join ', '}"
         @system.execute
           if: install.length
           cmd: "npm install #{global} #{install.join ' '}"
           sudo: options.sudo
-        , (err) ->
-          options.log message: "NPM Installed Packages: #{install.join ', '}"
+        , (err) =>
+          @log message: "NPM Installed Packages: #{install.join ', '}"
