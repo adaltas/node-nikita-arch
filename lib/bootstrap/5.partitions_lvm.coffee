@@ -3,12 +3,12 @@
 
 options:
 
-* partition (string)   
-  Partition to crypt and used to create LVM physical volume.   
+* partition (string)
+  Partition to crypt and used to create LVM physical volume.
 
 ###
 
-module.exports = header: "Partitions LVM", handler: (options) ->
+module.exports = header: "Partitions LVM", handler: ({options}) ->
   @system.execute
     cmd: """
     echo '#{options.passphrase}' | \
@@ -34,4 +34,3 @@ module.exports = header: "Partitions LVM", handler: (options) ->
     if [ -n $info ]; then lvs; fi
     """
     if: -> @status -1
-    

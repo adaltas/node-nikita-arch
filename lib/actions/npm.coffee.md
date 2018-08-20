@@ -12,7 +12,7 @@ Install Node.js packages with NPM.
 *   `upgrade` (boolean)
     Upgrade all packages, default to "false".
 
-    module.exports = (options) ->
+    module.exports = ({options}) ->
       options.name = options.argument if options.argument?
       options.name = [options.name] if typeof options.name is 'string'
       global = if options.global then ' -g' else ''

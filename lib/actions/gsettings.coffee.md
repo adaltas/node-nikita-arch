@@ -11,7 +11,7 @@ require('nikita').system.gsettings({
   }
 })
 
-    module.exports = (options) ->
+    module.exports = ({options}) ->
       options.properties = options.argument if options.argument?
       options.properties ?= {}
       for path, properties of options.properties

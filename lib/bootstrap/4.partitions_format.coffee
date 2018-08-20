@@ -1,5 +1,5 @@
 
-module.exports = header: "Partitions Formating", handler: (options) ->
+module.exports = header: "Partitions Formating", handler: ({options}) ->
   for mount, type of options.partitions
     @system.execute switch type
       when 'f32'

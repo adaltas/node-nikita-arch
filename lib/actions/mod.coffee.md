@@ -14,7 +14,7 @@ require('nikita').system.mod({
   name: 'vboxpci'
 })
 
-    module.exports = (options) ->
+    module.exports = ({options}) ->
       options.name = options.argument if options.argument?
       throw Error "Required Option: name" unless options.name
       @system.execute

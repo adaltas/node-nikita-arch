@@ -1,5 +1,5 @@
 
-module.exports = header: "System Install", handler: (options) ->
+module.exports = header: "System Install", handler: ({options}) ->
   options.locale ?= 'en_US.UTF-8'
   for username, user of options.users
     user.name ?= username

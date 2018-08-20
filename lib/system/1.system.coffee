@@ -8,16 +8,16 @@
 
 Interesting commands
 
-* `yaourt -Ssq ${name}`   
+* `yaourt -Ssq ${name}`
   Search packages by name
-* `pacman -Rns ${name}`   
+* `pacman -Rns ${name}`
   Remove a package
-* `pacman -Qdtq | pacman -Rcsn -`   
+* `pacman -Qdtq | pacman -Rcsn -`
   Remove all the packages that were installed as a dependency and are no longer needed
 
 ###
 
-module.exports = (options) ->
+module.exports = ({options}) ->
   throw Error "Required option: locales" unless options.locales
   options.locale ?= options.locales[0]
   @call

@@ -1,8 +1,8 @@
 
 # `nikita.system.dconf`
 
-dconf is a low-level configuration system and settings management used by 
-Gnome. It is a replacemet of gconf, replacing its XML based database with a 
+dconf is a low-level configuration system and settings management used by
+Gnome. It is a replacemet of gconf, replacing its XML based database with a
 BLOB based database.
 
 ## Options
@@ -24,7 +24,7 @@ Run the command "dconf-editor" to navigate the database with a UI.
 
 ## Source Code
 
-    module.exports = (options) ->
+    module.exports = ({options}) ->
       options.properties = options.argument if options.argument?
       options.properties ?= {}
       for key, value of options.properties
