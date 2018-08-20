@@ -103,6 +103,16 @@ module.exports = ({options}) ->
     @service
       header: 'NTFS',
       name: 'ntfs-3g'
+  @call header: 'system', ->
+    @call header: 'bluetooth', ->
+      @service.install
+        name: 'bluez'
+      @service.install
+        name: 'bluez-utils'
+      @service.start
+        name: 'bluetooth'
+      @service.startup
+        name: 'bluetooth'
   @call header: 'Virtualization', ->
     # ebtables dnsmasq firewalld vde2
     @service.install
@@ -250,7 +260,7 @@ module.exports = ({options}) ->
         'language-coffee-script', 'language-docker', 'language-jade',
         'language-jade', 'language-log', 'language-scala', 'linter', 'markdown-toc',
         'material-syntax', 'minimap', 'minimap-find-and-replace', 'minimap-highlight-selected',
-        'minimap-selection', 'monokai', 'pretty-json', 'project-manager', 'react', 
+        'minimap-selection', 'monokai', 'pretty-json', 'project-manager', 'react',
         'tail', 'teletype']
       upgrade: true
     @file.cson
@@ -366,7 +376,7 @@ module.exports = ({options}) ->
     #   header: 'Package pantheon-files-plugin-dropbox-bzr'
     #   name: 'pantheon-files-plugin-dropbox-bzr'
     # @system.gsettings
-    #   header: 'Pantheon Single Click', 
+    #   header: 'Pantheon Single Click',
     #   properties:
     #     'org.pantheon.files.preferences': 'single-click': 'false'
     @service.install
@@ -433,10 +443,10 @@ module.exports = ({options}) ->
       header: 'Package docker'
       name: 'docker'
       action: 'start'
-      startup: true 
+      startup: true
     @service.install
       header: 'Package docker-compose'
-      name: 'docker-compose'    
+      name: 'docker-compose'
     # Installation is based on  the official documentation
     # [Deploying a registry server](https://docs.docker.com/registry/deploying/)
     # @system.execute
@@ -468,7 +478,7 @@ module.exports = ({options}) ->
   @service
     header: 'Vagrant'
     name: 'vagrant'
-    
+
 
 ## Dependencies
 
