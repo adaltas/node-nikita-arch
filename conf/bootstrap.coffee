@@ -1,10 +1,10 @@
 
 module.exports =
-  '@nikita/core/lib/log/cli':
+  '@nikitajs/core/lib/log/cli':
      pad: host: 20, header: 60
-  '@nikita/core/lib/log/md':
+  '@nikitajs/core/lib/log/md':
     basedir: "#{__dirname}/../log"
-  '@nikita/core/lib/ssh/open':
+  '@nikitajs/core/lib/ssh/open':
     host: '192.168.1.39'
     port: 22
     password: 'secret'
@@ -26,4 +26,4 @@ module.exports =
     # locale: 'fr_FR.UTF-8' # Default to en_US.UTF-8
     timezone: 'Europe/Paris'
     users: oskarryn: uid: 1000, password: 'secret', sudoer: true
-  '@nikita/core/lib/ssh/close': {}
+  '@nikitajs/core/lib/ssh/close': {}

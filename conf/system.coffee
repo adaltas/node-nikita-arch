@@ -1,10 +1,10 @@
 
 module.exports =
-  'nikita/lib/log/cli':
+  '@nikitajs/core/lib/log/cli':
      pad: host: 20, header: 60
-  'nikita/lib/log/md':
+  '@nikitajs/core/lib/log/md':
     basedir: "#{__dirname}/../log"
-  'nikita/lib/ssh/open':
+  '@nikitajs/core/lib/ssh/open':
     disabled: true
     host: '192.168.0.17'
     port: 22
@@ -67,5 +67,5 @@ module.exports =
       ".md":
         "whitespace":
           "removeTrailingWhitespace": false
-  'nikita/lib/ssh/close':
+  '@nikitajs/core/lib/ssh/close':
     disabled: true

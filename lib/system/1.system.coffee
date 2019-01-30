@@ -484,4 +484,4 @@ module.exports = ({options}) ->
 
 path = require 'path'
 season = require 'season'
-{merge} = require 'nikita/lib/misc'
+{merge} = require '@nikitajs/core/lib/misc'
