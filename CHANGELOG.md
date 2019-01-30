@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* bootstrap: use fsdisk to create partitions
 * mailstrping: install
 * libreoffice: fr pack
 * gravit: install
