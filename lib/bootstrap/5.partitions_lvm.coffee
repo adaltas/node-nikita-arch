@@ -12,9 +12,6 @@ module.exports = header: "Partitions LVM", handler: ({options}) ->
   @system.execute
     cmd: """
     echo '#{options.passphrase}' | \
-      cryptsetup open --type luks #{options.partition} lvm \
-      || exit 3
-    echo '#{options.passphrase}' | \
       cryptsetup luksFormat #{options.partition}
     echo '#{options.passphrase}' | \
       cryptsetup open --type luks #{options.partition} lvm

@@ -1,4 +1,6 @@
 
+require '@nikita/filetypes/lib/register'
+
 module.exports = header: "System Install", handler: ({options}) ->
   options.locale ?= 'en_US.UTF-8'
   for username, user of options.users
@@ -23,7 +25,7 @@ module.exports = header: "System Install", handler: ({options}) ->
     code_skipped: 3
   @system.execute
     cmd: """
-    echo '\\n\\n' | pacstrap -i /mnt base base-devel net-tools
+    echo '\\n\\n1\\n' | pacstrap -i /mnt base base-devel net-tools
     genfstab -U -p /mnt > /mnt/etc/fstab
     """
     shy: true # Status not handled for now
@@ -50,22 +52,28 @@ module.exports = header: "System Install", handler: ({options}) ->
     """
     code_skipped: 3
   @call (_, callback) ->
-    fs.readFile options.ssh, "/mnt/etc/mkinitcpio.conf", 'ascii', (err, content) ->
+    @fs.readFile
+      target: "/mnt/etc/mkinitcpio.conf"
+      encoding: 'ascii'
+    , (err, {data}) ->
       return callback err if err
-      content = content.split '\n'
-      for line, i in content
+      data = data.split '\n'
+      for line, i in data
         continue unless /^HOOKS=/.test line
-        hooks = original = line.replace /.*"(.*)"/, "$1"
+        # Was `"..."`, is now `(...)`
+        hooks = original = line.replace /HOOKS=["\(](.*)["\)]/, "$1"
         hooks = hooks.split ' '
         place = hooks.indexOf 'keyboard'
         for hook in ["encrypt", "lvm2", "resume"].reverse()
           hooks.splice place+1, 0, hook unless hook in hooks
         hooks = hooks.join ' '
         return callback null, false if hooks is original
-        content[i] = "HOOKS=\"#{hooks}\""
-        content = content.join '\n'
-        fs.writeFile options.ssh, "/mnt/etc/mkinitcpio.conf", content, (err) ->
-          callback err, true
+        data[i] = "HOOKS=(#{hooks})"
+        data = data.join '\n'
+      @fs.writeFile
+        target: '/mnt/etc/mkinitcpio.conf'
+        content: data
+      @next (err) -> callback err, true
   @system.execute
     header: 'mkinitcpio'
     arch_chroot: true
@@ -141,14 +149,14 @@ module.exports = header: "System Install", handler: ({options}) ->
     pacman -Syy
     """
     shy: true
-  @service.install
-    header: "Package yaourt"
-    arch_chroot: true
-    rootdir: '/mnt'
-    name: 'yaourt'
+  # @service.install
+  #   header: "Package yaourt"
+  #   arch_chroot: true
+  #   rootdir: '/mnt'
+  #   name: 'yaourt'
   (
     @service.install
-      header: "Packages #{pck}"
+      header: "Package #{pck}"
       arch_chroot: true
       rootdir: '/mnt'
     , pck
@@ -156,18 +164,21 @@ module.exports = header: "System Install", handler: ({options}) ->
     "nvidia", "xf86-video-intel", "intel-ucode", "bumblebee", "bbswitch",
     "primus", "lib32-primus", "lib32-virtualgl", "lib32-nvidia-utils"
   ]
-  @system.execute
-    header: 'mesa'
-    if: -> @status -1
+  @service.install
+    header: 'Package mesa'
+    # if: -> @status -1
     arch_chroot: true
     rootdir: '/mnt'
-    cmd: """
-    pacman -S lib32-mesa lib32-mesa-libg
-    """
-    shy: true # TODO: nikita.service.install shall support multi package installation
+    name: 'lib32-mesa'
+  @service.install
+    header: 'Package vulkan-intel'
+    # if: -> @status -1
+    arch_chroot: true
+    rootdir: '/mnt'
+    name: 'vulkan-intel'
   @system.execute
     header: 'mkinitcpio'
-    if: -> @status -1
+    # if: -> @status -1
     arch_chroot: true
     rootdir: '/mnt'
     cmd: """
@@ -182,7 +193,7 @@ module.exports = header: "System Install", handler: ({options}) ->
     , pck
   ) for pck in [ # , "nvme-cli"
     "acpi", "gnome", "gdm", "gnome-extra", "system-config-printer", "networkmanager",
-    "rhythmbox", "xorg-server", "xorg-xinit", "xorg-utils", "xorg-server-utils", "xorg-twm",
+    "rhythmbox", "xorg-server", "xorg-xinit", "xorg-apps", "xorg-twm",
     "xorg-xclock", "xterm"
   ]
   for username, user of options.users
@@ -194,8 +205,9 @@ module.exports = header: "System Install", handler: ({options}) ->
         xrandr --auto
         """
         eof: true
-      @system.arch_chroot
+      @system.execute
         if: -> @status -1
+        arch_chroot: true
         rootdir: '/mnt'
         cmd: """
         chown #{user.username}:#{user.group} #{user.home}/.xinitrc

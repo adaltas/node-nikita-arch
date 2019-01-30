@@ -27,12 +27,12 @@ module.exports = ({options}) ->
     @system.execute
       header: 'Upgrade'
       cmd: """
-      yaourt --noconfirm -Syyu
+      pacman --noconfirm -Syyu
       """
     @system.execute
       header: 'Cleanup Orphan'
       cmd: """
-      yaourt --noconfirm -Rns $(yaourt -Qtdq)
+      pacman --noconfirm -Rns $(pacman -Qtdq)
       """
   @call header: 'System', ->
     @system.user options.user,
@@ -316,7 +316,7 @@ module.exports = ({options}) ->
       @service.install
         header: 'Package'
         name: 'sublime-text'
-        yaourt_flags: ['u', 'y']
+        pacman_flags: ['u', 'y']
     # @system.execute
     #   header: 'K8S kubectl'
     #   cmd: """

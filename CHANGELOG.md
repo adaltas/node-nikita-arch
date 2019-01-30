@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* bootstrap: latest arch
 * bootstrap: use fsdisk to create partitions
 * mailstrping: install
 * libreoffice: fr pack
