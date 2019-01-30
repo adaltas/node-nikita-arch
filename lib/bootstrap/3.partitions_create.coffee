@@ -14,7 +14,7 @@ module.exports = header: "Partitions Creation", handler: ({options}) ->
       # default - start at beginning of disk
     +1G # 100 MB boot parttion
     n # new partition
-    2 # partion number 2
+    2 # partition number 2
       # default, start immediately after preceding partition
       # default, extend partition to end of disk
     p # print the in-memory partition table
