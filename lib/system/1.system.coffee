@@ -418,9 +418,6 @@ module.exports = ({options}) ->
       header: 'SFTP client filezilla'
       name: 'filezilla'
     @service.install
-      header: 'Package sqlectron-gui'
-      name: 'sqlectron-gui'
-    @service.install
       header: 'Package Apache Directory Studio'
       name: 'apachedirectorystudio'
     @service.install
