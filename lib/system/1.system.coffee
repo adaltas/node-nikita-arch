@@ -181,15 +181,19 @@ module.exports = ({options}) ->
       eof: true
       backup: true
     @service.install
-      header: 'Oracle JDK 7'
-      name: 'jdk7'
+     header: 'Oracle JDK 7'
+     name: 'jdk7'
     @service.install
-      header: 'Oracle JDK 8'
-      name: 'jdk8'
+     header: 'Oracle JDK 8'
+     name: 'jdk8'
+    @service.install
+     header: 'Oracle JDK 9'
+     name: 'jdk9'
     @system.execute
-      header: 'Java Default'
-      if: -> @status -1
-      cmd: 'archlinux-java set java-9-jdk'
+     header: 'Java Default'
+     if: -> @status -1
+     cmd: 'archlinux-java set java-9-jdk'
+     sudo: true
     @file.yaml
       target: '~/.gitconfig'
       merge: true

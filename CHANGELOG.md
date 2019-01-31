@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* java: jdk9
 * groups: create custom groups
 * terminal: preferences
 * package: update nikita
