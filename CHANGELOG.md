@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* skype: disabled
 * virtualbox: update dependencies
 * mailspring: disabled
 * gnome shell: disable battery extension
