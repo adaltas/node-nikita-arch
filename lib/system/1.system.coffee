@@ -213,6 +213,21 @@ module.exports = ({options}) ->
     @system.dconf
       header: 'Gnome Session TouchPad'
       properties: '/org/gnome/desktop/peripherals/touchpad/click-method': '\'fingers\''
+    @system.dconf
+      header: 'Gnome Terminal Menu'
+      properties: '/org/gnome/terminal/legacy/default-show-menubar': 'false'
+    @system.dconf
+      header: 'Gnome Terminal KeyBinding'
+      properties:
+        '/org/gnome/terminal/legacy/keybindings/close-tab': '\'<Primary>w\''
+        '/org/gnome/terminal/legacy/keybindings/close-window': '\'<Primary>q\''
+        '/org/gnome/terminal/legacy/keybindings/copy': '\'<Primary>c\''
+        '/org/gnome/terminal/legacy/keybindings/new-tab': '\'<Primary>t\''
+        '/org/gnome/terminal/legacy/keybindings/new-window': '\'<Primary>n\''
+        '/org/gnome/terminal/legacy/keybindings/next-tab': '\'<Primary><Shift>Right\''
+        '/org/gnome/terminal/legacy/keybindings/paste': '\'<Primary>v\''
+        '/org/gnome/terminal/legacy/keybindings/prev-tab': '\'<Primary><Shift>Left\''
+        '/org/gnome/terminal/legacy/keybindings/reset-and-clear': '\'<Primary>k\''
     # Note, could not find the property for "> settings > Date & Time > Automatic Date & Time"
     @system.dconf
       header: 'Automatic update timezone'

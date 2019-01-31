@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* terminal: preferences
 * package: update nikita
 * bootstrap: latest arch
 * bootstrap: use fsdisk to create partitions
