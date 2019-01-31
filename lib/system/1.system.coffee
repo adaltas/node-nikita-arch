@@ -245,9 +245,9 @@ module.exports = ({options}) ->
       properties: '/org/gnome/desktop/datetime/automatic-timezone': '\'true\''
     @service.install 'networkmanager-openvpn'
     @service.install 'chrome-gnome-shell-git'
-    @service.install 'gnome-shell-extension-battery-percentage-git'
+    # @service.install 'gnome-shell-extension-battery-percentage-git'
     @service.install 'gnome-shell-extension-simple-net-speed-git'
-    # @service.install 'gnome-shell-extension-refresh-wifi-git'
+    @service.install 'gnome-shell-extension-refresh-wifi-git'
     @service.install 'gnome-system-monitor'
   @call header: 'Nodejs', ->
     @system.execute

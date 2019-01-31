@@ -3,6 +3,8 @@
 
 ## Trunk
 
+* gnome shell: disable battery extension
+* gnome: automatic timezone
 * zsh: install with oh-my-zsh
 * java: jdk9
 * groups: create custom groups
