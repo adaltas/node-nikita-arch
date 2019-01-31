@@ -1,6 +1,12 @@
 
 # Changelog
 
+TODO:
+* Time was not synchronized until activated inside gnome settings, 
+  maybe "timedatectl" was not started?
+* Permission were manually set the `whoami` on "/usr/local/lib" for N and NPM,
+  maybe there is a better way?
+
 ## Trunk
 
 * skype: disabled
