@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* virtualbox: update dependencies
 * mailspring: disabled
 * gnome shell: disable battery extension
 * gnome: automatic timezone

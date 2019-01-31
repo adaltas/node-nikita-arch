@@ -492,9 +492,10 @@ module.exports = ({options}) ->
   @call header: 'VirtualBox', ->
     @service.install 'linux-headers'
     @service.install 'virtualbox'
-    @service.install 'virtualbox-guest-iso'
     # Note, virtualbox-host-dkms doesnt work for david but is ok for younes
-    @service.install 'virtualbox-host-modules-arch'
+    @service.install 'virtualbox-guest-modules-arch'
+    @service.install 'virtualbox-host-dkms'
+    @service.install 'virtualbox-guest-utils'
     @system.mod 'vboxnetadp'
     @system.mod 'vboxnetflt'
     @system.mod 'vboxpci'
