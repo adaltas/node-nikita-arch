@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* zsh: install with oh-my-zsh
 * java: jdk9
 * groups: create custom groups
 * terminal: preferences

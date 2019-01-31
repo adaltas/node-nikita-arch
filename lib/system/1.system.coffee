@@ -132,13 +132,16 @@ module.exports = ({options}) ->
     #   cmd: "lsmod | grep virtio"
   @call header: 'Environnment', ->
     @service.install
-      header: 'oh-my-zsh Install'
-      name: 'oh-my-zsh-git'
+      header: 'zsh'
+      name: 'zsh'
+    @service.install
+     header: 'oh-my-zsh Install'
+     name: 'oh-my-zsh-git'
     @system.copy
-      header: 'oh-my-zsh Init'
-      unless_exists: true
-      source: "/usr/share/oh-my-zsh/zshrc"
-      target: "~/.zshrc"
+     header: 'oh-my-zsh Init'
+     unless_exists: true
+     source: "/usr/share/oh-my-zsh/zshrc"
+     target: "~/.zshrc"
     @file
       header: 'Bash Profile'
       if_exists: true
