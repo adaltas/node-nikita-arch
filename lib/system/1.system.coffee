@@ -405,9 +405,9 @@ module.exports = ({options}) ->
     #   header: 'Pantheon Single Click',
     #   properties:
     #     'org.pantheon.files.preferences': 'single-click': 'false'
-    @service.install
-      header: 'Package Skype'
-      name: 'skypeforlinux-bin'
+    # @service.install
+    #   header: 'Package Skype'
+    #   name: 'skypeforlinux-bin'
     @service.install
       header: 'Package libreoffice-fresh'
       name: 'libreoffice-fresh'
