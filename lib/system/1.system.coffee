@@ -374,14 +374,14 @@ module.exports = ({options}) ->
     #   """
     #   trap: true
     #   code_skipped: 3
-    @call header: 'K8S Helm', ->
-      @service.install
-        name: 'kubernetes-helm'
-      @system.execute
-        if: -> @status -1
-        cmd: 'helm init'
-      @system.execute
-        cmd: 'helm repo update'
+    # @call header: 'K8S Helm', ->
+    #   @service.install
+    #     name: 'kubernetes-helm'
+    #   @system.execute
+    #     if: -> @status -1
+    #     cmd: 'helm init'
+    #   @system.execute
+    #     cmd: 'helm repo update'
   @call header: 'Productivity', ->
     # @service.install
     #   header: 'Package gitkraken'
