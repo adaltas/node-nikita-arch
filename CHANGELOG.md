@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* groups: create custom groups
 * terminal: preferences
 * package: update nikita
 * bootstrap: latest arch

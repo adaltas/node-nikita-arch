@@ -35,6 +35,7 @@ module.exports = ({options}) ->
       pacman --noconfirm -Rns $(pacman -Qtdq)
       """
   @call header: 'System', ->
+    @system.group group for group in options.groups or []
     @system.user options.user,
       name: process.env.USER
       sudo: true

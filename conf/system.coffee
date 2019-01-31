@@ -14,6 +14,10 @@ module.exports =
     upgrade: false
     locales: ['fr_FR.UTF-8', 'en_US.UTF-8']
     locale: 'en_US.UTF-8'
+    groups: [
+      name: 'docker'
+      system: true
+    ]
     user:
       groups: ['bumblebee', 'docker']
       shell: '/bin/zsh'
