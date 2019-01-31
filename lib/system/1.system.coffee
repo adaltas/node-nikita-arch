@@ -449,18 +449,18 @@ module.exports = ({options}) ->
       header: 'ttf-ms-fonts (Arial, Courier New, Georgia, Verdana, ...)'
       name: 'ttf-ms-fonts'
   @call header: 'Office', ->
-    @service.install
-      header: 'Master PDF Editor'
-      name: 'masterpdfeditor'
+    # @service.install
+    #   header: 'Master PDF Editor'
+    #   name: 'masterpdfeditor'
     @service.install
       header: 'Package firefox'
       name: 'firefox'
     @service.install
       header: 'Package thunderbird'
       name: 'thunderbird'
-    @service.install
-      header: 'Package mailspring'
-      name: 'mailspring'
+    # @service.install
+    #   header: 'Package mailspring'
+    #   name: 'mailspring'
   @call header: 'Docker', ->
     @service
       header: 'Package docker'

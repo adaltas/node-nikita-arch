@@ -3,6 +3,7 @@
 
 ## Trunk
 
+* mailspring: disabled
 * gnome shell: disable battery extension
 * gnome: automatic timezone
 * zsh: install with oh-my-zsh
