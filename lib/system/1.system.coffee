@@ -211,6 +211,9 @@ module.exports = ({options}) ->
     @service.install 'arc-gtk-theme'
     @system.dconf
       header: 'Gnome Session Save'
+      properties: '/org/gnome/desktop/datetime/automatic-timezone': 'true'
+    @system.dconf
+      header: 'Gnome Session Save'
       properties: '/org/gnome/gnome-session/auto-save-session': 'false'
     @system.dconf
       header: 'Gnome Session LANG'
