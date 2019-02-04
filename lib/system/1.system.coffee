@@ -104,6 +104,23 @@ module.exports = ({options}) ->
     @service
       header: 'NTFS',
       name: 'ntfs-3g'
+  @call header: 'YAY', ->
+    @system.execute
+      header: 'YAY'
+      cwd: '/tmp'
+      trap: true
+      unless_exists: '/usr/bin/yay'
+      cmd: """
+      [ -d /tmp/yay_build_git ] && rm -rf /tmp/yay_build_git
+      git clone https://aur.archlinux.org/yay.git /tmp/yay_build_git
+      cd /tmp/yay_build_git
+      makepkg -s
+      for file in `cd pkg/yay/usr && find -type f`; do
+        sudo cp -p pkg/yay/usr/$file /usr/$file;
+      done
+      cd ..
+      rm -rf /tmp/yay_build_git
+      """
   @call header: 'system', ->
     @call header: 'bluetooth', ->
       @service.install
