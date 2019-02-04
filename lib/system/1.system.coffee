@@ -108,7 +108,6 @@ module.exports = ({options}) ->
     @system.execute
       header: 'YAY'
       cwd: '/tmp'
-      trap: true
       unless_exists: '/usr/bin/yay'
       cmd: """
       [ -d /tmp/yay_build_git ] && rm -rf /tmp/yay_build_git
@@ -120,6 +119,13 @@ module.exports = ({options}) ->
       done
       cd ..
       rm -rf /tmp/yay_build_git
+      """
+  @call header: 'Keybase', ->
+    @system.execute
+      header: 'Keybase'
+      unless_exists: '/usr/bin/keybase'
+      cmd: """
+      yay --noconfirm -S keybase-bin
       """
   @call header: 'system', ->
     @call header: 'bluetooth', ->
