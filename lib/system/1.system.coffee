@@ -125,7 +125,6 @@ module.exports = ({options}) ->
       header: 'Keybase'
       name: 'keybase-bin'
       unless_exists: '/usr/bin/keybase'
-      yay_flags: ['--noconfirm'] 
   @call header: 'system', ->
     @call header: 'bluetooth', ->
       @service.install
