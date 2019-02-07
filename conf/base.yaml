@@ -11,4 +11,7 @@ bootstrap:
     locales: ['fr_FR.UTF-8', 'en_US.UTF-8']
     timezone: 'Europe/Paris'
     users:
-      nikita: uid: 1000, password: 'secret', sudoer: true
+      nikita:
+        uid: 1000
+        password: 'secret'
+        sudoer: true
