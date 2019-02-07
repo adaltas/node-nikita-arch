@@ -10,6 +10,7 @@ options:
 
 module.exports = header: "Partitions LVM", handler: ({options}) ->
   @system.execute
+    header: 'Crypsetup'
     cmd: """
     echo '#{options.passphrase}' | \
       cryptsetup luksFormat #{options.partition}
@@ -18,6 +19,7 @@ module.exports = header: "Partitions LVM", handler: ({options}) ->
     """
     code_skipped: 3
   @system.execute
+    header: 'Format'
     cmd: """
     info=#{options.info or ''}
     pvcreate /dev/mapper/lvm

@@ -9,6 +9,7 @@ module.exports = header: "System Install", handler: ({options}) ->
     user.home ?= "/home/#{username}"
   # `umount --recursive /mnt` to exit and enter with `arch-chroot /mnt /bin/bash`
   @system.execute
+    header: 'Mount'
     cmd: """
     if \
       df | grep /dev/mapper/volume-root && \
@@ -24,6 +25,7 @@ module.exports = header: "System Install", handler: ({options}) ->
     """
     code_skipped: 3
   @system.execute
+    header: 'Fstab'
     cmd: """
     echo '\\n\\n1\\n' | pacstrap -i /mnt base base-devel net-tools
     genfstab -U -p /mnt > /mnt/etc/fstab
@@ -131,6 +133,7 @@ module.exports = header: "System Install", handler: ({options}) ->
       """
       code_skipped: 3
   @file.types.pacman_conf
+    header: 'Pacman'
     target: '/mnt/etc/pacman.conf'
     content:
       'archlinuxfr':
@@ -149,11 +152,6 @@ module.exports = header: "System Install", handler: ({options}) ->
     pacman -Syy
     """
     shy: true
-  # @service.install
-  #   header: "Package yaourt"
-  #   arch_chroot: true
-  #   rootdir: '/mnt'
-  #   name: 'yaourt'
   (
     @service.install
       header: "Package #{pck}"
