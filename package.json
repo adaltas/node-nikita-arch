@@ -34,6 +34,8 @@
   ],
   "dependencies": {
     "coffeescript": "~2.3.2",
+    "js-yaml": "^3.12.1",
+    "mixme": "^0.0.1",
     "nikita": "^0.9.3-alpha.2",
     "season": "^6.0.2",
     "ssh2-fs": "~0.3.6"
@@ -44,7 +46,7 @@
     "nikita-arch": "npm start"
   },
   "scripts": {
-    "bootstrap": "coffee run.coffee ./conf/bootstrap",
-    "system": "coffee run.coffee ./conf/system"
+    "bootstrap": "coffee run.coffee bootstrap",
+    "system": "coffee run.coffee system"
   }
 }

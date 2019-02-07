@@ -1,0 +1,14 @@
+
+bootstrap:
+  '@nikitajs/core/lib/ssh/open':
+    disabled: false
+    host: 'X.X.X.X'
+    port: 22
+    password: 'XXXX'
+  './lib/bootstrap/5.partitions_lvm':
+    passphrase: 'XXXX'
+  './lib/bootstrap/6.system_install':
+    locales: ['fr_FR.UTF-8', 'en_US.UTF-8']
+    timezone: 'Europe/Paris'
+    users:
+      nikita: uid: 1000, password: 'secret', sudoer: true

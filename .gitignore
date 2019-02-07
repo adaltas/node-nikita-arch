@@ -1,4 +1,5 @@
 .*
+/conf/user.yaml
 /yarn.lock
 /node_modules
 /log

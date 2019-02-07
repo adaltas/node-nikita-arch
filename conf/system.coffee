@@ -1,7 +1,7 @@
 
 module.exports =
   '@nikitajs/core/lib/log/cli':
-     pad: host: 20, header: 60
+    pad: host: 20, header: 60
   '@nikitajs/core/lib/log/md':
     basedir: "#{__dirname}/../log"
   '@nikitajs/core/lib/ssh/open':

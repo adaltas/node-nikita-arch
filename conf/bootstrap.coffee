@@ -1,10 +1,11 @@
 
 module.exports =
   '@nikitajs/core/lib/log/cli':
-     pad: host: 20, header: 60
+    pad: host: 20, header: 60
   '@nikitajs/core/lib/log/md':
     basedir: "#{__dirname}/../log"
   '@nikitajs/core/lib/ssh/open':
+    disabled: true
     host: '192.168.1.39'
     port: 22
     password: 'secret'
@@ -19,11 +20,11 @@ module.exports =
       '/dev/nvme0n1p1': 'f32'
       '/dev/nvme0n1p2': 'ext4'
   './lib/bootstrap/5.partitions_lvm':
-    passphrase: 'GdansK007'
+    passphrase: 'secret'
     partition: '/dev/nvme0n1p2'
   './lib/bootstrap/6.system_install':
     locales: ['fr_FR.UTF-8', 'en_US.UTF-8']
     # locale: 'fr_FR.UTF-8' # Default to en_US.UTF-8
     timezone: 'Europe/Paris'
-    users: oskarryn: uid: 1000, password: 'secret', sudoer: true
+    users: {}
   '@nikitajs/core/lib/ssh/close': {}
