@@ -121,12 +121,11 @@ module.exports = ({options}) ->
       rm -rf /tmp/yay_build_git
       """
   @call header: 'Keybase', ->
-    @system.execute
+    @service.install
       header: 'Keybase'
+      name: 'keybase-bin'
       unless_exists: '/usr/bin/keybase'
-      cmd: """
-      yay --noconfirm -S keybase-bin
-      """
+      yay_flags: ['--noconfirm'] 
   @call header: 'system', ->
     @call header: 'bluetooth', ->
       @service.install
