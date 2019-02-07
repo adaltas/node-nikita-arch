@@ -1,5 +1,5 @@
 
-require '@nikita/filetypes/lib/register'
+require '@nikitajs/filetypes/lib/register'
 
 module.exports = header: "System Install", handler: ({options}) ->
   options.locale ?= 'en_US.UTF-8'
