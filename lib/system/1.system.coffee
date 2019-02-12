@@ -56,18 +56,26 @@ module.exports = ({options}) ->
       locales: options.locales
       locale: options.locale
       generate: true
+      sudo : true
     @file
       header: 'Locale conf'
       target: '/etc/locale.conf'
       content: "LANG=#{options.locale}"
+      sudo: true
     @service
       header: 'SSH'
       name: 'openssh'
       srv_name: 'sshd'
+      sudo: true
     @service
       name: 'wine'
-    @service.install 'rsync'
-    @service.install 'dosfstools'
+      sudo: true
+    @service.install
+      name: 'rsync'
+      sudo: true
+    @service.install
+      name: 'dosfstools'
+      sudo: true
     # Brother brother-mfc-l2720dw
     @service
       header: 'Printer',
@@ -76,6 +84,7 @@ module.exports = ({options}) ->
       chk_name: 'org.cups.cupsd.service'
       startup: true
       action: 'start'
+      sudo: true
     @file
       target: "/lib/udev/rules.d/39-usbmuxd.rules"
       content: """
@@ -106,8 +115,9 @@ module.exports = ({options}) ->
       sudo: true
   @call header: 'File System', ->
     @service
-      header: 'NTFS',
+      header: 'NTFS'
       name: 'ntfs-3g'
+      sudo: true
   @call header: 'YAY', ->
     @system.execute
       header: 'YAY'
@@ -124,6 +134,7 @@ module.exports = ({options}) ->
       cd ..
       rm -rf /tmp/yay_build_git
       """
+      sudo: true
   @call header: 'Keybase', ->
     @service.install
       header: 'Keybase'
