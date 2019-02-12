@@ -118,28 +118,21 @@ module.exports = ({options}) ->
       header: 'NTFS'
       name: 'ntfs-3g'
       sudo: true
-  @call header: 'YAY', ->
-    @system.execute
-      header: 'YAY'
-      cwd: '/tmp'
-      unless_exists: '/usr/bin/yay'
-      cmd: """
-      [ -d /tmp/yay_build_git ] && rm -rf /tmp/yay_build_git
-      git clone https://aur.archlinux.org/yay.git /tmp/yay_build_git
-      cd /tmp/yay_build_git
-      makepkg -s
-      for file in `cd pkg/yay/usr && find -type f`; do
-        sudo cp -p pkg/yay/usr/$file /usr/$file;
-      done
-      cd ..
-      rm -rf /tmp/yay_build_git
-      """
-      sudo: true
-  @call header: 'Keybase', ->
-    @service.install
-      header: 'Keybase'
-      name: 'keybase-bin'
-      unless_exists: '/usr/bin/keybase'
+  @system.execute
+    header: 'YAY'
+    cwd: '/tmp'
+    unless_exists: '/usr/bin/yay'
+    cmd: """
+    [ -d /tmp/yay_build_git ] && rm -rf /tmp/yay_build_git
+    git clone https://aur.archlinux.org/yay.git /tmp/yay_build_git
+    cd /tmp/yay_build_git
+    makepkg --noconfirm -s
+    for file in `cd pkg/yay/usr && find -type f`; do
+      sudo cp -p pkg/yay/usr/$file /usr/$file;
+    done
+    cd ..
+    rm -rf /tmp/yay_build_git
+    """
   @call header: 'system', ->
     @call header: 'bluetooth', ->
       @service.install
@@ -480,6 +473,10 @@ module.exports = ({options}) ->
     @service.install
       header: 'Gravit'
       name: 'gravit-designer-bin'
+    @service.install
+      header: 'Keybase'
+      name: 'keybase-bin'
+      unless_exists: '/usr/bin/keybase'
   @call header: 'Font', ->
     @service.install
       header: 'Liberation'
