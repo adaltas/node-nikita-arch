@@ -274,14 +274,26 @@ module.exports = ({options}) ->
     @service.install 'gnome-shell-extension-simple-net-speed-git'
     @service.install 'gnome-shell-extension-refresh-wifi-git'
     @service.install 'gnome-system-monitor'
-  @call header: 'Nodejs', ->
+  @call header: 'NPM global', ->
+    @system.mkdir
+      target: '~/.npm-global'
     @system.execute
       cmd: """
-      [[ `npm config get prefix` == "/usr/local" ]] && exit 3
-      chown -R `whoami`. /usr/local
-      npm config set prefix /usr/local
+      [[ `npm config get prefix` == "~/.npm-global" ]] && exit 42
+      npm config set prefix ~/.npm-global
       """
-      code_skipped: 3
+      code_skipped: 42
+    @file
+      replace: """
+      export PATH=~/.npm-global/bin:$PATH
+      """
+      target: "~/.profile"
+      from: '#START NPM GLOBAL'
+      to: '#END NPM GLOBAL'
+      append: true
+      eof: true
+      backup: true
+  @call header: 'Nodejs', ->
     @system.npm
       header: 'Global Packages'
       name: ['n', 'coffee-script', 'mocha']

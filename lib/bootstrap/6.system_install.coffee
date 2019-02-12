@@ -182,7 +182,8 @@ module.exports = header: "System Install", handler: ({options}) ->
     , pck
   ) for pck in [ # , "nvme-cli"
     "xf86-video-intel", "intel-ucode", "bbswitch", 
-    "primus", "lib32-primus", "lib32-virtualgl", "lib32-nvidia-utils", "nodejs"
+    "primus", "lib32-primus", "lib32-virtualgl", "lib32-nvidia-utils",
+    "nodejs", "npm"
   ]
   @service.install
     header: 'Package mesa'
