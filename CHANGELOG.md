@@ -9,6 +9,7 @@ TODO:
 
 ## Trunk
 
+* bootstrap: nvidia-dkms
 * skype: disabled
 * virtualbox: update dependencies
 * mailspring: disabled

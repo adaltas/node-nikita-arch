@@ -6,9 +6,9 @@ module.exports =
     basedir: "#{__dirname}/../log"
   '@nikitajs/core/lib/ssh/open':
     disabled: true
-    host: '192.168.0.17'
+    host: 'XXX.XXX.XXX.XXX'
     port: 22
-    password: 'secret'
+    password: 'XXXXXX'
   './lib/system/1.system':
     disabled: false
     upgrade: false

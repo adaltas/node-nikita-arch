@@ -20,8 +20,8 @@ Create a bootable USB stick
 Ensure the target host can boot over USB
 For Dell Precision, press F2 to enter the BIOS, en modify
 1. Secure Boot: Secure Boot Enable: Enabled
-2. Advanced Boot Options: Enable Legacyf Option ROMs
-Optional and not sure, activate UEFI from the BIOS, path is "/loader/entries/archiso-x86_64.conf"
+2. General: Advanced Boot Options: Enable Legacy Option ROMs
+3. Save the BIOS settings and reboot while pressing F12
 
 From the drive containing the Arch installation media
 
@@ -42,10 +42,10 @@ pacman -Sy openssh
 # Start ssh daemon
 systemctl start sshd
 # Print IP address
-ip addr show
+ip a
 ```
 
-Copy the file 'conf/base.yaml' to 'conf/user.yaml' and modify the connection information, such as "hostname" and "password", and the user information. By default, a "nikita" user is created with the "secret" password.
+Copy the file 'conf/base.yaml' to 'conf/user.yaml' and modify the connection information, such as "hostname" and "password", and the user information. By default, a "nikita" user is created as sudoer with the "secret" password.
 
 ## Step 2: bootstrap
 
@@ -56,7 +56,7 @@ The bootstrap process can be executed either from the bootable system or from a 
 3. Edit any other configuration of interest
 4. Run `npm run bootstrap`
 
-Reboot, update the bios UEFI entry, for exemple set "EFI/systemd/systemd-bootx64.efi"  in "Settings/General/Boot Sequence".
+Reboot into the BIOS and create a new UEFI entry, for example set "EFI/systemd/systemd-bootx64.efi"  in "Settings/General/Boot Sequence".
 
 ## System
 

@@ -31,6 +31,30 @@ module.exports = header: "System Install", handler: ({options}) ->
     genfstab -U -p /mnt > /mnt/etc/fstab
     """
     shy: true # Status not handled for now
+  @file.types.pacman_conf
+    header: 'Pacman conf'
+    target: '/mnt/etc/pacman.conf'
+    content:
+      'archlinuxfr':
+        'SigLevel': 'Never'
+        'Server': 'http://repo.archlinux.fr/$arch'
+      'multilib':
+        'Include': '/etc/pacman.d/mirrorlist'
+    merge: true
+    backup: true
+  @system.execute
+    header: 'Pacman update'
+    arch_chroot: true
+    rootdir: '/mnt'
+    cmd: """
+    pacman -Syy
+    """
+    shy: true
+  @service.install
+    header: 'Linux headers'
+    arch_chroot: true
+    rootdir: '/mnt'
+    name: 'linux-headers'
   @file.types.locale_gen
     header: 'Locale gen'
     rootdir: '/mnt'
@@ -53,6 +77,11 @@ module.exports = header: "System Install", handler: ({options}) ->
     exit
     """
     code_skipped: 3
+  @service.install
+    header: "Package nvidia"
+    arch_chroot: true
+    rootdir: '/mnt'
+    name: 'nvidia-dkms'
   @call (_, callback) ->
     @fs.readFile
       target: "/mnt/etc/mkinitcpio.conf"
@@ -61,17 +90,29 @@ module.exports = header: "System Install", handler: ({options}) ->
       return callback err if err
       data = data.split '\n'
       for line, i in data
-        continue unless /^HOOKS=/.test line
-        # Was `"..."`, is now `(...)`
-        hooks = original = line.replace /HOOKS=["\(](.*)["\)]/, "$1"
-        hooks = hooks.split ' '
-        place = hooks.indexOf 'keyboard'
-        for hook in ["encrypt", "lvm2", "resume"].reverse()
-          hooks.splice place+1, 0, hook unless hook in hooks
-        hooks = hooks.join ' '
-        return callback null, false if hooks is original
-        data[i] = "HOOKS=(#{hooks})"
-        data = data.join '\n'
+        status = true
+        if /^MODULES=/.test line
+          # Was `"..."`, is now `(...)`
+          modules = original = line.replace /MODULES=["\(](.*)["\)]/, "$1"
+          modules = modules.split ' '
+          # place = modules.indexOf 'keyboard'
+          for module in ["nvidia"]
+            modules.push module unless module in modules
+          modules = modules.join ' '
+          status = false if modules is original
+          data[i] = "MODULES=(#{modules})"
+        if /^HOOKS=/.test line
+          # Was `"..."`, is now `(...)`
+          hooks = original = line.replace /HOOKS=["\(](.*)["\)]/, "$1"
+          hooks = hooks.split ' '
+          place = hooks.indexOf 'keyboard'
+          for hook in ["encrypt", "lvm2", "resume"].reverse()
+            hooks.splice place+1, 0, hook unless hook in hooks
+          hooks = hooks.join ' '
+          status = false if hooks is original
+          data[i] = "HOOKS=(#{hooks})"
+      return callback null, false unless status
+      data = data.join '\n'
       @fs.writeFile
         target: '/mnt/etc/mkinitcpio.conf'
         content: data
@@ -83,7 +124,8 @@ module.exports = header: "System Install", handler: ({options}) ->
     cmd: """
     [ -f /boot/vmlinuz-linux ] && exit 3
     mkinitcpio -p linux
-    bootctl install # on 2nd attemp: Failed to open loader.conf for writing: File exists
+    # Note, called a second time just below for no good reason
+    #bootctl install # on 2nd attemp: Failed to open loader.conf for writing: File exists
     exit
     """
     code_skipped: 3
@@ -132,26 +174,6 @@ module.exports = header: "System Install", handler: ({options}) ->
       echo "#{username} ALL=(ALL) ALL" >> /etc/sudoers
       """
       code_skipped: 3
-  @file.types.pacman_conf
-    header: 'Pacman'
-    target: '/mnt/etc/pacman.conf'
-    content:
-      'archlinuxfr':
-        'SigLevel': 'Never'
-        'Server': 'http://repo.archlinux.fr/$arch'
-      'multilib':
-        'Include': '/etc/pacman.d/mirrorlist'
-    merge: true
-    backup: true
-  @system.execute
-    header: 'User'
-    arch_chroot: true
-    rootdir: '/mnt'
-    cmd: """
-    # Update database
-    pacman -Syy
-    """
-    shy: true
   (
     @service.install
       header: "Package #{pck}"
@@ -159,7 +181,7 @@ module.exports = header: "System Install", handler: ({options}) ->
       rootdir: '/mnt'
     , pck
   ) for pck in [ # , "nvme-cli"
-    "nvidia", "xf86-video-intel", "intel-ucode", "bumblebee", "bbswitch",
+    "xf86-video-intel", "intel-ucode", "bbswitch", 
     "primus", "lib32-primus", "lib32-virtualgl", "lib32-nvidia-utils", "nodejs"
   ]
   @service.install
@@ -174,15 +196,15 @@ module.exports = header: "System Install", handler: ({options}) ->
     arch_chroot: true
     rootdir: '/mnt'
     name: 'vulkan-intel'
-  @system.execute
-    header: 'mkinitcpio'
-    # if: -> @status -1
-    arch_chroot: true
-    rootdir: '/mnt'
-    cmd: """
-    mkinitcpio -p linux
-    """
-    code_skipped: 3
+  # @system.execute
+  #   header: 'mkinitcpio'
+  #   # if: -> @status -1
+  #   arch_chroot: true
+  #   rootdir: '/mnt'
+  #   cmd: """
+  #   mkinitcpio -p linux
+  #   """
+  #   code_skipped: 3
   (
     @service.install
       header: "Package #{pck}"
@@ -212,22 +234,6 @@ module.exports = header: "System Install", handler: ({options}) ->
         chmod 644 #{user.home}/.xinitrc
         """
         code_skipped: 3
-  @file
-    header: 'Bumblebee Configuration'
-    target: "/mnt/etc/bumblebee/bumblebee.conf"
-    match: /^Bridge=.*$/m
-    replace: "Bridge=primus"
-    backup: true
-  for username, user of options.users
-    @system.execute
-      header: "Bumblebee for #{username}"
-      arch_chroot: true
-      rootdir: '/mnt'
-      cmd: """
-      id #{username} | grep \\(bumblebee\\) && exit 3
-      gpasswd -a #{username} bumblebee
-      """
-      code_skipped: 3
   @system.execute
     header: "Video Card"
     arch_chroot: true
@@ -311,11 +317,33 @@ module.exports = header: "System Install", handler: ({options}) ->
     arch_chroot: true
     rootdir: '/mnt'
     name: 'NetworkManager'
-  @service.startup
-    header: 'Startup bumblebeed'
-    arch_chroot: true
-    rootdir: '/mnt'
-    name: 'bumblebeed'
+  @call header: 'Bumblebee', disabled: true, ->
+    @service.install
+      header: "Package"
+      arch_chroot: true
+      rootdir: '/mnt'
+      name: 'bumblebee'
+    @file
+      header: 'Bumblebee Configuration'
+      target: "/mnt/etc/bumblebee/bumblebee.conf"
+      match: /^Bridge=.*$/m
+      replace: "Bridge=primus"
+      backup: true
+    for username, user of options.users
+      @system.execute
+        header: "Bumblebee for #{username}"
+        arch_chroot: true
+        rootdir: '/mnt'
+        cmd: """
+        id #{username} | grep \\(bumblebee\\) && exit 3
+        gpasswd -a #{username} bumblebee
+        """
+        code_skipped: 3
+    @service.startup
+      header: 'Startup bumblebeed'
+      arch_chroot: true
+      rootdir: '/mnt'
+      name: 'bumblebeed'
   @service
     name: 'openssh'
     srv_name: 'sshd'
