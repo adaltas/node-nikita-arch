@@ -121,8 +121,8 @@ module.exports = ({options}) ->
   @system.execute
     header: 'YAY'
     cwd: '/tmp'
-    unless_exists: '/usr/bin/yay'
     cmd: """
+    [ -f /usr/bin/yay ] && exit 42
     [ -d /tmp/yay_build_git ] && rm -rf /tmp/yay_build_git
     git clone https://aur.archlinux.org/yay.git /tmp/yay_build_git
     cd /tmp/yay_build_git
@@ -133,7 +133,8 @@ module.exports = ({options}) ->
     cd ..
     rm -rf /tmp/yay_build_git
     """
-  @call header: 'system', ->
+    code_skipped: 42
+  @call header: 'System', ->
     @call header: 'bluetooth', ->
       @service.install
         name: 'bluez'
