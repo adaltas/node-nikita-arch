@@ -66,3 +66,7 @@ From your host machine
 2. Create and modify your user configuration in "user.yaml"
 3. Edit any other configuration of interest
 4. Run `npm run system`
+
+Note, system may also be executed from a remote location
+1. Edit the configuration "./conf/user.yaml" and add your SSH connection settings
+2. Enable sudo passwordless eg `sudo su -; echo '<username> ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers`
