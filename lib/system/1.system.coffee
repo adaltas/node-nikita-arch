@@ -19,9 +19,11 @@ Interesting commands
 
 module.exports = ({options}) ->
   throw Error "Required option: locales" unless options.locales
+  ssh = @ssh options.ssh
+  home = if ssh then "/home/#{ssh.config.username}" else '~'
   options.locale ?= options.locales[0]
   @call
-    header: 'System'
+    header: 'Maintenance'
     if: options.upgrade
   , ->
     @system.execute
@@ -103,6 +105,10 @@ module.exports = ({options}) ->
       header: 'NTFS'
       name: 'ntfs-3g'
       sudo: true
+  @service.install
+    # Note, yay requires git soon after
+    name: 'git'
+    sudo: true
   @system.execute
     header: 'YAY'
     cwd: '/tmp'
@@ -126,6 +132,7 @@ module.exports = ({options}) ->
     @service.install
       header: 'zsh'
       name: 'zsh'
+      sudo: true
     @service.install
      header: 'oh-my-zsh Install'
      name: 'oh-my-zsh-git'
@@ -133,11 +140,11 @@ module.exports = ({options}) ->
      header: 'oh-my-zsh Init'
      unless_exists: true
      source: "/usr/share/oh-my-zsh/zshrc"
-     target: "~/.zshrc"
+     target: "#{home}/.zshrc"
     @file
       header: 'Bash Profile'
       if_exists: true
-      target: "~/.bashrc"
+      target: "#{home}/.bashrc"
       match: /^\. ~\/.profile$/m
       replace: '. ~/.profile'
       append: true
@@ -146,7 +153,7 @@ module.exports = ({options}) ->
     @file
       header: 'ZSH Profile'
       if_exists: true
-      target: "~/.zshrc"
+      target: "#{home}/.zshrc"
       match: /^source ~\/.profile$/m
       replace: 'source ~/.profile'
       append: true
@@ -154,7 +161,7 @@ module.exports = ({options}) ->
       eof: true
     @file
       header: "Profile CWD"
-      target: "~/.profile"
+      target: "#{home}/.profile"
       from: '#START TERM CWD'
       to: '#END TERM CWD'
       replace: """
@@ -169,7 +176,7 @@ module.exports = ({options}) ->
       header: "Profile Alias"
       if: !!options.aliases
       replace: Object.keys(options.aliases).map((k) -> "alias #{k}='#{options.aliases[k]}'").join '\n'
-      target: "~/.profile"
+      target: "#{home}/.profile"
       from: '#START ALIAS'
       to: '#END ALIAS'
       append: true
@@ -189,12 +196,12 @@ module.exports = ({options}) ->
      if: -> @status -1
      cmd: 'archlinux-java set java-9-jdk'
      sudo: true
-    @file.yaml
-      target: '~/.gitconfig'
+    @file.ini
+      target: "#{home}/.gitconfig"
       merge: true
       content: color: ui: 'true'
-    @file.yaml
-      target: '~/.gitconfig'
+    @file.ini
+      target: "#{home}/.gitconfig"
       merge: true
       content: alias: lgb: "log --graph --abbrev-commit --oneline --date=relative --branches --pretty=format:'%C(bold green)%h %d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'"
   @call header: 'System', ->
@@ -220,8 +227,10 @@ module.exports = ({options}) ->
         name: 'bluez-utils'
       @service.start
         name: 'bluetooth'
+        sudo: true
       @service.startup
         name: 'bluetooth'
+        sudo: true
   @call header: 'Gnome', ->
     @service.install 'gnome-session-properties'
     @service.install 'dconf-editor'
@@ -281,7 +290,7 @@ module.exports = ({options}) ->
       name: ' virt-manager'
   @call header: 'NPM global', ->
     @system.mkdir
-      target: '~/.npm-global'
+      target: "#{home}/.npm-global"
     @system.execute
       cmd: """
       [[ `npm config get prefix` == "~/.npm-global" ]] && exit 42
@@ -292,7 +301,7 @@ module.exports = ({options}) ->
       replace: """
       export PATH=~/.npm-global/bin:$PATH
       """
-      target: "~/.profile"
+      target: "#{home}/.profile"
       from: '#START NPM GLOBAL'
       to: '#END NPM GLOBAL'
       append: true
@@ -306,10 +315,11 @@ module.exports = ({options}) ->
       sudo: true
     @file
       header: "N"
-      target: "~/.profile"
+      target: "#{home}/.profile"
       from: '#START N'
       to: '#END N'
       replace: """
+      export N_PREFIX=~/.n
       n 10.0.0
       """
       append: true
@@ -333,12 +343,12 @@ module.exports = ({options}) ->
       upgrade: true
     @file.cson
       header: 'Configuration'
-      target: "~/.atom/config.cson"
+      target: "#{home}/.atom/config.cson"
       content: options.atom_config
       merge: true
     @file.cson
       header: 'Keymap'
-      target: "~/.atom/keymap.cson"
+      target: "#{home}/.atom/keymap.cson"
       content:
         'atom-workspace':
           "alt-f7": "find-and-replace:select-all"
@@ -377,10 +387,10 @@ module.exports = ({options}) ->
         content: 'sublime-text': 'Server': 'https://download.sublimetext.com/arch/stable/x86_64'
         merge: true
         backup: true
-      # @system.execute
-      #   if: -> @status -1
-      #   cmd: 'pacman -Syu sublime-text'
-      #   sudo: true
+      @system.execute
+        if: -> @status -1
+        cmd: 'pacman --noconfirm -Syu sublime-text'
+        sudo: true
       @service.install
         header: 'Package'
         name: 'sublime-text'
@@ -401,7 +411,7 @@ module.exports = ({options}) ->
     #   """
     #   code_skipped: 3
     # @file
-    #   target: '~/.zshrc'
+    #   target: "#{home}/.zshrc"
     #   from: '#START KUBECTL'
     #   to: '#END KUBECTL'
     #   replace: """
@@ -513,6 +523,7 @@ module.exports = ({options}) ->
       name: 'docker'
       action: 'start'
       startup: true
+      sudo: true
     @service.install
       header: 'Package docker-compose'
       name: 'docker-compose'
