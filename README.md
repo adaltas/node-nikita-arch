@@ -19,7 +19,7 @@ Create a bootable USB stick
 
 Ensure the target host can boot over USB
 For Dell Precision, press F2 to enter the BIOS, en modify
-1. Secure Boot: Secure Boot Enable: Enabled
+1. Secure Boot: Secure Boot Enable: Disabled
 2. General: Advanced Boot Options: Enable Legacy Option ROMs
 3. Save the BIOS settings and reboot while pressing F12
 
