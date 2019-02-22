@@ -67,23 +67,8 @@ module.exports = ({options}) ->
       name: 'openssh'
       srv_name: 'sshd'
       sudo: true
-    @service
-      name: 'wine'
-      sudo: true
     @service.install
       name: 'rsync'
-      sudo: true
-    @service.install
-      name: 'dosfstools'
-      sudo: true
-    # Brother brother-mfc-l2720dw
-    @service
-      header: 'Printer',
-      name: 'cups'
-      srv_name: 'org.cups.cupsd.service'
-      chk_name: 'org.cups.cupsd.service'
-      startup: true
-      action: 'start'
       sudo: true
     @file
       target: "/lib/udev/rules.d/39-usbmuxd.rules"
@@ -134,29 +119,6 @@ module.exports = ({options}) ->
     rm -rf /tmp/yay_build_git
     """
     code_skipped: 42
-  @call header: 'System', ->
-    @call header: 'bluetooth', ->
-      @service.install
-        name: 'bluez'
-      @service.install
-        name: 'bluez-utils'
-      @service.start
-        name: 'bluetooth'
-      @service.startup
-        name: 'bluetooth'
-  @call header: 'Virtualization', ->
-    # ebtables dnsmasq firewalld vde2
-    @service.install
-      header: 'qemu'
-      name: ' qemu'
-    @service.install
-      header: 'libvirt'
-      name: 'libvirt'
-      started: true
-      action: 'start'
-    @service.install
-      header: 'libvirt manager'
-      name: ' virt-manager'
     # Virtio modules are not loaded, can't find a solution for now
     # @system.execute
     #   cmd: "lsmod | grep virtio"
@@ -235,6 +197,31 @@ module.exports = ({options}) ->
       target: '~/.gitconfig'
       merge: true
       content: alias: lgb: "log --graph --abbrev-commit --oneline --date=relative --branches --pretty=format:'%C(bold green)%h %d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'"
+  @call header: 'System', ->
+    @service
+      name: 'wine'
+      sudo: true
+    @service.install
+      name: 'dosfstools'
+      sudo: true
+    # Brother brother-mfc-l2720dw
+    @service
+      header: 'Printer',
+      name: 'cups'
+      srv_name: 'org.cups.cupsd.service'
+      chk_name: 'org.cups.cupsd.service'
+      startup: true
+      action: 'start'
+      sudo: true
+    @call header: 'bluetooth', ->
+      @service.install
+        name: 'bluez'
+      @service.install
+        name: 'bluez-utils'
+      @service.start
+        name: 'bluetooth'
+      @service.startup
+        name: 'bluetooth'
   @call header: 'Gnome', ->
     @service.install 'gnome-session-properties'
     @service.install 'dconf-editor'
@@ -279,6 +266,19 @@ module.exports = ({options}) ->
     @service.install 'gnome-shell-extension-simple-net-speed-git'
     @service.install 'gnome-shell-extension-refresh-wifi-git'
     @service.install 'gnome-system-monitor'
+  @call header: 'Virtualization', ->
+    # ebtables dnsmasq firewalld vde2
+    @service.install
+      header: 'qemu'
+      name: ' qemu'
+    @service.install
+      header: 'libvirt'
+      name: 'libvirt'
+      started: true
+      action: 'start'
+    @service.install
+      header: 'libvirt manager'
+      name: ' virt-manager'
   @call header: 'NPM global', ->
     @system.mkdir
       target: '~/.npm-global'
