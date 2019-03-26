@@ -15,4 +15,21 @@ bootstrap:
         uid: 1000
         password: 'secret'
         sudoer: true
-system: {}
+    install_bumblebee: false
+
+system:
+    # Groups of packages to install
+    './lib/system/2.dev_apps':
+        gnome: true
+        virtualization: true
+        docker: true
+        virtualbox: true
+        npm_global: true
+        atom: true
+        nodejs: true
+        programming: true
+
+    './lib/system/3.office_apps':
+        productivity: true
+        font: true
+        office: true

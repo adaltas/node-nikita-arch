@@ -235,6 +235,9 @@ module.exports = ({options}) ->
       @service.startup
         name: 'bluetooth'
         sudo: true
+    @service
+      name: 'ntp'
+      startup: 'ntpd'
 
 ## Dependencies
 

@@ -13,7 +13,10 @@ module.exports = ({options}) ->
   ssh = @ssh options.ssh
   home = if ssh then "/home/#{ssh.config.username}" else '~'
   options.locale ?= options.locales[0]
-  @call header: 'Gnome', ->
+  @call
+    header: 'Gnome'
+    if: options.gnome,
+  ->
     @service.install 'gnome-session-properties'
     @service.install 'dconf-editor'
     @service.install 'arc-gtk-theme'
@@ -58,7 +61,10 @@ module.exports = ({options}) ->
     @service.install 'gnome-shell-extension-refresh-wifi-git'
     @service.install 'gnome-system-monitor'
 
-  @call header: 'Virtualization', ->
+  @call
+    header: 'Virtualization'
+    if: options.virtualization
+  , ->
     # ebtables dnsmasq firewalld vde2
     @service.install
       header: 'qemu'
@@ -72,7 +78,10 @@ module.exports = ({options}) ->
       header: 'libvirt manager'
       name: ' virt-manager'
 
-  @call header: 'NPM Global', ->
+  @call
+    header: 'NPM Global'
+    if: options.npm_global
+  , ->
     @system.mkdir
       target: "#{home}/.npm-global"
     @system.execute
@@ -92,7 +101,10 @@ module.exports = ({options}) ->
       eof: true
       backup: true
 
-  @call header: 'Nodejs', ->
+  @call
+    header: 'Nodejs'
+    if: options.nodejs
+  , ->
     @system.npm
       header: 'Global Packages'
       name: ['n', 'coffee-script', 'mocha']
@@ -111,7 +123,10 @@ module.exports = ({options}) ->
       eof: true
       backup: true
 
-  @call header: 'Atom', ->
+  @call
+    header: 'Atom'
+    if: options.atom
+  , ->
     @service.install
       header: 'Package'
       name: 'atom'
@@ -146,7 +161,13 @@ module.exports = ({options}) ->
           "ctrl-shift-G": "find-and-replace:find-previous"
       merge: true
 
-  @call header: 'Programming', ->
+  @call
+    header: 'Programming'
+    if: options.programming
+  , ->
+    @service.install
+      header: 'Neovim'
+      name: 'python-neovim'
     @service.install
       header: 'Dart'
       name: 'dart'
@@ -228,7 +249,10 @@ module.exports = ({options}) ->
     #   @system.execute
     #     cmd: 'helm repo update'
 
-  @call header: 'Docker', ->
+  @call
+    header: 'Docker'
+    if: options.docker
+  , ->
     @service
       header: 'Package docker'
       name: 'docker'
@@ -258,7 +282,10 @@ module.exports = ({options}) ->
     #   """
     # ) for image in ['centos']
 
-  @call header: 'VirtualBox', ->
+  @call
+    header: 'VirtualBox'
+    if: options.virtualbox,
+  ->
     @service.install 'linux-headers'
     @service.install 'virtualbox'
     # Note, virtualbox-host-dkms doesnt work for david but is ok for younes

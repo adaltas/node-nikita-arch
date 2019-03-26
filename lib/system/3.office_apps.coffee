@@ -13,7 +13,10 @@ module.exports = ({options}) ->
   ssh = @ssh options.ssh
   home = if ssh then "/home/#{ssh.config.username}" else '~'
   options.locale ?= options.locales[0]
-  @call header: 'Productivity', ->
+  @call
+    header: 'Productivity'
+    if: options.productivity
+  , ->
     # @service.install
     #   header: 'Package gitkraken'
     #   name: 'gitkraken'
@@ -59,10 +62,12 @@ module.exports = ({options}) ->
       name: 'gravit-designer-bin'
     @service.install
       header: 'Keybase'
-      name: 'keybase-bin'
-      unless_exists: '/usr/bin/keybase'
+      name: 'keybase-gui'
 
-  @call header: 'Font', ->
+  @call
+    header: 'Font'
+    if: options.font
+  , ->
     @service.install
       header: 'Liberation'
       name: 'ttf-liberation'
@@ -79,7 +84,10 @@ module.exports = ({options}) ->
       header: 'ttf-ms-fonts (Arial, Courier New, Georgia, Verdana, ...)'
       name: 'ttf-ms-fonts'
 
-  @call header: 'Office', ->
+  @call
+    header: 'Office'
+    if: options.office
+  , ->
     # @service.install
     #   header: 'Master PDF Editor'
     #   name: 'masterpdfeditor'
