@@ -9,6 +9,7 @@ module.exports =
     host: 'XXX.XXX.XXX.XXX'
     port: 22
     password: 'XXXXXX'
+
   './lib/system/1.system':
     disabled: false
     upgrade: false
@@ -22,6 +23,8 @@ module.exports =
       groups: ['bumblebee', 'docker']
       shell: '/bin/zsh'
     aliases: 'll': 'ls -l'
+
+  './lib/system/2.dev_apps.coffee':
     atom_config:
       "*":
         "core":
@@ -71,5 +74,6 @@ module.exports =
       ".md":
         "whitespace":
           "removeTrailingWhitespace": false
+
   '@nikitajs/core/lib/ssh/close':
     disabled: true

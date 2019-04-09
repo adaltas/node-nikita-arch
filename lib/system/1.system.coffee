@@ -36,7 +36,8 @@ module.exports = ({options}) ->
       cmd: """
       pacman --noconfirm -Rns $(pacman -Qtdq)
       """
-  @call header: 'System', ->
+
+  @call header: 'System Configuration', ->
     for group in options.groups or []
       @system.group
         header: "Group #{group.name}"
@@ -100,6 +101,7 @@ module.exports = ({options}) ->
       system: true
       nofile: 64000
       sudo: true
+
   @call header: 'File System', ->
     @service
       header: 'NTFS'
@@ -128,6 +130,7 @@ module.exports = ({options}) ->
     # Virtio modules are not loaded, can't find a solution for now
     # @system.execute
     #   cmd: "lsmod | grep virtio"
+
   @call header: 'Environnment', ->
     @service.install
       header: 'zsh'
@@ -204,7 +207,8 @@ module.exports = ({options}) ->
       target: "#{home}/.gitconfig"
       merge: true
       content: alias: lgb: "log --graph --abbrev-commit --oneline --date=relative --branches --pretty=format:'%C(bold green)%h %d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'"
-  @call header: 'System', ->
+
+  @call header: 'System Utilities', ->
     @service
       name: 'wine'
       sudo: true
@@ -231,335 +235,9 @@ module.exports = ({options}) ->
       @service.startup
         name: 'bluetooth'
         sudo: true
-  @call header: 'Gnome', ->
-    @service.install 'gnome-session-properties'
-    @service.install 'dconf-editor'
-    @service.install 'arc-gtk-theme'
-    @system.dconf
-      header: 'Gnome Session Save'
-      properties: '/org/gnome/desktop/datetime/automatic-timezone': 'true'
-    @system.dconf
-      header: 'Gnome Session Save'
-      properties: '/org/gnome/gnome-session/auto-save-session': 'false'
-    @system.dconf
-      header: 'Gnome Session LANG'
-      properties: '/org/gnome/desktop/input-sources/sources': '[(\'xkb\', \'us\'), (\'xkb\', \'fr\')]'
-    @system.dconf
-      header: 'Gnome Session Invert Alt/CTL'
-      properties: '/org/gnome/desktop/input-sources/xkb-options': '[\'ctrl:swap_lalt_lctl\']'
-    @system.dconf
-      header: 'Gnome Session TouchPad'
-      properties: '/org/gnome/desktop/peripherals/touchpad/click-method': '\'fingers\''
-    @system.dconf
-      header: 'Gnome Terminal Menu'
-      properties: '/org/gnome/terminal/legacy/default-show-menubar': 'false'
-    @system.dconf
-      header: 'Gnome Terminal KeyBinding'
-      properties:
-        '/org/gnome/terminal/legacy/keybindings/close-tab': '\'<Primary>w\''
-        '/org/gnome/terminal/legacy/keybindings/close-window': '\'<Primary>q\''
-        '/org/gnome/terminal/legacy/keybindings/copy': '\'<Primary>c\''
-        '/org/gnome/terminal/legacy/keybindings/new-tab': '\'<Primary>t\''
-        '/org/gnome/terminal/legacy/keybindings/new-window': '\'<Primary>n\''
-        '/org/gnome/terminal/legacy/keybindings/next-tab': '\'<Primary><Shift>Right\''
-        '/org/gnome/terminal/legacy/keybindings/paste': '\'<Primary>v\''
-        '/org/gnome/terminal/legacy/keybindings/prev-tab': '\'<Primary><Shift>Left\''
-        '/org/gnome/terminal/legacy/keybindings/reset-and-clear': '\'<Primary>k\''
-    # Note, could not find the property for "> settings > Date & Time > Automatic Date & Time"
-    @system.dconf
-      header: 'Automatic update timezone'
-      properties: '/org/gnome/desktop/datetime/automatic-timezone': '\'true\''
-    @service.install 'networkmanager-openvpn'
-    @service.install 'chrome-gnome-shell-git'
-    # @service.install 'gnome-shell-extension-battery-percentage-git'
-    @service.install 'gnome-shell-extension-simple-net-speed-git'
-    @service.install 'gnome-shell-extension-refresh-wifi-git'
-    @service.install 'gnome-system-monitor'
-  @call header: 'Virtualization', ->
-    # ebtables dnsmasq firewalld vde2
-    @service.install
-      header: 'qemu'
-      name: ' qemu'
-    @service.install
-      header: 'libvirt'
-      name: 'libvirt'
-      started: true
-      action: 'start'
-    @service.install
-      header: 'libvirt manager'
-      name: ' virt-manager'
-  @call header: 'NPM global', ->
-    @system.mkdir
-      target: "#{home}/.npm-global"
-    @system.execute
-      cmd: """
-      [[ `npm config get prefix` == "~/.npm-global" ]] && exit 42
-      npm config set prefix ~/.npm-global
-      """
-      code_skipped: 42
-    @file
-      replace: """
-      export PATH=~/.npm-global/bin:$PATH
-      """
-      target: "#{home}/.profile"
-      from: '#START NPM GLOBAL'
-      to: '#END NPM GLOBAL'
-      append: true
-      eof: true
-      backup: true
-  @call header: 'Nodejs', ->
-    @system.npm
-      header: 'Global Packages'
-      name: ['n', 'coffee-script', 'mocha']
-      global: true
-      sudo: true
-    @file
-      header: "N"
-      target: "#{home}/.profile"
-      from: '#START N'
-      to: '#END N'
-      replace: """
-      export N_PREFIX=~/.n
-      n 10.0.0
-      """
-      append: true
-      eof: true
-      backup: true
-  @call header: 'Atom', ->
-    @service.install
-      header: 'Package'
-      name: 'atom'
-    @system.apm
-      header: 'APM Packages'
-      name: [
-        'stylus', 'sublime-style-column-selection', 'atom-monokai-dark',
-        'atom-typescript', 'chester-atom-syntax', 'color-picker', 'git-plus',
-        'git-time-machine', 'highlight-selected', 'indent-guide-improved',
-        'language-coffee-script', 'language-docker', 'language-jade',
-        'language-jade', 'language-log', 'language-scala', 'linter', 'markdown-toc',
-        'material-syntax', 'minimap', 'minimap-find-and-replace', 'minimap-highlight-selected',
-        'minimap-selection', 'monokai', 'pretty-json', 'project-manager', 'react',
-        'tail', 'teletype']
-      upgrade: true
-    @file.cson
-      header: 'Configuration'
-      target: "#{home}/.atom/config.cson"
-      content: options.atom_config
-      merge: true
-    @file.cson
-      header: 'Keymap'
-      target: "#{home}/.atom/keymap.cson"
-      content:
-        'atom-workspace':
-          "alt-f7": "find-and-replace:select-all"
-          "ctrl-f7": "find-and-replace:find-next-selected"
-          "ctrl-shift-f7": "find-and-replace:find-previous-selected"
-          "shift-f7": "find-and-replace:find-previous"
-          "f7": "find-and-replace:find-next"
-          "ctrl-g": "find-and-replace:find-next"
-          "ctrl-shift-G": "find-and-replace:find-previous"
-      merge: true
-  @call header: 'Programming', ->
-    @service.install
-      header: 'Dart'
-      name: 'dart'
-    @service.install
-      header: 'GIT Crypt'
-      name: 'git-crypt'
-    @call
-      header: 'SublimeText'
-    , ->
-      @system.execute
-        header: 'GPG keys'
-        sudo: true
-        cmd: """
-        curl -O https://download.sublimetext.com/sublimehq-pub.gpg
-        pacman-key --add sublimehq-pub.gpg
-        pacman-key --lsign-key 8A8F901A
-        rm sublimehq-pub.gpg
-        """
-        trap: true
-        shy: true # todo: add status discovery
-      @file.types.pacman_conf
-        header: 'Stable channel'
-        sudo: true
-        # target: '/etc/pacman.conf'
-        content: 'sublime-text': 'Server': 'https://download.sublimetext.com/arch/stable/x86_64'
-        merge: true
-        backup: true
-      @system.execute
-        if: -> @status -1
-        cmd: 'pacman --noconfirm -Syu sublime-text'
-        sudo: true
-      @service.install
-        header: 'Package'
-        name: 'sublime-text'
-        pacman_flags: ['u', 'y']
-    # @system.execute
-    #   header: 'K8S kubectl'
-    #   cmd: """
-    #   version=`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`
-    #   if [ -f /usr/local/bin/kubectl ]; then
-    #     current_version=`kubectl version --client -o=json | grep gitVersion | sed 's/.*"\\(.*\\)".*/\\1/'`
-    #     [[ $version == $current_version ]] && exit 3
-    #   fi
-    #   curl -L https://storage.googleapis.com/kubernetes-release/release/${version}/bin/linux/amd64/kubectl -o /tmp/kubectl
-    #   chmod +x /tmp/kubectl
-    #   sudo mv ./kubectl /usr/local/bin/kubectl
-    #   kubectl cluster-info
-    #   kubectl completion -h
-    #   """
-    #   code_skipped: 3
-    # @file
-    #   target: "#{home}/.zshrc"
-    #   from: '#START KUBECTL'
-    #   to: '#END KUBECTL'
-    #   replace: """
-    #   if [ $commands[kubectl] ]; then
-    #     source <(kubectl completion zsh)
-    #   fi
-    #   """
-    # @system.execute
-    #   cmd: """
-    #   version=`curl -s https://raw.githubusercontent.com/kubernetes/minikube/master/Makefile | grep '^ISO_VERSION ' | sed 's/.* \\(.*\\)/\\1/'`
-    #   if [ -f /usr/local/bin/minikube ]; then
-    #     current_version=`minikube version | sed 's/.* \\(.*\\)/\\1/'`
-    #     [[ $version == $current_version ]] && exit 3
-    #   fi
-    #   curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.23.0/minikube-linux-amd64
-    #   chmod +x minikube
-    #   sudo mv minikube /usr/local/bin/
-    #   """
-    #   trap: true
-    #   code_skipped: 3
-    # @call header: 'K8S Helm', ->
-    #   @service.install
-    #     name: 'kubernetes-helm'
-    #   @system.execute
-    #     if: -> @status -1
-    #     cmd: 'helm init'
-    #   @system.execute
-    #     cmd: 'helm repo update'
-  @call header: 'Productivity', ->
-    # @service.install
-    #   header: 'Package gitkraken'
-    #   name: 'gitkraken'
-    @service.install
-      header: 'Package chromium'
-      name: 'chromium'
-    @service.install
-      header: 'Package opera'
-      name: 'opera'
-    # @service.install
-    #   header: 'Package pantheon-files-plugin-dropbox-bzr'
-    #   name: 'pantheon-files-plugin-dropbox-bzr'
-    # @system.gsettings
-    #   header: 'Pantheon Single Click',
-    #   properties:
-    #     'org.pantheon.files.preferences': 'single-click': 'false'
-    # @service.install
-    #   header: 'Package Skype'
-    #   name: 'skypeforlinux-bin'
-    @service.install
-      header: 'Package libreoffice-fresh'
-      name: 'libreoffice-fresh'
-    @service.install
-      header: 'Package libreoffice-fresh-fr'
-      name: 'libreoffice-fresh-fr'
-    @service.install
-      header: 'Package typora'
-      name: 'typora'
-    @service.install
-      header: 'SFTP client gftp'
-      name: 'gftp'
-    @service.install
-      header: 'SFTP client filezilla'
-      name: 'filezilla'
-    @service.install
-      header: 'Package Apache Directory Studio'
-      name: 'apachedirectorystudio'
-    @service.install
-      header: 'tcpdump'
-      name: 'tcpdump'
-    @service.install
-      header: 'Gravit'
-      name: 'gravit-designer-bin'
-    @service.install
-      header: 'Keybase'
-      name: 'keybase-bin'
-      unless_exists: '/usr/bin/keybase'
-  @call header: 'Font', ->
-    @service.install
-      header: 'Liberation'
-      name: 'ttf-liberation'
-    @service.install
-      header: 'Dejavu'
-      name: 'ttf-dejavu'
-    @service.install
-      header: 'Roboto'
-      name: 'ttf-roboto'
-    @service.install
-      header: 'Noto'
-      name: 'noto-fonts'
-    @service.install
-      header: 'ttf-ms-fonts (Arial, Courier New, Georgia, Verdana, ...)'
-      name: 'ttf-ms-fonts'
-  @call header: 'Office', ->
-    # @service.install
-    #   header: 'Master PDF Editor'
-    #   name: 'masterpdfeditor'
-    @service.install
-      header: 'Package firefox'
-      name: 'firefox'
-    @service.install
-      header: 'Package thunderbird'
-      name: 'thunderbird'
-    # @service.install
-    #   header: 'Package mailspring'
-    #   name: 'mailspring'
-  @call header: 'Docker', ->
     @service
-      header: 'Package docker'
-      name: 'docker'
-      action: 'start'
-      startup: true
-      sudo: true
-    @service.install
-      header: 'Package docker-compose'
-      name: 'docker-compose'
-    # Installation is based on  the official documentation
-    # [Deploying a registry server](https://docs.docker.com/registry/deploying/)
-    # @system.execute
-    #   cmd: """
-    #   docker run -d -p 5000:5000 --restart=always --name registry \
-    #     -v `pwd`/data:/var/lib/registry \
-    #     registry:2
-    #   """
-    #   code_skipped: 3
-    # @system.execute (
-    #   header: "Push #{image}"
-    #   cmd: """
-    #   # Get any image from the hub and tag it to point to your registry
-    #   docker pull #{image}
-    #   docker tag #{image} localhost:5000/#{image}
-    #   # then push it to your registry
-    #   docker push localhost:5000/ubuntu
-    #   """
-    # ) for image in ['centos']
-  @call header: 'VirtualBox', ->
-    @service.install 'linux-headers'
-    @service.install 'virtualbox'
-    # Note, virtualbox-host-dkms doesnt work for david but is ok for younes
-    @service.install 'virtualbox-guest-modules-arch'
-    @service.install 'virtualbox-host-dkms'
-    @service.install 'virtualbox-guest-utils'
-    @system.mod 'vboxnetadp'
-    @system.mod 'vboxnetflt'
-    @system.mod 'vboxpci'
-  @service
-    header: 'Vagrant'
-    name: 'vagrant'
-
+      name: 'ntp'
+      startup: 'ntpd'
 
 ## Dependencies
 

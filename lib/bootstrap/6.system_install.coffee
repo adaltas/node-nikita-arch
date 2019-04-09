@@ -318,7 +318,11 @@ module.exports = header: "System Install", handler: ({options}) ->
     arch_chroot: true
     rootdir: '/mnt'
     name: 'NetworkManager'
-  @call header: 'Bumblebee', disabled: true, ->
+  # TODO: configure this and bbswitch
+  @call
+    header: 'Bumblebee'
+    if: options.install_bumblebee
+  , ->
     @service.install
       header: "Package"
       arch_chroot: true
