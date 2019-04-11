@@ -140,7 +140,7 @@ module.exports = ({options}) ->
         'language-jade', 'language-log', 'language-scala', 'linter', 'markdown-toc',
         'material-syntax', 'minimap', 'minimap-find-and-replace', 'minimap-highlight-selected',
         'minimap-selection', 'monokai', 'pretty-json', 'project-manager', 'react',
-        'tail', 'teletype']
+        'tail', 'teletype', 'linter-coffeelint']
       upgrade: true
     @file.cson
       header: 'Configuration'
