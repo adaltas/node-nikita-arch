@@ -11,13 +11,9 @@ BLOB based database.
     Name of the module.
 
 ## Example
-
-require('nikita').system.dconf({
-  properties: {
-    '/org/gnome/gnome-session/auto-save-session': 'true'
-  }
-})
-
+```javascript
+require('nikita').system.dconf({ properties: {'/org/gnome/gnome-session/auto-save-session': 'true'} })
+```
 ## Note
 
 Run the command "dconf-editor" to navigate the database with a UI.
