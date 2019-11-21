@@ -5,9 +5,9 @@ bootstrap:
     host: 'X.X.X.X'
     port: 22
     password: 'XXXX'
-  './lib/bootstrap/5.partitions_lvm':
+  './lib/bootstrap/2.disk':
     passphrase: 'XXXX'
-  './lib/bootstrap/6.system_install':
+  './lib/bootstrap/3.system':
     locales: ['fr_FR.UTF-8', 'en_US.UTF-8']
     timezone: 'Europe/Paris'
     users:
