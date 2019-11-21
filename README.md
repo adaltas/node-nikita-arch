@@ -70,3 +70,12 @@ From your host machine
 Note, system may also be executed from a remote location
 1. Edit the configuration "./conf/user.yaml" and add your SSH connection settings
 2. Enable sudo passwordless eg `sudo su -; echo '<username> ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers`
+
+
+## Troubleshooting
+
+### Disk Timeout
+
+Symtoms: The disks time out, do not show up in initramfs. 
+
+Check the RAID parameters in BIOS and switch back to AHCI.

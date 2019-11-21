@@ -15,8 +15,8 @@ module.exports = ({options}) ->
   options.locale ?= options.locales[0]
   @call
     header: 'Gnome'
-    if: options.gnome,
-  ->
+    if: options.gnome
+  , ->
     @service.install 'gnome-session-properties'
     @service.install 'dconf-editor'
     @service.install 'arc-gtk-theme'
@@ -140,7 +140,7 @@ module.exports = ({options}) ->
         'language-jade', 'language-log', 'language-scala', 'linter', 'markdown-toc',
         'material-syntax', 'minimap', 'minimap-find-and-replace', 'minimap-highlight-selected',
         'minimap-selection', 'monokai', 'pretty-json', 'project-manager', 'react',
-        'tail', 'teletype']
+        'tail', 'teletype', 'linter-coffeelint']
       upgrade: true
     @file.cson
       header: 'Configuration'
@@ -284,8 +284,8 @@ module.exports = ({options}) ->
 
   @call
     header: 'VirtualBox'
-    if: options.virtualbox,
-  ->
+    if: options.virtualbox
+  , ->
     @service.install 'linux-headers'
     @service.install 'virtualbox'
     # Note, virtualbox-host-dkms doesnt work for david but is ok for younes
