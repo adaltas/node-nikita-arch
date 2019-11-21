@@ -23,6 +23,8 @@ For Dell Precision, press F2 to enter the BIOS, en modify
 2. General: Advanced Boot Options: Enable Legacy Option ROMs
 3. Save the BIOS settings and reboot while pressing F12
 
+Boot the computer over the USB system. On startup, select "Boot Arch Linux (x86_64)".
+
 From the drive containing the Arch installation media
 
 ```
