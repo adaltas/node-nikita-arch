@@ -36,7 +36,6 @@ module.exports = ({options}) ->
       cmd: """
       pacman --noconfirm -Rns $(pacman -Qtdq)
       """
-
   @call header: 'System Configuration', ->
     for group in options.groups or []
       @system.group
@@ -130,20 +129,19 @@ module.exports = ({options}) ->
     # Virtio modules are not loaded, can't find a solution for now
     # @system.execute
     #   cmd: "lsmod | grep virtio"
-
   @call header: 'Environnment', ->
     @service.install
       header: 'zsh'
       name: 'zsh'
       sudo: true
     @service.install
-     header: 'oh-my-zsh Install'
-     name: 'oh-my-zsh-git'
+      header: 'oh-my-zsh Install'
+      name: 'oh-my-zsh-git'
     @system.copy
-     header: 'oh-my-zsh Init'
-     unless_exists: true
-     source: "/usr/share/oh-my-zsh/zshrc"
-     target: "#{home}/.zshrc"
+      header: 'oh-my-zsh Init'
+      unless_exists: true
+      source: "/usr/share/oh-my-zsh/zshrc"
+      target: "#{home}/.zshrc"
     @file
       header: 'Bash Profile'
       if_exists: true
@@ -186,19 +184,19 @@ module.exports = ({options}) ->
       eof: true
       backup: true
     @service.install
-     header: 'Oracle JDK 7'
-     name: 'jdk7'
+      header: 'Oracle JDK 7'
+      name: 'jdk7'
     @service.install
-     header: 'Oracle JDK 8'
-     name: 'jdk8'
+      header: 'Oracle JDK 8'
+      name: 'jdk8'
     @service.install
-     header: 'Oracle JDK 9'
-     name: 'jdk9'
+      header: 'Oracle JDK 9'
+      name: 'jdk9'
     @system.execute
-     header: 'Java Default'
-     if: -> @status -1
-     cmd: 'archlinux-java set java-9-jdk'
-     sudo: true
+      header: 'Java Default'
+      if: -> @status -1
+      cmd: 'archlinux-java set java-9-jdk'
+      sudo: true
     @file.ini
       target: "#{home}/.gitconfig"
       merge: true
@@ -207,7 +205,6 @@ module.exports = ({options}) ->
       target: "#{home}/.gitconfig"
       merge: true
       content: alias: lgb: "log --graph --abbrev-commit --oneline --date=relative --branches --pretty=format:'%C(bold green)%h %d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'"
-
   @call header: 'System Utilities', ->
     @service
       name: 'wine'

@@ -1,7 +1,7 @@
 
 require '@nikitajs/filetypes/lib/register'
 
-module.exports = header: "System Install", handler: ({options}) ->
+module.exports = header: "System", handler: ({options}) ->
   options.locale ?= 'en_US.UTF-8'
   for username, user of options.users
     user.name ?= username
@@ -181,8 +181,8 @@ module.exports = header: "System Install", handler: ({options}) ->
       rootdir: '/mnt'
     , pck
   ) for pck in [ # , "nvme-cli"
-    "xf86-video-intel", "intel-ucode", "bbswitch", 
-    "primus", "lib32-primus", "lib32-virtualgl", "lib32-nvidia-utils",
+    "xf86-video-intel", "intel-ucode", "bbswitch"
+    "primus", "lib32-primus", "lib32-virtualgl", "lib32-nvidia-utils"
     "nodejs", "npm"
   ]
   @service.install

@@ -1,13 +1,5 @@
 
 module.exports = header: "Disk", handler: ({options}) ->
-  
-  # @system.execute
-  #   header: 'Encryption'
-  #   """
-  #   cryptsetup open --type plain #{options.disk} container --key-file /dev/random
-  #   dd if=/dev/zero of=/dev/mapper/container status=progress bs=1M
-  #   cryptsetup close container
-  #   """
   @call
     header: "Partitions Creation"
   , ->
