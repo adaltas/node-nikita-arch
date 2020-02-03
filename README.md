@@ -13,14 +13,16 @@ There are 3 main steps:
 
 For now, the preparation process is manual.
 
+First, [download the arch distribution](https://www.archlinux.org/download/) as an ISO image.
+
 Create a bootable USB stick
 * [`dd` for Linux, Windows and MacOS](https://wiki.archlinux.org/index.php/USB_flash_installation_media)
-* [OSX graphical instructions](https://tutorials.ubuntu.com/tutorial/tutorial-create-a-usb-stick-on-macos#0)
+* [OSX graphical instructions](https://tutorials.ubuntu.com/tutorial/tutorial-create-a-usb-stick-on-macos)
 
 Ensure the target host can boot over USB
 For Dell Precision, press F2 to enter the BIOS, en modify
-1. Secure Boot: Secure Boot Enable: Disabled
-2. General: Advanced Boot Options: Enable Legacy Option ROMs
+1. General: Advanced Boot Options: Enable Legacy Option ROMs
+2. Secure Boot: Secure Boot Enable: Disabled
 3. Save the BIOS settings and reboot while pressing F12
 
 Boot the computer over the USB system. On startup, select "Boot Arch Linux (x86_64)".
