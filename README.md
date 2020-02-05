@@ -13,22 +13,30 @@ There are 3 main steps:
 
 For now, the preparation process is manual.
 
+### Download
+
 First, [download the arch distribution](https://www.archlinux.org/download/) as an ISO image.
 
 Create a bootable USB stick:
 
-* [`dd` for Linux, Windows and MacOS](https://wiki.archlinux.org/index.php/USB_flash_installation_media)
-* [OSX graphical instructions](https://tutorials.ubuntu.com/tutorial/tutorial-create-a-usb-stick-on-macos)
+The easiest way to create a bootable Arch Linux on USB is by using the [Etcher GUI tool](https://www.balena.io/etcher/) available on Linux, Windows and MacOS. Ubuntu also provide some good instructions such as the one for [MacOS](https://tutorials.ubuntu.com/tutorial/tutorial-create-a-usb-stick-on-macos).
 
-Ensure the target host can boot over USB. For Dell Precision, press F2 to enter the BIOS, en modify:
+Alternatively, if you favor CLI commands, you can use the dd command to create a live USB. You can refer to the Arch Linux documentation on how to use [`dd` for Linux, Windows and MacOS](https://wiki.archlinux.org/index.php/USB_flash_installation_media).
+
+### Boot
+
+Ensure the target host can boot over USB and that the disks are discoverable. For Dell Precision, press F2 to enter the BIOS, and modify:
 
 1. General: Advanced Boot Options: Enable Legacy Option ROMs
 2. Secure Boot: Secure Boot Enable: Disabled
-3. Save the BIOS settings and reboot while pressing F12
+3. System Configuration: SATA Operation : AHCI
+4. Save the BIOS settings and reboot while pressing F12
 
 Boot the computer over the USB system. On startup, select "Boot Arch Linux (x86_64)".
 
-From the drive containing the Arch installation media
+### Preparation
+
+From the drive containing the Arch installation media:
 
 ```
 # Start the computer
@@ -76,11 +84,7 @@ Note, system may also be executed from a remote location
 1. Edit the configuration "./conf/user.yaml" and add your SSH connection settings
 2. Enable sudo passwordless eg `sudo su -; echo '<username> ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers`
 
+## Complementary documentations
 
-## Troubleshooting
-
-### Disk Timeout
-
-Symtoms: The disks time out, do not show up in initramfs. 
-
-Check the RAID parameters in BIOS and switch back to AHCI.
+* [Troubleshooting](./docs/troubleshooting.md)
+* [Dell Precision 5520 specifics]('./docs/dell.md')
