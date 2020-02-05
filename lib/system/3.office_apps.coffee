@@ -9,10 +9,8 @@
 ###
 
 module.exports = ({options}) ->
-  throw Error "Required option: locales" unless options.locales
   ssh = @ssh options.ssh
   home = if ssh then "/home/#{ssh.config.username}" else '~'
-  options.locale ?= options.locales[0]
   @call
     header: 'Productivity'
     if: options.productivity

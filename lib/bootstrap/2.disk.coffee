@@ -1,5 +1,13 @@
 
 module.exports = header: "Disk", handler: ({options}) ->
+  # Need to check, this was used in previous versions of nikita-arch,
+  # probably to ensure the disk is erased from any previous data
+  # @system.execute
+  #   cmd: """
+  #   cryptsetup open --type plain #{options.disk} container --key-file /dev/random
+  #   dd if=/dev/zero of=/dev/mapper/container status=progress bs=1M
+  #   cryptsetup close container
+  #   """
   @call
     header: "Partitions Creation"
   , ->

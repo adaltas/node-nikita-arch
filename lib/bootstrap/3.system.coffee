@@ -55,6 +55,17 @@ module.exports = header: "System", handler: ({options}) ->
     arch_chroot: true
     rootdir: '/mnt'
     name: 'linux-headers'
+  # Installing Linux because mkinitcpio alone is not enough as it create
+  # "/etc/mkinitcpio.conf" and "/etc/mkinitcpio.d"
+  # but there is no "/etc/mkinitcpio.d/linux.preset"
+  @service.install
+    header: 'Linux'
+    arch_chroot: true
+    rootdir: '/mnt'
+    name: 'linux'
+    # Installing linux-firmware because otherwise the network card is not
+    # activated with `dmesg | grep firmware` printing a message such as
+    # "iwlwifi no suitable firmare found"
   @file.types.locale_gen
     header: 'Locale gen'
     rootdir: '/mnt'
@@ -82,6 +93,13 @@ module.exports = header: "System", handler: ({options}) ->
     arch_chroot: true
     rootdir: '/mnt'
     name: 'nvidia-dkms'
+  # mkinitcpio is a Bash script used to create an initial ramdisk environment.
+  # The initial ramdisk is in essence a very small environment (early userspace)
+  # which loads various kernel modules and sets up necessary things before
+  # handing over control to init. This makes it possible to have, for example,
+  # encrypted root file systems and root file systems on a software RAID array.
+  # mkinitcpio allows for easy extension with custom hooks, has autodetection at
+  # runtime, and many other features.
   @call (_, callback) ->
     @fs.readFile
       target: "/mnt/etc/mkinitcpio.conf"
@@ -183,29 +201,17 @@ module.exports = header: "System", handler: ({options}) ->
   ) for pck in [ # , "nvme-cli"
     "xf86-video-intel", "intel-ucode", "bbswitch"
     "primus", "lib32-primus", "lib32-virtualgl", "lib32-nvidia-utils"
-    "nodejs", "npm"
   ]
   @service.install
     header: 'Package mesa'
-    # if: -> @status -1
     arch_chroot: true
     rootdir: '/mnt'
     name: 'lib32-mesa'
   @service.install
     header: 'Package vulkan-intel'
-    # if: -> @status -1
     arch_chroot: true
     rootdir: '/mnt'
     name: 'vulkan-intel'
-  # @system.execute
-  #   header: 'mkinitcpio'
-  #   # if: -> @status -1
-  #   arch_chroot: true
-  #   rootdir: '/mnt'
-  #   cmd: """
-  #   mkinitcpio -p linux
-  #   """
-  #   code_skipped: 3
   (
     @service.install
       header: "Package #{pck}"

@@ -183,20 +183,26 @@ module.exports = ({options}) ->
       append: true
       eof: true
       backup: true
-    @service.install
-      header: 'Oracle JDK 7'
-      name: 'jdk7'
-    @service.install
-      header: 'Oracle JDK 8'
-      name: 'jdk8'
-    @service.install
-      header: 'Oracle JDK 9'
-      name: 'jdk9'
-    @system.execute
-      header: 'Java Default'
-      if: -> @status -1
-      cmd: 'archlinux-java set java-9-jdk'
-      sudo: true
+    @call header: 'Java', ->
+      # Oracle JDK is no longer valid. I didn't have to investigate but
+      # probably due to the licence agreement. Disabling for now.
+      @service.install
+        header: 'Oracle JDK 7'
+        disabled: true
+        name: 'jdk7'
+      @service.install
+        header: 'Oracle JDK 8'
+        disabled: true
+        name: 'jdk8'
+      @service.install
+        header: 'Oracle JDK 9'
+        disabled: true
+        name: 'jdk9'
+      @system.execute
+        header: 'Java Default'
+        if: -> @status -1
+        cmd: 'archlinux-java set java-9-jdk'
+        sudo: true
     @file.ini
       target: "#{home}/.gitconfig"
       merge: true
@@ -235,6 +241,7 @@ module.exports = ({options}) ->
     @service
       name: 'ntp'
       startup: 'ntpd'
+      sudo: true
 
 ## Dependencies
 

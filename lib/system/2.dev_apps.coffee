@@ -9,10 +9,8 @@
 ###
 
 module.exports = ({options}) ->
-  throw Error "Required option: locales" unless options.locales
   ssh = @ssh options.ssh
   home = if ssh then "/home/#{ssh.config.username}" else '~'
-  options.locale ?= options.locales[0]
   @call
     header: 'Gnome'
     if: options.gnome
@@ -105,6 +103,12 @@ module.exports = ({options}) ->
     header: 'Nodejs'
     if: options.nodejs
   , ->
+    @service.install
+      header: 'Package nodejs'
+      name: 'nodejs'
+    @service.install
+      header: 'Package npm'
+      name: 'npm'
     @system.npm
       header: 'Global Packages'
       name: ['n', 'coffee-script', 'mocha']
@@ -281,20 +285,26 @@ module.exports = ({options}) ->
     #   docker push localhost:5000/ubuntu
     #   """
     # ) for image in ['centos']
-
+  # Module vboxpci used to work but I can't activate it as of feb 2020,
+  # command `modprob vboxpci` fail with message "Module vboxpci not found in
+  # directory /lib/modules/`uname -r`"
+  # command `modprob vboxdrv vboxpci` work but with `lsmod` doesn't print the module.
   @call
     header: 'VirtualBox'
     if: options.virtualbox
   , ->
     @service.install 'linux-headers'
     @service.install 'virtualbox'
-    # Note, virtualbox-host-dkms doesnt work for david but is ok for younes
+    # for linux kernel choose virtualbox-host-modules-arch
+    @service.install 'virtualbox-host-modules-arch'
+    # for other kernels choose virtualbox-host-dkms
+    # @service.install 'virtualbox-host-dkms'
     @service.install 'virtualbox-guest-modules-arch'
-    @service.install 'virtualbox-host-dkms'
     @service.install 'virtualbox-guest-utils'
-    @system.mod 'vboxnetadp'
-    @system.mod 'vboxnetflt'
-    @system.mod 'vboxpci'
+    @system.mod 'vboxdrv'    # Mandatory
+    @system.mod 'vboxnetadp' # Optional, needed to create the host interface in the VirtualBox global preferences
+    @system.mod 'vboxnetflt' # Optional, needed to launch a virtual machine using that network interface
+    @system.mod 'vboxpci', disabled: true # Optional, needed when your virtual machine needs to pass through a PCI device on your host.
   @service
     header: 'Vagrant'
     name: 'vagrant'

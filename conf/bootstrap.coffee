@@ -23,5 +23,4 @@ module.exports =
     # locale: 'fr_FR.UTF-8' # Default to en_US.UTF-8
     timezone: 'Europe/Paris'
     users: {}
-
   '@nikitajs/core/lib/ssh/close': {}

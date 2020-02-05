@@ -3,6 +3,7 @@
 /yarn.lock
 /node_modules
 /log
+/package-lock.json
 !.travis.yml
 !.gitignore
 !.npmignore
