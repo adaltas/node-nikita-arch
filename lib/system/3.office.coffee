@@ -12,15 +12,25 @@ module.exports = ({options}) ->
   ssh = @ssh options.ssh
   home = if ssh then "/home/#{ssh.config.username}" else '~'
   @call
-    header: 'Productivity'
-    if: options.productivity
+    header: 'Web'
+    if: options.office
   , ->
+    @service.install
+      header: 'Package firefox'
+      name: 'firefox'
     @service.install
       header: 'Package chromium'
       name: 'chromium'
     @service.install
       header: 'Package opera'
       name: 'opera'
+  @call
+    header: 'Productivity'
+    if: options.productivity
+  , ->
+    @service.install
+      header: 'Package thunderbird'
+      name: 'thunderbird'
     @service.install
       header: 'Package libreoffice-fresh'
       name: 'libreoffice-fresh'
@@ -48,7 +58,6 @@ module.exports = ({options}) ->
     @service.install
       header: 'Keybase'
       name: 'keybase-gui'
-
   @call
     header: 'Font'
     if: options.font
@@ -68,20 +77,3 @@ module.exports = ({options}) ->
     @service.install
       header: 'ttf-ms-fonts (Arial, Courier New, Georgia, Verdana, ...)'
       name: 'ttf-ms-fonts'
-
-  @call
-    header: 'Office'
-    if: options.office
-  , ->
-    # @service.install
-    #   header: 'Master PDF Editor'
-    #   name: 'masterpdfeditor'
-    @service.install
-      header: 'Package firefox'
-      name: 'firefox'
-    @service.install
-      header: 'Package thunderbird'
-      name: 'thunderbird'
-    # @service.install
-    #   header: 'Package mailspring'
-    #   name: 'mailspring'
