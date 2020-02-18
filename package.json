@@ -41,25 +41,26 @@
       "email": "pierre@adaltas.com"
     },
     {
-      "name": "Joris Rummens",
+      "name": "Joris nmmens",
       "email": "joris@adaltas.com"
     }
   ],
   "dependencies": {
-    "coffeescript": "~2.3.2",
-    "js-yaml": "^3.12.1",
-    "mixme": "^0.0.1",
-    "nikita": "^0.9.3-alpha.8",
+    "coffeescript": "~2.5.1",
+    "js-yaml": "^3.13.1",
+    "mixme": "^0.3.5",
+    "nikita": "^0.9.5",
+    "prompts": "^2.3.0",
     "season": "^6.0.2",
-    "ssh2-fs": "~0.3.7"
+    "ssh2-fs": "~0.3.8"
   },
   "devDependencies": {},
-  "main": "./run",
+  "main": "./lib",
   "bin": {
     "nikita-arch": "npm start"
   },
   "scripts": {
-    "bootstrap": "coffee run.coffee bootstrap",
-    "system": "coffee run.coffee system"
+    "bootstrap": "coffee ./lib bootstrap",
+    "system": "coffee  ./lib system"
   }
 }

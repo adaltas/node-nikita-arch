@@ -9,6 +9,8 @@ TODO:
 
 ## Trunk
 
+* config: prompt user with questions
+* dconf: move to nikita
 * bootstrap: nvidia-dkms
 * skype: disabled
 * virtualbox: update dependencies

@@ -18,25 +18,25 @@ module.exports = ({options}) ->
     @service.install 'gnome-session-properties'
     @service.install 'dconf-editor'
     @service.install 'arc-gtk-theme'
-    @system.dconf
+    @tools.dconf
       header: 'Gnome Session Save'
       properties: '/org/gnome/desktop/datetime/automatic-timezone': 'true'
-    @system.dconf
+    @tools.dconf
       header: 'Gnome Session Save'
       properties: '/org/gnome/gnome-session/auto-save-session': 'false'
-    @system.dconf
+    @tools.dconf
       header: 'Gnome Session LANG'
       properties: '/org/gnome/desktop/input-sources/sources': '[(\'xkb\', \'us\'), (\'xkb\', \'fr\')]'
-    @system.dconf
+    @tools.dconf
       header: 'Gnome Session Invert Alt/CTL'
       properties: '/org/gnome/desktop/input-sources/xkb-options': '[\'ctrl:swap_lalt_lctl\']'
-    @system.dconf
+    @tools.dconf
       header: 'Gnome Session TouchPad'
       properties: '/org/gnome/desktop/peripherals/touchpad/click-method': '\'fingers\''
-    @system.dconf
+    @tools.dconf
       header: 'Gnome Terminal Menu'
       properties: '/org/gnome/terminal/legacy/default-show-menubar': 'false'
-    @system.dconf
+    @tools.dconf
       header: 'Gnome Terminal KeyBinding'
       properties:
         '/org/gnome/terminal/legacy/keybindings/close-tab': '\'<Primary>w\''
@@ -49,7 +49,7 @@ module.exports = ({options}) ->
         '/org/gnome/terminal/legacy/keybindings/prev-tab': '\'<Primary><Shift>Left\''
         '/org/gnome/terminal/legacy/keybindings/reset-and-clear': '\'<Primary>k\''
     # Note, could not find the property for "> settings > Date & Time > Automatic Date & Time"
-    @system.dconf
+    @tools.dconf
       header: 'Automatic update timezone'
       properties: '/org/gnome/desktop/datetime/automatic-timezone': '\'true\''
     @service.install 'networkmanager-openvpn'

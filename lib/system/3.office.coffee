@@ -52,9 +52,13 @@ module.exports = ({options}) ->
     @service.install
       header: 'tcpdump'
       name: 'tcpdump'
+    # Install fail:
+    # gravit-designer-bin-2019_2.7.zip ... FAILED
+    # Seems to be related with an invalid checksum
     @service.install
       header: 'Gravit'
       name: 'gravit-designer-bin'
+      disabled: true
     @service.install
       header: 'Keybase'
       name: 'keybase-gui'
