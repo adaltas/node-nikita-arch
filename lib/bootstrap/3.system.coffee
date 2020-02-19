@@ -68,6 +68,7 @@ module.exports = header: "System", handler: ({options}) ->
     # "iwlwifi no suitable firmare found"
   @file.types.locale_gen
     header: 'Locale gen'
+    arch_chroot: true
     rootdir: '/mnt'
     locales: options.locales
     locale: options.locale
