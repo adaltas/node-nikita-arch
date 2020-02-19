@@ -1,15 +1,12 @@
 # Create a user configuration
 fs = require 'fs'
 prompts = require 'prompts'
-{merge} = require 'mixme'
 path = require 'path'
 yaml = require 'js-yaml'
 
 module.exports = ->
-  source = path.resolve __dirname, '../conf/base.yaml'
   target = path.resolve __dirname, '../conf/user.yaml'
   unless fs.existsSync target
-    # fs.copyFileSync source, target
     response = await prompts [
       type: 'text',
       name: 'ssh_ip',
@@ -31,29 +28,41 @@ module.exports = ->
       name: 'user_password'
       message: 'Password'
     ]
-    config = yaml.safeLoad fs.readFileSync source
-    unless response.user_username is 'nikita'
-      {users} = config.bootstrap['./lib/bootstrap/3.system']
-      users[response.user_username] = users.nikita
-      delete users.nikita
-    config = merge config,
+    config =
       bootstrap:
         '@nikitajs/core/lib/ssh/open':
           disabled: false
           host: response.ssh_ip
           password: response.ssh_password
+          port: 22
         './lib/bootstrap/2.disk':
-          passphrase: response.disk_password
+          lvm:
+            passphrase: response.disk_password
         './lib/bootstrap/3.system':
           locales: ['fr_FR.UTF-8', 'en_US.UTF-8']
           timezone: 'Europe/Paris'
           users:
             [response.user_username]:
               password: response.user_password
+              sudoer: true
+          install_bumblebee: false
       system:
         '@nikitajs/core/lib/ssh/open':
           disabled: false
           host: response.ssh_ip
           username: response.user_username
           password: response.user_password
+        './lib/system/2.dev_apps':
+          gnome: true
+          virtualization: true
+          docker: true
+          virtualbox: true
+          npm_global: true
+          atom: true
+          nodejs: true
+          programming: true
+        './lib/system/3.office_apps':
+          productivity: true
+          font: true
+          office: true
     fs.writeFileSync target, yaml.safeDump config

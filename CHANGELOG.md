@@ -9,6 +9,7 @@ TODO:
 
 ## Trunk
 
+* config: refactor and fix luks secret
 * config: prompt user with questions
 * dconf: move to nikita
 * bootstrap: nvidia-dkms
