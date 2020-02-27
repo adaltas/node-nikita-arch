@@ -46,10 +46,10 @@ module.exports = ->
     config =
       bootstrap:
         '@nikitajs/core/lib/ssh/open':
-          disabled: false
-          host: response.ssh_ip
-          password: response.ssh_password
-          port: 22
+          disabled: response.connection is 'local'
+          host: response.ssh_ip or null
+          password: response.ssh_password or null
+          port: response.ssh_port or null
         './lib/bootstrap/2.disk':
           lvm:
             passphrase: response.disk_password
@@ -63,11 +63,12 @@ module.exports = ->
           install_bumblebee: false
       system:
         '@nikitajs/core/lib/ssh/open':
-          disabled: false
+          disabled: response.connection is 'local'
           host: response.ssh_ip
           username: response.user_username
-          password: response.user_password
-        './lib/system/2.dev_apps':
+          password: response.user_password or null
+          port: response.ssh_port or null
+        './lib/system/2.dev':
           gnome: true
           virtualization: true
           docker: true
