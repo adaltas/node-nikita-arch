@@ -285,26 +285,32 @@ module.exports = ({options}) ->
     #   docker push localhost:5000/ubuntu
     #   """
     # ) for image in ['centos']
-  # Module vboxpci used to work but I can't activate it as of feb 2020,
-  # command `modprob vboxpci` fail with message "Module vboxpci not found in
-  # directory /lib/modules/`uname -r`"
-  # command `modprob vboxdrv vboxpci` work but with `lsmod` doesn't print the module.
   @call
     header: 'VirtualBox'
     if: options.virtualbox
   , ->
     @service.install 'linux-headers'
-    @service.install 'virtualbox'
+    # Note 02/2020: The `virtualbox` package ask to choose between;
+    # 1. virtualbox-host-dkms                   2. virtualbox-host-modules-arch
+    # Since the first option (virtualbox-host-dkms) is selected, it create a
+    # conflict if we later try to install the second one (virtualbox-host-modules-arch)
+    # The current fix is to install the second option before the `virtualbox`
+    # package.
     # for linux kernel choose virtualbox-host-modules-arch
     @service.install 'virtualbox-host-modules-arch'
     # for other kernels choose virtualbox-host-dkms
     # @service.install 'virtualbox-host-dkms'
+    @service.install 'virtualbox'
     @service.install 'virtualbox-guest-modules-arch'
     @service.install 'virtualbox-guest-utils'
-    @system.mod 'vboxdrv'    # Mandatory
-    @system.mod 'vboxnetadp' # Optional, needed to create the host interface in the VirtualBox global preferences
-    @system.mod 'vboxnetflt' # Optional, needed to launch a virtual machine using that network interface
-    @system.mod 'vboxpci', disabled: true # Optional, needed when your virtual machine needs to pass through a PCI device on your host.
+    # Module vboxpci used to work but I can't activate it as of feb 2020,
+    # command `modprob vboxpci` fail with message "Module vboxpci not found in
+    # directory /lib/modules/`uname -r`"
+    # command `modprob vboxdrv vboxpci` work but with `lsmod` doesn't print the module.
+    @system.mod 'vboxdrv', sudo: true    # Mandatory
+    @system.mod 'vboxnetadp', sudo: true # Optional, needed to create the host interface in the VirtualBox global preferences
+    @system.mod 'vboxnetflt', sudo: true # Optional, needed to launch a virtual machine using that network interface
+    @system.mod 'vboxpci', sudo: true, disabled: true # Optional, needed when your virtual machine needs to pass through a PCI device on your host.
   @service
     header: 'Vagrant'
     name: 'vagrant'
