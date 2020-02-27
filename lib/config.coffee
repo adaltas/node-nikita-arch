@@ -77,7 +77,7 @@ module.exports = ->
           atom: true
           nodejs: true
           programming: true
-        './lib/system/3.office_apps':
+        './lib/system/3.office':
           productivity: true
           font: true
           office: true

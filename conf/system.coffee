@@ -22,7 +22,7 @@ module.exports =
       groups: ['bumblebee', 'docker']
       shell: '/bin/zsh'
     aliases: 'll': 'ls -l'
-  './lib/system/2.dev_apps':
+  './lib/system/2.dev':
     atom_config:
       "*":
         "core":
