@@ -9,6 +9,13 @@ TODO:
 
 ## Trunk
 
+* excess spaces removed
+* config: fix repository names
+* config: new ssh parameters
+* config: new prompt questions
+* ntp: name and startup fixed
+* git.config: remove color bug
+* virtualbox: installation options
 * config: refactor and fix luks secret
 * config: prompt user with questions
 * dconf: move to nikita
