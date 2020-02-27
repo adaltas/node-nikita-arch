@@ -58,7 +58,6 @@ module.exports = ({options}) ->
     @service.install 'gnome-shell-extension-simple-net-speed-git'
     @service.install 'gnome-shell-extension-refresh-wifi-git'
     @service.install 'gnome-system-monitor'
-
   @call
     header: 'Virtualization'
     if: options.virtualization
@@ -75,7 +74,6 @@ module.exports = ({options}) ->
     @service.install
       header: 'libvirt manager'
       name: ' virt-manager'
-
   @call
     header: 'NPM Global'
     if: options.npm_global
@@ -98,7 +96,6 @@ module.exports = ({options}) ->
       append: true
       eof: true
       backup: true
-
   @call
     header: 'Nodejs'
     if: options.nodejs
@@ -126,7 +123,6 @@ module.exports = ({options}) ->
       append: true
       eof: true
       backup: true
-
   @call
     header: 'Atom'
     if: options.atom
@@ -164,7 +160,6 @@ module.exports = ({options}) ->
           "ctrl-g": "find-and-replace:find-next"
           "ctrl-shift-G": "find-and-replace:find-previous"
       merge: true
-
   @call
     header: 'Programming'
     if: options.programming
@@ -252,7 +247,6 @@ module.exports = ({options}) ->
     #     cmd: 'helm init'
     #   @system.execute
     #     cmd: 'helm repo update'
-
   @call
     header: 'Docker'
     if: options.docker
