@@ -203,10 +203,15 @@ module.exports = ({options}) ->
         if: -> @status -1
         cmd: 'archlinux-java set java-9-jdk'
         sudo: true
-    @file.ini
-      target: "#{home}/.gitconfig"
-      merge: true
-      content: color: ui: 'true'
+    # There is a bug in file init where `color: ui: "true"` is written without a value:
+    # ```
+    # [color]
+    # ui
+    # ```
+    # @file.ini
+    #   target: "#{home}/.gitconfig"
+    #   merge: true
+    #   content: color: ui: 'true'
     @file.ini
       target: "#{home}/.gitconfig"
       merge: true
