@@ -8,13 +8,28 @@ module.exports = ->
   target = path.resolve __dirname, '../conf/user.yaml'
   unless fs.existsSync target
     response = await prompts [
-      type: 'text',
+      type: 'select',
+      name: 'connection',
+      message: 'Connection',
+      choices: [
+        title: 'Remote SSH',
+        value: 'remote'
+      ,
+        title: 'Local',
+        value: 'local'
+      ]
+    ,
+      type: (prev) -> if prev is 'remote' then 'text' else null,
       name: 'ssh_ip',
       message: 'SSH target IP',
     ,
-      type: 'text',
+      type: (prev) -> if prev is 'remote' then 'text' else null,
       name: 'ssh_password',
       message: 'SSH target password',
+    ,
+      type: (prev) -> if prev is 'remote' then 'text' else null,
+      name: 'ssh_port',
+      message: 'SSH target port',
     ,
       type: 'text',
       name: 'disk_password',
