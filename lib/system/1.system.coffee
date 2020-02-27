@@ -245,7 +245,8 @@ module.exports = ({options}) ->
         sudo: true
     @service
       name: 'ntp'
-      startup: 'ntpd'
+      srv_name: 'ntpd'
+      startup: true
       sudo: true
 
 ## Dependencies
