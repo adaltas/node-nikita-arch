@@ -13,6 +13,7 @@ lsblk
 # nvme0n1     259:0    0 953.9G  0 disk 
 # ├─nvme0n1p1 259:1    0     1G  0 part 
 # └─nvme0n1p2 259:2    0 952.9G  0 part
+# Print information
 file -s /dev/nvme0n1p2
 # /dev/nvme0n1p2: LUKS encrypted file, ver 2 [, , sha256] UUID: f3fbeeaa-f3a0-4de1-a9b4-8f755b981122
 cryptsetup luksOpen /dev/nvme0n1p2 encrypted_device
