@@ -12,6 +12,8 @@ Install Node.js packages with NPM.
 *   `upgrade` (boolean)
     Upgrade all packages, default to "false".
 
+## Source code
+
     module.exports = ({options}) ->
       options.name = options.argument if options.argument?
       options.name = [options.name] if typeof options.name is 'string'
