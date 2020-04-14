@@ -86,5 +86,5 @@ Note, system may also be executed from a remote location
 
 ## Complementary documentations
 
-* [Troubleshooting](./docs/troubleshooting.md)
-* [Dell Precision 5520 specifics]('./docs/dell.md')
+* [Troubleshooting](./doc/troubleshooting.md)
+* [Dell Precision 5520 specifics](./doc/dell.md)
