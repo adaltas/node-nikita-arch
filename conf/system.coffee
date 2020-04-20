@@ -30,7 +30,7 @@ module.exports =
           "closeDeletedFileTabs": true
           "disabledPackages": [ "indent-guide-improved" ]
           "excludeVcsIgnoredPaths": false
-          "ignoreNames": [".hg", ".svn", ".DS_Store", "._*", "Thumbs.db", ".git"]
+          "ignoreNames": [".hg", ".svn", ".DS_Store", "._*", "Thumbs.db", ".git", "node_modules"]
           "telemetryConsent": "no"
         "editor":
           "fontSize": 13
