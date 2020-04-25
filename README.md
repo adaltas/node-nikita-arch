@@ -58,8 +58,6 @@ systemctl start sshd
 ip a
 ```
 
-Copy the file 'conf/base.yaml' to 'conf/user.yaml' and modify the connection information, such as "hostname" and "password", and the user information. By default, a "nikita" user is created as sudoer with the "secret" password.
-
 ## Step 2: bootstrap
 
 The bootstrap process can be executed either from the bootable system or from a remote location through SSH. From your host machine
@@ -68,6 +66,13 @@ The bootstrap process can be executed either from the bootable system or from a 
 2. Set your target IP address in "./conf/bootstrap.coffee"
 3. Edit any other configuration of interest
 4. Run `npm run bootstrap`
+  - Here you'll be prompted to select the installation target (_Local_ or _Remote SSH_).
+    If you choose the **_recommended_** _Remote SSH_, you'll be prompted for target machine's below details, which will be written to conf/user.yaml:
+    - _hostname_
+    - _username_
+    - _password_
+    - _disk encryption password_
+
 
 Reboot into the BIOS and create a new UEFI entry, for example set "EFI/systemd/systemd-bootx64.efi"  in "Settings/General/Boot Sequence".
 
