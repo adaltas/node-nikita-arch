@@ -66,6 +66,11 @@ module.exports = header: "System", handler: ({options}) ->
     # Installing linux-firmware because otherwise the network card is not
     # activated with `dmesg | grep firmware` printing a message such as
     # "iwlwifi no suitable firmare found"
+  @service.install
+    header: 'Linux'
+    arch_chroot: true
+    rootdir: '/mnt'
+    name: 'linux-firmare'
   @file.types.locale_gen
     header: 'Locale gen'
     arch_chroot: true
