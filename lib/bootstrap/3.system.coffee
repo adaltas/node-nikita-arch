@@ -77,7 +77,15 @@ module.exports = header: "System", handler: ({options}) ->
     rootdir: '/mnt'
     locales: options.locales
     locale: options.locale
-    generate: true
+    generate: true # this is not executed, need to run `sudo locale-gen`
+  # # Locale
+  # @system.execute
+  #   header: 'Locale'
+  #   arch_chroot: true
+  #   rootdir: '/mnt'
+  #   cmd: """
+  #   locale-gen
+  #   """
   @file
     header: 'Locale conf'
     target: '/mnt/etc/locale.conf'
@@ -198,6 +206,7 @@ module.exports = header: "System", handler: ({options}) ->
       echo "#{username} ALL=(ALL) ALL" >> /etc/sudoers
       """
       code_skipped: 3
+  # Graphic support
   (
     @service.install
       header: "Package #{pck}"
