@@ -17,13 +17,15 @@ module.exports =
     partitions:
       '/dev/nvme0n1p1': type: 'f32'
       '/dev/nvme0n1p2': type: 'ext4'
-    lvm:
+    crypt:
       passphrase: 'XXXXXX'
-      partition: '/dev/nvme0n1p2'
+      device: '/dev/nvme0n1p2'
   './lib/bootstrap/3.system':
     locales: ['fr_FR.UTF-8', 'en_US.UTF-8']
     boot_partition: '/dev/nvme0n1p1'
     # locale: 'fr_FR.UTF-8' # Default to en_US.UTF-8
+    crypt:
+      device: '/dev/nvme0n1p2'
     timezone: 'Europe/Paris'
     users: {}
   '@nikitajs/core/lib/ssh/close': {}

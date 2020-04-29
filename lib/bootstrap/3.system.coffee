@@ -170,7 +170,7 @@ module.exports = header: "System", handler: ({options}) ->
     cmd: """
     [ -f /boot/loader/entries/arch.conf ] && exit 3
     # Get UUID of /boot, root, and swap partition
-    uuid_boot=`blkid -s UUID -o value /dev/nvme0n1p2`
+    uuid_boot=`blkid -s UUID -o value #{options.crypt.device}`
     uuid_root=`blkid -s UUID -o value /dev/mapper/volume-root`
     uuid_swap=`blkid -s UUID -o value /dev/mapper/volume-swap`
     cat >/boot/loader/entries/arch.conf <<CONF

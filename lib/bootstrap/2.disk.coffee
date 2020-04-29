@@ -45,10 +45,10 @@ module.exports = header: "Disk", handler: ({options}) ->
     @system.execute
       header: 'Crypsetup'
       cmd: """
-      echo '#{options.lvm.passphrase}' | \
-        cryptsetup luksFormat #{options.lvm.partition}
-      echo '#{options.lvm.passphrase}' | \
-        cryptsetup open --type luks #{options.lvm.partition} lvm
+      echo '#{options.crypt.passphrase}' | \
+        cryptsetup luksFormat #{options.crypt.device}
+      echo '#{options.crypt.passphrase}' | \
+        cryptsetup open --type luks #{options.crypt.device} lvm
       """
       code_skipped: 3
     @system.execute
