@@ -63,14 +63,14 @@ module.exports = header: "System", handler: ({options}) ->
     arch_chroot: true
     rootdir: '/mnt'
     name: 'linux'
-    # Installing linux-firmware because otherwise the network card is not
-    # activated with `dmesg | grep firmware` printing a message such as
-    # "iwlwifi no suitable firmare found"
+  # Installing linux-firmware because otherwise the network card is not
+  # activated with `dmesg | grep firmware` printing a message such as
+  # "iwlwifi no suitable firmare found"
   @service.install
     header: 'Linux'
     arch_chroot: true
     rootdir: '/mnt'
-    name: 'linux-firmare'
+    name: 'linux-firmware'
   @file.types.locale_gen
     header: 'Locale gen'
     arch_chroot: true
