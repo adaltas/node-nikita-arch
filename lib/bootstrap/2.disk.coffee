@@ -1,7 +1,10 @@
 
 module.exports = header: "Disk", handler: ({options}) ->
+  # Format the disk into partitions
+  options.format ?= true
   # Ensure the disk is erased from any previous data
   options.wipe ?= false
+  return unless options.format
   @system.execute
     if: options.wipe
     cmd: """

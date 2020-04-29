@@ -71,7 +71,6 @@ The bootstrap process can be executed either from the bootable system or from a 
     - _password_
     - _disk encryption password_
 
-
 Reboot into the BIOS and create a new UEFI entry, for example set "EFI/systemd/systemd-bootx64.efi"  in "Settings/General/Boot Sequence".
 
 ## System
