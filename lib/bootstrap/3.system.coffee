@@ -196,6 +196,9 @@ module.exports = header: "System", handler: ({options}) ->
       no_home_ownership: true
       arch_chroot: true
       rootdir: '/mnt'
+    # Note, current implementation create a passwordless sudoer because
+    # otherwise it is impossible to run `system` over ssh as it does not prompt
+    # for a password
     @system.execute
       header: 'User Sudoer'
       arch_chroot: true
@@ -203,7 +206,7 @@ module.exports = header: "System", handler: ({options}) ->
       cmd: """
       sudoer=#{if user.sudoer then '1' else ''}
       ([ -z $sudoer ] || cat /etc/sudoers | grep "#{username}") && exit 3
-      echo "#{username} ALL=(ALL) ALL" >> /etc/sudoers
+      echo "#{username} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
       """
       code_skipped: 3
   # Graphic support
