@@ -1,13 +1,15 @@
 
 module.exports = header: "Disk", handler: ({options}) ->
-  # Need to check, this was used in previous versions of nikita-arch,
-  # probably to ensure the disk is erased from any previous data
-  # @system.execute
-  #   cmd: """
-  #   cryptsetup open --type plain #{options.disk} container --key-file /dev/random
-  #   dd if=/dev/zero of=/dev/mapper/container status=progress bs=1M
-  #   cryptsetup close container
-  #   """
+  # Ensure the disk is erased from any previous data
+  options.wipe ?= false
+  @system.execute
+    if: options.wipe
+    cmd: """
+    cryptsetup open --type plain #{options.disk} container --key-file /dev/random
+    dd if=/dev/zero of=/dev/mapper/container status=progress bs=1M
+    cryptsetup close container
+    """
+  # Split the disk into 2 partitions, first to boot, second to store data
   @call
     header: "Partitions Creation"
   , ->
@@ -18,7 +20,6 @@ module.exports = header: "Disk", handler: ({options}) ->
       label: gpt
       device: #{options.disk}
       unit: sectors
-
       #{partition_1} : start=     2048, size=   2097152, type=C12A7328-F81F-11D2-BA4B-00A0C93EC93B
       #{partition_2} : start=  2099200, type=E6D6D379-F507-44C2-A23C-238F2A3DF928
       """
@@ -28,12 +29,12 @@ module.exports = header: "Disk", handler: ({options}) ->
   @call
     header: "Partitions Formating"
   , ->
-    for mount, type of options.partitions
-      @system.execute switch type
+    for partition, info of options.partitions
+      @system.execute switch info.type
         when 'f32'
-          "mkfs.vfat -F32 -nESP #{mount}"
+          "mkfs.vfat -F32 -nESP #{partition}"
         when 'ext4'
-          "mkfs.ext4 #{mount}"
+          "mkfs.ext4 #{partition}"
         else throw Error "Invalid partition type"
   @call
     header: "Partitions LVM"

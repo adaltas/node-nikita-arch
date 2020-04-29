@@ -12,6 +12,7 @@ module.exports =
   './lib/bootstrap/1.welcome': {}
   './lib/bootstrap/2.disk':
     disk: '/dev/nvme0n1'
+    wipe: false
     partitions:
       '/dev/nvme0n1p1': 'f32'
       '/dev/nvme0n1p2': 'ext4'
