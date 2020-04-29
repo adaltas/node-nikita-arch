@@ -21,7 +21,7 @@ module.exports = header: "System", handler: ({options}) ->
     mount /dev/mapper/volume-home /mnt/home
     swapon /dev/mapper/volume-swap
     mkdir /mnt/boot
-    mount /dev/nvme0n1p1 /mnt/boot
+    mount #{options.boot_partition} /mnt/boot
     """
     code_skipped: 3
   @system.execute

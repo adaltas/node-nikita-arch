@@ -20,6 +20,7 @@ module.exports =
       partition: '/dev/nvme0n1p2'
   './lib/bootstrap/3.system':
     locales: ['fr_FR.UTF-8', 'en_US.UTF-8']
+    boot_partition: '/dev/nvme0n1p1'
     # locale: 'fr_FR.UTF-8' # Default to en_US.UTF-8
     timezone: 'Europe/Paris'
     users: {}
