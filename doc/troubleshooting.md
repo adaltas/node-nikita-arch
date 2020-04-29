@@ -1,6 +1,14 @@
 
 # Troubleshooting
 
+## Relauching bootstrap
+
+To debug the bootstrap process, you can bypass the disk formating step by setting `['./lib/bootstrap/2.disk', 'format']` to `false`.
+
+In case of system reboot, it is necessary to decrypt the partition with `echo '#{passphrase}' | cryptsetup open --type luks #{partition} lvm` where `passphrase` is your disk encryption password and partition is the target disk partition, commonly `/dev/nvme0n1p2` or `/dev/sda2`.
+
+Additionnaly, once disk format is disabled, you can go into `./lib/bootstrap/system` and comment the executed actions manually to speed up the process.
+
 ## Mount LVM partition encrypted with LUKS
 
 ```

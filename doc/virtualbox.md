@@ -26,4 +26,6 @@ To make it work with the disk of VirtualBox, I had to make a few tweacks in the 
 - "conf/bootstrap":
   replace all occurence of '/dev/nvme0n1' with '/dev/sda'
 - "lib/bootstrap/2.disk.coffee":
-  replace `lvcreate -L 100G volume -n root` by `lvcreate -L 10G volume -n root`
+  replace `lvcreate -L 4G volume -n swap` by `lvcreate -L 2G volume -n swap`
+  and `lvcreate -L 100G volume -n root` by `lvcreate -L 18G volume -n root`
+
