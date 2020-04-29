@@ -68,6 +68,7 @@ module.exports = ({options}) ->
       header: 'SSH'
       name: 'openssh'
       srv_name: 'sshd'
+      startup: true
       sudo: true
     @service.install
       name: 'rsync'
