@@ -108,7 +108,7 @@ module.exports = ({options}) ->
       name: 'npm'
     @system.npm
       header: 'Global Packages'
-      name: ['n', 'coffee-script', 'mocha']
+      name: ['n', 'coffeescript', 'mocha']
       global: true
       sudo: true
     @file
