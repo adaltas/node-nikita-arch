@@ -14,8 +14,8 @@ module.exports =
     disk: '/dev/nvme0n1'
     wipe: false
     partitions:
-      '/dev/nvme0n1p1': 'f32'
-      '/dev/nvme0n1p2': 'ext4'
+      '/dev/nvme0n1p1': type: 'f32'
+      '/dev/nvme0n1p2': type: 'ext4'
     lvm:
       passphrase: 'XXXXXX'
       partition: '/dev/nvme0n1p2'
