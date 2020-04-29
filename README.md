@@ -45,13 +45,11 @@ From the drive containing the Arch installation media:
 wifi-menu
 ```
 
-The following procedure will setup an SSH server and is only required if you wish to execute the bootstrap procedure of step 2 through SSH from an external host which is recommended.
+The following procedure will setup an SSH server and is only required if you wish to execute the bootstrap procedure of step 2 through SSH from an external host which is recommended. Note, the `openssh` package shall already be installed.
 
 ```
 # Change root password
 passwd
-# Install ssh
-pacman -Sy openssh
 # Start ssh daemon
 systemctl start sshd
 # Print IP address
