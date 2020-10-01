@@ -3,6 +3,10 @@
 
 This procedure test nikita-arch inside VirtualBox.
 
+## Patch
+
+The default settings dont suit the VirtualBox requirement, go to `./lib/bootstrap/disk.coffee` and uncomment the lines preceeded by "VirtualBox sizing".
+
 ## Manual installation
 
 1. Create a new Virtual Machine "Machine > New"
@@ -17,7 +21,7 @@ This procedure test nikita-arch inside VirtualBox.
      Choose "VDI" type then "Dynamically allocated"
      Set a size of around 30GB
 2. Attach a new disk iso
-   rom the VM settings, in "Storage", select "Controller IDE" > "Empty" and choose the Arch Linux iso file
+   From the VM settings, in "Storage", select "Controller IDE" > "Empty" and click on the disk icon next to "Optical drive". Choose the Arch Linux iso file
 3. Set the network
    From the VM settings, in "Network", choose "Bridge Adapter"
 4. Start the VM

@@ -374,6 +374,7 @@ module.exports = header: "System", handler: ({options}) ->
       rootdir: '/mnt'
       name: 'bumblebeed'
   @service
+    header: 'SSH'
     name: 'openssh'
     srv_name: 'sshd'
     startup: true

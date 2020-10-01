@@ -59,6 +59,9 @@ module.exports = header: "Disk", handler: ({options}) ->
       vgcreate volume /dev/mapper/lvm
       lvcreate -L 4G volume -n swap
       lvcreate -L 100G volume -n root
+      # VirtualBox sizing
+      # lvcreate -L 2G volume -n swap
+      # lvcreate -L 18G volume -n root
       lvcreate -l 100%FREE volume -n home
       mkfs.ext4 /dev/mapper/volume-root
       mkfs.ext4 /dev/mapper/volume-home
