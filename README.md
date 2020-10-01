@@ -41,8 +41,12 @@ From the drive containing the Arch installation media:
 ```
 # Start the computer
 # Select "Boot Arch Linux"
-# Connect to the internet
-wifi-menu
+# Connect to the internet (see: https://wiki.archlinux.org/index.php/Iwd#iwctl)
+iwctl
+device list
+station {device} scan
+station {device} get-networks
+station {device} connect {my_device}
 ```
 
 The following procedure will setup an SSH server and is only required if you wish to execute the bootstrap procedure of step 2 through SSH from an external host which is recommended. Note, the `openssh` package shall already be installed.
