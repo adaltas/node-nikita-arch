@@ -9,6 +9,7 @@ TODO:
 
 ## Trunk
 
+* config: fix crypt password injection
 * excess spaces removed
 * config: fix repository names
 * config: new ssh parameters

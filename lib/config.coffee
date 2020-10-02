@@ -51,7 +51,7 @@ module.exports = ->
           password: response.ssh_password or null
           port: response.ssh_port or null
         './lib/bootstrap/2.disk':
-          lvm:
+          crypt:
             passphrase: response.disk_password
         './lib/bootstrap/3.system':
           locales: ['fr_FR.UTF-8', 'en_US.UTF-8']
