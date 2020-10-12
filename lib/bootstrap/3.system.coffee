@@ -2,7 +2,7 @@
 require '@nikitajs/filetypes/lib/register'
 
 module.exports = header: "System", handler: ({options}) ->
-  options.locale ?= 'en_US.UTF-8'
+  options.locales ?= ['en_US.UTF-8']
   for username, user of options.users
     user.name ?= username
     user.group ?= user.name
@@ -76,7 +76,7 @@ module.exports = header: "System", handler: ({options}) ->
     arch_chroot: true
     rootdir: '/mnt'
     locales: options.locales
-    locale: options.locale
+    # locale: options.locale
     generate: true # this is not executed, need to run `sudo locale-gen`
   # # Locale
   # @system.execute
