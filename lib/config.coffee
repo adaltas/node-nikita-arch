@@ -64,7 +64,7 @@ module.exports = ->
       system:
         '@nikitajs/core/lib/ssh/open':
           disabled: response.connection is 'local'
-          host: response.ssh_ip
+          host: response.ssh_ip or null
           username: response.user_username
           password: response.user_password or null
           port: response.ssh_port or null
