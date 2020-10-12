@@ -295,7 +295,7 @@ module.exports = ({options}) ->
     # for other kernels choose virtualbox-host-dkms
     # @service.install 'virtualbox-host-dkms'
     @service.install 'virtualbox'
-    @service.install 'virtualbox-guest-modules-arch'
+    #@service.install 'virtualbox-guest-modules-arch' module dosen't exist anymore
     @service.install 'virtualbox-guest-utils'
     # Module vboxpci used to work but I can't activate it as of feb 2020,
     # command `modprob vboxpci` fail with message "Module vboxpci not found in
