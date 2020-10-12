@@ -237,9 +237,12 @@ module.exports = header: "System", handler: ({options}) ->
       rootdir: '/mnt'
     , pck
   ) for pck in [ # , "nvme-cli"
-    "acpi", "gnome", "gdm", "gnome-extra", "system-config-printer", "networkmanager",
-    "rhythmbox", "xorg-server", "xorg-xinit", "xorg-apps", "xorg-twm",
-    "xorg-xclock", "xterm"
+    # Note, we tried to install iwd to ensure there is a way to setup an
+    # internet connection if gnome doesn't start. However, iwctl doesn't seem to
+    # work, `iwctl station wlan0 scan` always return an empty list.
+    "iwd", "acpi", "gnome", "gdm", "gnome-extra", "system-config-printer",
+    "networkmanager", "rhythmbox", "xorg-server", "xorg-xinit", "xorg-apps",
+    "xorg-twm", "xorg-xclock", "xterm"
   ]
   for username, user of options.users
     @call header: 'xinit', ->
