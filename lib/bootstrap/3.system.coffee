@@ -310,11 +310,11 @@ module.exports = header: "System", handler: ({options}) ->
     EndSection
 
     Section "Device"
-    #    Identifier     "Device0"
-        Identifier     "nvidia"
+        Identifier     "Device0"
+        # Identifier     "nvidia"
         Driver         "nvidia"
         VendorName     "NVIDIA Corporation"
-        BusID	   "PCI:1:0:0"
+        BusID	         "PCI:1:0:0"
     EndSection
 
     Section "Screen"
@@ -324,10 +324,10 @@ module.exports = header: "System", handler: ({options}) ->
     EndSection
 
     Section "Device"
-        Identifier "intel"
-        Driver "modesetting"
-        BusID "PCI:0:2:0"
-        Option "AccelMethod"  "none"
+        Identifier     "intel"
+        Driver         "modesetting"
+        BusID          "PCI:0:2:0"
+        Option         "AccelMethod"  "none"
     EndSection
 
     Section "Screen"
