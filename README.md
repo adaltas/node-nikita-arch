@@ -82,9 +82,17 @@ Reboot into the BIOS and create a new UEFI entry, for example set "EFI/systemd/s
 From your host machine
 
 1. Clone this repository
-2. Create and modify your user configuration in "user.yaml"
-3. Edit any other configuration of interest
-4. Run `npm run system`
+2. Run ssh-keygen to create key pairs for SSH with no password
+3. Nvidia graphic card is used by default. If you want to use the Intel card, replace the screen used in xorg.conf in bootstrap/3.system.coffee by setting Intel:
+   ```
+   Section "ServerLayout"
+        Identifier     "layout"
+        Screen      0  "intel"
+        Inactive	     "nvidia"
+   ```
+   
+4. Edit any other configuration of interest
+5. Run `npm run system` (The first time the command is run, your user configuration is created in user.yaml)
 
 Note, system may also be executed from a remote location
 1. Edit the configuration "./conf/user.yaml" and add your SSH connection settings
