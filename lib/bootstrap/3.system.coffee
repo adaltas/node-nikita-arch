@@ -335,6 +335,25 @@ module.exports = header: "System", handler: ({options}) ->
         Device "intel"
     EndSection
     """
+  @file
+    target: '/mnt/etc/gdm/custom.conf'
+    #we put Wayland as default
+    content: """
+    [daemon]
+    WaylandEnable=true
+    AutomaticLoginEnable=True
+    """
+  @file
+    target: '/mnt/lib/udev/rules.d/61-gdm.rules'
+    #We modify gdm rules so that the use of Wayland is not automatically disabled
+    content: """
+    # disable Wayland on Hi1710 chipsets
+    #ATTR{vendor}=="0x19e5", ATTR{device}=="0x1711", RUN+="/usr/lib/gdm-disable-wayland"
+    # disable Wayland when using the proprietary nvidia driver
+    #DRIVER=="nvidia", RUN+="/usr/lib/gdm-disable-wayland"
+    # disable Wayland if modesetting is disabled
+    #IMPORT{cmdline}="nomodeset", RUN+="/usr/lib/gdm-disable-wayland"
+    """
   @service.startup
     header: 'Startup gdm'
     arch_chroot: true
