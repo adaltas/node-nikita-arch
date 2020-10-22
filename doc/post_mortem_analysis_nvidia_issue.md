@@ -21,6 +21,12 @@ Thus, when starting for the first time, the usage of Wayland is disabled by gdm 
 WaylandEnable=false
 ```
 
+**Observations**: The configuration problem causes a black screen at startup. To work around this problem and force the gdm to launch, you must type ctrl + alt + f5 to access the terminal. After logging in, you have to edit the custom.conf file by setting the wayland to true then restart the gdm with the command: 
+```
+systemctl restart gdm.service
+```
+This way of launching the gdm is only temporary because once the computer is turned on the wayland will be disabled again
+
 **Resolution**: Changing configuration of gdm rules and forcing the usage of Wayland in custom.conf by changing the bootstrap part of Arch Linux's installation.
 
 * Gdm rules are commented out in '61-gdm.rules' file in order to use Wayland
