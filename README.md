@@ -1,4 +1,3 @@
-
 # Nikita Arch
 
 ## Steps
@@ -34,13 +33,11 @@ Ensure the target host can boot over USB and that the disks are discoverable. Fo
 
 Boot the computer over the USB system. On startup, select "Boot Arch Linux (x86_64)".
 
-### Preparation
+### Network activation
 
 From the drive containing the Arch installation media:
 
-```
-# Start the computer
-# Select "Boot Arch Linux"
+```bash
 # Connect to the internet (see: https://wiki.archlinux.org/index.php/Iwd#iwctl)
 iwctl
 device list
@@ -51,7 +48,7 @@ station {device} connect {my_device}
 
 The following procedure will setup an SSH server and is only required if you wish to execute the bootstrap procedure of step 2 through SSH from an external host which is recommended. Note, the `openssh` package shall already be installed.
 
-```
+```bash
 # Change root password
 passwd
 # Start ssh daemon
@@ -65,7 +62,7 @@ ip a
 The bootstrap process can be executed either from the bootable system or from a remote location through SSH. From your host machine
 
 1. Clone this repository
-2. Set your target IP address in "./conf/bootstrap.coffee"
+2. Set your target IP address in `./conf/bootstrap.coffee`
 3. Edit any other configuration of interest
 4. Run `npm run bootstrap`
   - Here you'll be prompted to select the installation target (_Local_ or _Remote SSH_).
@@ -77,20 +74,27 @@ The bootstrap process can be executed either from the bootable system or from a 
 
 Reboot into the BIOS and create a new UEFI entry, for example set "EFI/systemd/systemd-bootx64.efi"  in "Settings/General/Boot Sequence".
 
-## System
+## System (Optional)
 
 From your host machine
 
-1. Clone this repository
-2. Run ssh-keygen to create key pairs for SSH with no password
+1. Clone this repository: `git clone https://github.com/adaltas/node-nikita-arch.git`
+2. Run `ssh-keygen` to create key pairs for SSH with no password
 3. Edit any other configuration of interest
 4. Run `npm run system` (The first time the command is run, your user configuration is created in user.yaml)
 
-Note, system may also be executed from a remote location
+> Note, system may also be executed from a remote location
 1. Edit the configuration "./conf/user.yaml" and add your SSH connection settings
 2. Enable sudo passwordless eg `sudo su -; echo '<username> ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers`
+
+## Login
+
+Black screen at start-up: `ctrl + alt + f4` or `ctrl + alt + f5`  to access the terminal
 
 ## Complementary documentations
 
 * [Troubleshooting](./doc/troubleshooting.md)
 * [Dell Precision 5520 specifics](./doc/dell.md)
+* [Nvidia issue](./doc/post_mortem/post_mortem_analysis_nvidia_issue.md)
+* [GDM service autostart](./doc/gdm_autostart_issue.md)
+* [Virtualbox](./doc/virtualbox.md)
