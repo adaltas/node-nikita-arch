@@ -63,7 +63,7 @@ The bootstrap process can be executed either from the bootable system or from a 
 
 1. Clone this repository
 2. Set your target IP address in `./conf/bootstrap.coffee`
-3. Edit any other configuration of interest
+3. Edit any other configuration of interest (If needed to re-edit the configuration, do the modification in `./conf/user.yaml`)
 4. Run `npm run bootstrap`
   - Here you'll be prompted to select the installation target (_Local_ or _Remote SSH_).
     If you choose the **_recommended_** _Remote SSH_, you'll be prompted for target machine's below details, which will be written to conf/user.yaml:
