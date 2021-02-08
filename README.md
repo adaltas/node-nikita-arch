@@ -49,7 +49,7 @@ station {device} connect {my_device}
 The following procedure will setup an SSH server and is only required if you wish to execute the bootstrap procedure of step 2 through SSH from an external host which is recommended. Note, the `openssh` package shall already be installed.
 
 ```bash
-# Change root password
+# Create new password, root is passwordless (cf. cat etc/shadow)
 passwd
 # Start ssh daemon
 systemctl start sshd
