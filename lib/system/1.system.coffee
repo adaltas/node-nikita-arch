@@ -2,7 +2,7 @@
 ###
 
 * `locale` (string)
-  System locale, default to the first locale in "locales" options.
+  System locale, default to the first locale in "locales" config.
 * `locales` (string)
   List of supported locales, required.
 
@@ -17,55 +17,55 @@ Interesting commands
 
 ###
 
-module.exports = ({options}) ->
-  throw Error "Required option: locales" unless options.locales
-  ssh = @ssh options.ssh
+module.exports = ({config}) ->
+  throw Error "Required option: locales" unless config.locales
+  ssh = @ssh config.ssh
   home = if ssh then "/home/#{ssh.config.username}" else '~'
-  options.locale ?= options.locales[0]
+  config.locale ?= config.locales[0]
   @call
-    header: 'Maintenance'
-    if: options.upgrade
+    metadata: header: 'Maintenance'
+    if: config.upgrade
   , ->
-    @system.execute
-      header: 'Upgrade'
-      cmd: """
+    @execute
+      metadata: header: 'Upgrade'
+      command: """
       pacman --noconfirm -Syyu
       """
-    @system.execute
-      header: 'Cleanup Orphan'
-      cmd: """
+    @execute
+      metadata: header: 'Cleanup Orphan'
+      command: """
       pacman --noconfirm -Rns $(pacman -Qtdq)
       """
-  @call header: 'System Configuration', ->
-    for group in options.groups or []
+  @call metadata: header: 'System Configuration', ->
+    for group in config.groups or []
       @system.group
-        header: "Group #{group.name}"
+        metadata: header: "Group #{group.name}"
         sudo: true
       , group
-    @system.user options.user,
+    @system.user config.user,
       name: process.env.USER
       sudo: true
-    @system.execute
-      header: "Journalctl access"
-      cmd: """
+    @execute
+      metadata: header: "Journalctl access"
+      command: """
       id `whoami` | grep \\(systemd-journal\\) && exit 3
       gpasswd -a `whoami` systemd-journal
       """
       code_skipped: 3
       sudo: true
     @file.types.locale_gen
-      header: 'Locale gen'
-      locales: options.locales
-      locale: options.locale
+      metadata: header: 'Locale gen'
+      locales: config.locales
+      locale: config.locale
       generate: true
       sudo : true
     @file
-      header: 'Locale conf'
+      metadata: header: 'Locale conf'
       target: '/etc/locale.conf'
-      content: "LANG=#{options.locale}"
+      content: "LANG=#{config.locale}"
       sudo: true
     @service
-      header: 'SSH'
+      metadata: header: 'SSH'
       name: 'openssh'
       srv_name: 'sshd'
       startup: true
@@ -88,7 +88,7 @@ module.exports = ({options}) ->
       gid: 'root'
       mode: 0o0551
     @tools.sysctl
-      header: 'Sysctl'
+      metadata: header: 'Sysctl'
       target: '/etc/sysctl.d/99-sysctl.conf'
       properties:
         # Fix bug with node.js exiting with "ENOSPC" error
@@ -97,23 +97,23 @@ module.exports = ({options}) ->
     # Fix bug with node.js exiting with "EMFILE" error
     # No working for unkown reasons, temp solution: `ulimit -n 4096`
     @system.limits
-      header: 'File descriptors'
+      metadata: header: 'File descriptors'
       system: true
       nofile: 64000
       sudo: true
-  @call header: 'File System', ->
+  @call metadata: header: 'File System', ->
     @service
-      header: 'NTFS'
+      metadata: header: 'NTFS'
       name: 'ntfs-3g'
       sudo: true
   @service.install
     # Note, yay requires git soon after
     name: 'git'
     sudo: true
-  @system.execute
-    header: 'YAY'
+  @execute
+    metadata: header: 'YAY'
     cwd: '/tmp'
-    cmd: """
+    command: """
     [ -f /usr/bin/yay ] && exit 42
     [ -d /tmp/yay_build_git ] && rm -rf /tmp/yay_build_git
     git clone https://aur.archlinux.org/yay.git /tmp/yay_build_git
@@ -127,23 +127,23 @@ module.exports = ({options}) ->
     """
     code_skipped: 42
     # Virtio modules are not loaded, can't find a solution for now
-    # @system.execute
-    #   cmd: "lsmod | grep virtio"
-  @call header: 'Environnment', ->
+    # @execute
+    #   command: "lsmod | grep virtio"
+  @call metadata: header: 'Environnment', ->
     @service.install
-      header: 'zsh'
+      metadata: header: 'zsh'
       name: 'zsh'
       sudo: true
     @service.install
-      header: 'oh-my-zsh Install'
+      metadata: header: 'oh-my-zsh Install'
       name: 'oh-my-zsh-git'
     @system.copy
-      header: 'oh-my-zsh Init'
+      metadata: header: 'oh-my-zsh Init'
       unless_exists: true
       source: "/usr/share/oh-my-zsh/zshrc"
       target: "#{home}/.zshrc"
     @file
-      header: 'Bash Profile'
+      metadata: header: 'Bash Profile'
       if_exists: true
       target: "#{home}/.bashrc"
       match: /^\. ~\/.profile$/m
@@ -152,7 +152,7 @@ module.exports = ({options}) ->
       backup: true
       eof: true
     @file
-      header: 'ZSH Profile'
+      metadata: header: 'ZSH Profile'
       if_exists: true
       target: "#{home}/.zshrc"
       match: /^source ~\/.profile$/m
@@ -161,7 +161,7 @@ module.exports = ({options}) ->
       backup: true
       eof: true
     @file
-      header: "Profile CWD"
+      metadata: header: "Profile CWD"
       target: "#{home}/.profile"
       from: '#START TERM CWD'
       to: '#END TERM CWD'
@@ -174,34 +174,34 @@ module.exports = ({options}) ->
       eof: true
       backup: true
     @file
-      header: "Profile Alias"
-      if: !!options.aliases
-      replace: Object.keys(options.aliases).map((k) -> "alias #{k}='#{options.aliases[k]}'").join '\n'
+      metadata: header: "Profile Alias"
+      if: !!config.aliases
+      replace: Object.keys(config.aliases).map((k) -> "alias #{k}='#{config.aliases[k]}'").join '\n'
       target: "#{home}/.profile"
       from: '#START ALIAS'
       to: '#END ALIAS'
       append: true
       eof: true
       backup: true
-    @call header: 'Java', ->
+    @call metadata: header: 'Java', ->
       # Oracle JDK is no longer valid. I didn't have to investigate but
       # probably due to the licence agreement. Disabling for now.
       @service.install
-        header: 'Oracle JDK 7'
+        metadata: header: 'Oracle JDK 7'
         disabled: true
         name: 'jdk7'
       @service.install
-        header: 'Oracle JDK 8'
+        metadata: header: 'Oracle JDK 8'
         disabled: true
         name: 'jdk8'
       @service.install
-        header: 'Oracle JDK 9'
+        metadata: header: 'Oracle JDK 9'
         disabled: true
         name: 'jdk9'
-      @system.execute
-        header: 'Java Default'
+      @execute
+        metadata: header: 'Java Default'
         if: -> @status -1
-        cmd: 'archlinux-java set java-9-jdk'
+        command: 'archlinux-java set java-9-jdk'
         sudo: true
     # There is a bug in file init where `color: ui: "true"` is written without a value:
     # ```
@@ -216,7 +216,7 @@ module.exports = ({options}) ->
       target: "#{home}/.gitconfig"
       merge: true
       content: alias: lgb: "log --graph --abbrev-commit --oneline --date=relative --branches --pretty=format:'%C(bold green)%h %d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'"
-  @call header: 'System Utilities', ->
+  @call metadata: header: 'System Utilities', ->
     @service
       name: 'wine'
       sudo: true
@@ -225,14 +225,14 @@ module.exports = ({options}) ->
       sudo: true
     # Brother brother-mfc-l2720dw
     @service
-      header: 'Printer',
+      metadata: header: 'Printer',
       name: 'cups'
       srv_name: 'org.cups.cupsd.service'
       chk_name: 'org.cups.cupsd.service'
       startup: true
       action: 'start'
       sudo: true
-    @call header: 'bluetooth', ->
+    @call metadata: header: 'bluetooth', ->
       @service.install
         name: 'bluez'
       @service.install

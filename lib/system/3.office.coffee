@@ -2,82 +2,82 @@
 ###
 
 * `locale` (string)
-  System locale, default to the first locale in "locales" options.
+  System locale, default to the first locale in "locales" config.
 * `locales` (string)
   List of supported locales, required.
 
 ###
 
-module.exports = ({options}) ->
-  ssh = @ssh options.ssh
+module.exports = ({config}) ->
+  ssh = @ssh config.ssh
   home = if ssh then "/home/#{ssh.config.username}" else '~'
   @call
-    header: 'Web'
-    if: options.office
+    metadata: header: 'Web'
+    if: config.office
   , ->
     @service.install
-      header: 'Package firefox'
+      metadata: header: 'Package firefox'
       name: 'firefox'
     @service.install
-      header: 'Package chromium'
+      metadata: header: 'Package chromium'
       name: 'chromium'
     @service.install
-      header: 'Package opera'
+      metadata: header: 'Package opera'
       name: 'opera'
   @call
-    header: 'Productivity'
-    if: options.productivity
+    metadata: header: 'Productivity'
+    if: config.productivity
   , ->
     @service.install
-      header: 'Package thunderbird'
+      metadata: header: 'Package thunderbird'
       name: 'thunderbird'
     @service.install
-      header: 'Package libreoffice-fresh'
+      metadata: header: 'Package libreoffice-fresh'
       name: 'libreoffice-fresh'
     @service.install
-      header: 'Package libreoffice-fresh-fr'
+      metadata: header: 'Package libreoffice-fresh-fr'
       name: 'libreoffice-fresh-fr'
     @service.install
-      header: 'Package typora'
+      metadata: header: 'Package typora'
       name: 'typora'
     @service.install
-      header: 'SFTP client gftp'
+      metadata: header: 'SFTP client gftp'
       name: 'gftp'
     @service.install
-      header: 'SFTP client filezilla'
+      metadata: header: 'SFTP client filezilla'
       name: 'filezilla'
     @service.install
-      header: 'Package Apache Directory Studio'
+      metadata: header: 'Package Apache Directory Studio'
       name: 'apachedirectorystudio'
     @service.install
-      header: 'tcpdump'
+      metadata: header: 'tcpdump'
       name: 'tcpdump'
     # Install fail:
     # gravit-designer-bin-2019_2.7.zip ... FAILED
     # Seems to be related with an invalid checksum
     @service.install
-      header: 'Gravit'
+      metadata: header: 'Gravit'
       name: 'gravit-designer-bin'
       disabled: true
     @service.install
-      header: 'Keybase'
+      metadata: header: 'Keybase'
       name: 'keybase-gui'
   @call
-    header: 'Font'
-    if: options.font
+    metadata: header: 'Font'
+    if: config.font
   , ->
     @service.install
-      header: 'Liberation'
+      metadata: header: 'Liberation'
       name: 'ttf-liberation'
     @service.install
-      header: 'Dejavu'
+      metadata: header: 'Dejavu'
       name: 'ttf-dejavu'
     @service.install
-      header: 'Roboto'
+      metadata: header: 'Roboto'
       name: 'ttf-roboto'
     @service.install
-      header: 'Noto'
+      metadata: header: 'Noto'
       name: 'noto-fonts'
     @service.install
-      header: 'ttf-ms-fonts (Arial, Courier New, Georgia, Verdana, ...)'
+      metadata: header: 'ttf-ms-fonts (Arial, Courier New, Georgia, Verdana, ...)'
       name: 'ttf-ms-fonts'
