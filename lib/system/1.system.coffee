@@ -253,4 +253,4 @@ module.exports = ({config}) ->
 
 path = require 'path'
 season = require 'season'
-{merge} = require '@nikitajs/core/lib/misc'
+# {merge} = require '@nikitajs/core/lib/misc'
