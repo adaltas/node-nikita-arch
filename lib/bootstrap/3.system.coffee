@@ -1,16 +1,16 @@
 
 require '@nikitajs/filetypes/lib/register'
 
-module.exports = header: "System", handler: ({options}) ->
-  options.locales ?= ['en_US.UTF-8']
-  for username, user of options.users
+module.exports = metadata: header: "System", handler: ({config}) ->
+  config.locales ?= ['en_US.UTF-8']
+  for username, user of config.users
     user.name ?= username
     user.group ?= user.name
     user.home ?= "/home/#{username}"
   # `umount --recursive /mnt` to exit and enter with `arch-chroot /mnt /bin/bash`
-  @system.execute
-    header: 'Mount'
-    cmd: """
+  @execute
+    metadata: header: 'Mount'
+    command: """
     if \
       df | grep /dev/mapper/volume-root && \
       df | grep /dev/mapper/volume-home ;
@@ -21,18 +21,18 @@ module.exports = header: "System", handler: ({options}) ->
     mount /dev/mapper/volume-home /mnt/home
     swapon /dev/mapper/volume-swap
     mkdir /mnt/boot
-    mount #{options.boot_partition} /mnt/boot
+    mount #{config.boot_partition} /mnt/boot
     """
     code_skipped: 3
-  @system.execute
-    header: 'Fstab'
-    cmd: """
+  @execute
+    metadata: header: 'Fstab'
+    command: """
     echo '\\n\\n1\\n' | pacstrap -i /mnt base base-devel net-tools
     genfstab -U -p /mnt > /mnt/etc/fstab
     """
     shy: true # Status not handled for now
   @file.types.pacman_conf
-    header: 'Pacman conf'
+    metadata: header: 'Pacman conf'
     target: '/mnt/etc/pacman.conf'
     content:
       'archlinuxfr':
@@ -42,16 +42,16 @@ module.exports = header: "System", handler: ({options}) ->
         'Include': '/etc/pacman.d/mirrorlist'
     merge: true
     backup: true
-  @system.execute
-    header: 'Pacman update'
+  @execute
+    metadata: header: 'Pacman update'
     arch_chroot: true
     rootdir: '/mnt'
-    cmd: """
+    command: """
     pacman -Syy
     """
     shy: true
   @service.install
-    header: 'Linux headers'
+    metadata: header: 'Linux headers'
     arch_chroot: true
     rootdir: '/mnt'
     name: 'linux-headers'
@@ -59,7 +59,7 @@ module.exports = header: "System", handler: ({options}) ->
   # "/etc/mkinitcpio.conf" and "/etc/mkinitcpio.d"
   # but there is no "/etc/mkinitcpio.d/linux.preset"
   @service.install
-    header: 'Linux'
+    metadata: header: 'Linux'
     arch_chroot: true
     rootdir: '/mnt'
     name: 'linux'
@@ -67,43 +67,43 @@ module.exports = header: "System", handler: ({options}) ->
   # activated with `dmesg | grep firmware` printing a message such as
   # "iwlwifi no suitable firmare found"
   @service.install
-    header: 'Linux'
+    metadata: header: 'Linux'
     arch_chroot: true
     rootdir: '/mnt'
     name: 'linux-firmware'
   @file.types.locale_gen
-    header: 'Locale gen'
+    metadata: header: 'Locale gen'
     arch_chroot: true
     rootdir: '/mnt'
-    locales: options.locales
-    # locale: options.locale
+    locales: config.locales
+    # locale: config.locale
     generate: true # this is not executed, need to run `sudo locale-gen`
   # # Locale
-  # @system.execute
-  #   header: 'Locale'
+  # @execute
+  #   metadata: header: 'Locale'
   #   arch_chroot: true
   #   rootdir: '/mnt'
-  #   cmd: """
+  #   command: """
   #   locale-gen
   #   """
   @file
-    header: 'Locale conf'
+    metadata: header: 'Locale conf'
     target: '/mnt/etc/locale.conf'
-    content: "LANG=#{options.locale}"
-  @system.execute
-    header: 'Timezone'
+    content: "LANG=#{config.locale}"
+  @execute
+    metadata: header: 'Timezone'
     arch_chroot: true
     rootdir: '/mnt'
-    cmd: """
-    [ "$(readlink /etc/localtime)" = "/usr/share/zoneinfo/#{options.timezone}" ] && exit 3
-    [ -f /usr/share/zoneinfo/#{options.timezone} ] || exit 1
-    ln -sf /usr/share/zoneinfo/#{options.timezone} /etc/localtime
+    command: """
+    [ "$(readlink /etc/localtime)" = "/usr/share/zoneinfo/#{config.timezone}" ] && exit 3
+    [ -f /usr/share/zoneinfo/#{config.timezone} ] || exit 1
+    ln -sf /usr/share/zoneinfo/#{config.timezone} /etc/localtime
     hwclock --systohc --utc
     exit
     """
     code_skipped: 3
   @service.install
-    header: "Package nvidia"
+    metadata: header: "Package nvidia"
     arch_chroot: true
     rootdir: '/mnt'
     name: 'nvidia-dkms'
@@ -149,11 +149,11 @@ module.exports = header: "System", handler: ({options}) ->
         target: '/mnt/etc/mkinitcpio.conf'
         content: data
       @next (err) -> callback err, true
-  @system.execute
-    header: 'mkinitcpio'
+  @execute
+    metadata: header: 'mkinitcpio'
     arch_chroot: true
     rootdir: '/mnt'
-    cmd: """
+    command: """
     [ -f /boot/vmlinuz-linux ] && exit 3
     mkinitcpio -p linux
     # Note, called a second time just below for no good reason
@@ -161,24 +161,24 @@ module.exports = header: "System", handler: ({options}) ->
     exit
     """
     code_skipped: 3
-  @system.execute
-    header: 'Boot loader'
+  @execute
+    metadata: header: 'Boot loader'
     arch_chroot: true
     rootdir: '/mnt'
-    cmd: """
+    command: """
     [ -f /boot/loader/loader.conf ] && exit 3
     bootctl install
     exit
     """
     code_skipped: 3
-  @system.execute
-    header: 'Boot arch loader'
+  @execute
+    metadata: header: 'Boot arch loader'
     arch_chroot: true
     rootdir: '/mnt'
-    cmd: """
+    command: """
     [ -f /boot/loader/entries/arch.conf ] && exit 3
     # Get UUID of /boot, root, and swap partition
-    uuid_boot=`blkid -s UUID -o value #{options.crypt.device}`
+    uuid_boot=`blkid -s UUID -o value #{config.crypt.device}`
     uuid_root=`blkid -s UUID -o value /dev/mapper/volume-root`
     uuid_swap=`blkid -s UUID -o value /dev/mapper/volume-swap`
     cat >/boot/loader/entries/arch.conf <<CONF
@@ -187,11 +187,11 @@ module.exports = header: "System", handler: ({options}) ->
     initrd /intel-ucode.img
     initrd /initramfs-linux.img
     # i915.preliminary_hw_support=1 Remove ACPI error at boot time, no longer required after latest BIOS update (march 2017c)
-    options cryptdevice=UUID=$uuid_boot:volume root=UUID=$uuid_root resume=UUID=$uuid_swap quiet rw pcie_port_pm=off rcutree.rcu_idle_gp_delay=1 intel_idle.max_cstate=1 acpi_osi=! acpi_osi="Windows 2009" acpi_backlight=native i8042.noloop i8042.nomux i8042.nopnp i8042.reset
+    config cryptdevice=UUID=$uuid_boot:volume root=UUID=$uuid_root resume=UUID=$uuid_swap quiet rw pcie_port_pm=off rcutree.rcu_idle_gp_delay=1 intel_idle.max_cstate=1 acpi_osi=! acpi_osi="Windows 2009" acpi_backlight=native i8042.noloop i8042.nomux i8042.nopnp i8042.reset
     CONF
     """
     code_skipped: 3
-  for username, user of options.users
+  for username, user of config.users
     @system.user user,
       no_home_ownership: true
       arch_chroot: true
@@ -199,11 +199,11 @@ module.exports = header: "System", handler: ({options}) ->
     # Note, current implementation create a passwordless sudoer because
     # otherwise it is impossible to run `system` over ssh as it does not prompt
     # for a password
-    @system.execute
-      header: 'User Sudoer'
+    @execute
+      metadata: header: 'User Sudoer'
       arch_chroot: true
       rootdir: '/mnt'
-      cmd: """
+      command: """
       sudoer=#{if user.sudoer then '1' else ''}
       ([ -z $sudoer ] || cat /etc/sudoers | grep "#{username}") && exit 3
       echo "#{username} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
@@ -212,7 +212,7 @@ module.exports = header: "System", handler: ({options}) ->
   # Graphic support
   (
     @service.install
-      header: "Package #{pck}"
+      metadata: header: "Package #{pck}"
       arch_chroot: true
       rootdir: '/mnt'
     , pck
@@ -221,18 +221,18 @@ module.exports = header: "System", handler: ({options}) ->
     "primus", "lib32-primus", "lib32-virtualgl", "lib32-nvidia-utils"
   ]
   @service.install
-    header: 'Package mesa'
+    metadata: header: 'Package mesa'
     arch_chroot: true
     rootdir: '/mnt'
     name: 'lib32-mesa'
   @service.install
-    header: 'Package vulkan-intel'
+    metadata: header: 'Package vulkan-intel'
     arch_chroot: true
     rootdir: '/mnt'
     name: 'vulkan-intel'
   (
     @service.install
-      header: "Package #{pck}"
+      metadata: header: "Package #{pck}"
       arch_chroot: true
       rootdir: '/mnt'
     , pck
@@ -244,8 +244,8 @@ module.exports = header: "System", handler: ({options}) ->
     "networkmanager", "rhythmbox", "xorg-server", "xorg-xinit", "xorg-apps",
     "xorg-twm", "xorg-xclock", "xterm"
   ]
-  for username, user of options.users
-    @call header: 'xinit', ->
+  for username, user of config.users
+    @call metadata: header: 'xinit', ->
       @file
         target: "/mnt/#{user.home}/.xinitrc"
         content: """
@@ -253,20 +253,20 @@ module.exports = header: "System", handler: ({options}) ->
         xrandr --auto
         """
         eof: true
-      @system.execute
+      @execute
         if: -> @status -1
         arch_chroot: true
         rootdir: '/mnt'
-        cmd: """
+        command: """
         chown #{user.username}:#{user.group} #{user.home}/.xinitrc
         chmod 644 #{user.home}/.xinitrc
         """
         code_skipped: 3
-  @system.execute
-    header: "Video Card"
+  @execute
+    metadata: header: "Video Card"
     arch_chroot: true
     rootdir: '/mnt'
-    cmd: 'lspci | grep -E "VGA|3D"'
+    command: 'lspci | grep -E "VGA|3D"'
   @file
     target: '/mnt/etc/X11/xorg.conf'
     content: """
@@ -352,51 +352,51 @@ module.exports = header: "System", handler: ({options}) ->
     # disable Wayland when using the proprietary nvidia driver
     #DRIVER=="nvidia", RUN+="/usr/lib/gdm-disable-wayland"
     # disable Wayland if modesetting is disabled
-    #IMPORT{cmdline}="nomodeset", RUN+="/usr/lib/gdm-disable-wayland"
+    #IMPORT{commandline}="nomodeset", RUN+="/usr/lib/gdm-disable-wayland"
     """
   @service.startup
-    header: 'Startup gdm'
+    metadata: header: 'Startup gdm'
     arch_chroot: true
     rootdir: '/mnt'
     name: 'gdm'
   @service.startup
-    header: 'Startup NetworkManager'
+    metadata: header: 'Startup NetworkManager'
     arch_chroot: true
     rootdir: '/mnt'
     name: 'NetworkManager'
   # TODO: configure this and bbswitch
   @call
-    header: 'Bumblebee'
-    if: options.install_bumblebee
+    metadata: header: 'Bumblebee'
+    if: config.install_bumblebee
   , ->
     @service.install
-      header: "Package"
+      metadata: header: "Package"
       arch_chroot: true
       rootdir: '/mnt'
       name: 'bumblebee'
     @file
-      header: 'Bumblebee Configuration'
+      metadata: header: 'Bumblebee Configuration'
       target: "/mnt/etc/bumblebee/bumblebee.conf"
       match: /^Bridge=.*$/m
       replace: "Bridge=primus"
       backup: true
-    for username, user of options.users
-      @system.execute
-        header: "Bumblebee for #{username}"
+    for username, user of config.users
+      @execute
+        metadata: header: "Bumblebee for #{username}"
         arch_chroot: true
         rootdir: '/mnt'
-        cmd: """
+        command: """
         id #{username} | grep \\(bumblebee\\) && exit 3
         gpasswd -a #{username} bumblebee
         """
         code_skipped: 3
     @service.startup
-      header: 'Startup bumblebeed'
+      metadata: header: 'Startup bumblebeed'
       arch_chroot: true
       rootdir: '/mnt'
       name: 'bumblebeed'
   @service
-    header: 'SSH'
+    metadata: header: 'SSH'
     name: 'openssh'
     srv_name: 'sshd'
     startup: true

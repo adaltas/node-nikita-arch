@@ -2,42 +2,42 @@
 ###
 
 * `locale` (string)
-  System locale, default to the first locale in "locales" options.
+  System locale, default to the first locale in "locales" config.
 * `locales` (string)
   List of supported locales, required.
 
 ###
 
-module.exports = ({options}) ->
-  ssh = @ssh options.ssh
+module.exports = ({config}) ->
+  ssh = @ssh config.ssh
   home = if ssh then "/home/#{ssh.config.username}" else '~'
   @call
-    header: 'Gnome'
-    if: options.gnome
+    metadata: header: 'Gnome'
+    if: config.gnome
   , ->
     @service.install 'gnome-session-properties'
     @service.install 'dconf-editor'
     @service.install 'arc-gtk-theme'
     @tools.dconf
-      header: 'Gnome Session Save'
+      metadata: header: 'Gnome Session Save'
       properties: '/org/gnome/desktop/datetime/automatic-timezone': 'true'
     @tools.dconf
-      header: 'Gnome Session Save'
+      metadata: header: 'Gnome Session Save'
       properties: '/org/gnome/gnome-session/auto-save-session': 'false'
     @tools.dconf
-      header: 'Gnome Session LANG'
+      metadata: header: 'Gnome Session LANG'
       properties: '/org/gnome/desktop/input-sources/sources': '[(\'xkb\', \'us\'), (\'xkb\', \'fr\')]'
     @tools.dconf
-      header: 'Gnome Session Invert Alt/CTL'
-      properties: '/org/gnome/desktop/input-sources/xkb-options': '[\'ctrl:swap_lalt_lctl\']'
+      metadata: header: 'Gnome Session Invert Alt/CTL'
+      properties: '/org/gnome/desktop/input-sources/xkb-config': '[\'ctrl:swap_lalt_lctl\']'
     @tools.dconf
-      header: 'Gnome Session TouchPad'
+      metadata: header: 'Gnome Session TouchPad'
       properties: '/org/gnome/desktop/peripherals/touchpad/click-method': '\'fingers\''
     @tools.dconf
-      header: 'Gnome Terminal Menu'
+      metadata: header: 'Gnome Terminal Menu'
       properties: '/org/gnome/terminal/legacy/default-show-menubar': 'false'
     @tools.dconf
-      header: 'Gnome Terminal KeyBinding'
+      metadata: header: 'Gnome Terminal KeyBinding'
       properties:
         '/org/gnome/terminal/legacy/keybindings/close-tab': '\'<Primary>w\''
         '/org/gnome/terminal/legacy/keybindings/close-window': '\'<Primary>q\''
@@ -50,7 +50,7 @@ module.exports = ({options}) ->
         '/org/gnome/terminal/legacy/keybindings/reset-and-clear': '\'<Primary>k\''
     # Note, could not find the property for "> settings > Date & Time > Automatic Date & Time"
     @tools.dconf
-      header: 'Automatic update timezone'
+      metadata: header: 'Automatic update timezone'
       properties: '/org/gnome/desktop/datetime/automatic-timezone': '\'true\''
     @service.install 'networkmanager-openvpn'
     @service.install 'chrome-gnome-shell-git'
@@ -59,29 +59,29 @@ module.exports = ({options}) ->
     @service.install 'gnome-shell-extension-refresh-wifi-git'
     @service.install 'gnome-system-monitor'
   @call
-    header: 'Virtualization'
-    if: options.virtualization
+    metadata: header: 'Virtualization'
+    if: config.virtualization
   , ->
     # ebtables dnsmasq firewalld vde2
     @service.install
-      header: 'qemu'
+      metadata: header: 'qemu'
       name: ' qemu'
     @service.install
-      header: 'libvirt'
+      metadata: header: 'libvirt'
       name: 'libvirt'
       started: true
       action: 'start'
     @service.install
-      header: 'libvirt manager'
+      metadata: header: 'libvirt manager'
       name: ' virt-manager'
   @call
-    header: 'NPM Global'
-    if: options.npm_global
+    metadata: header: 'NPM Global'
+    if: config.npm_global
   , ->
     @system.mkdir
       target: "#{home}/.npm-global"
-    @system.execute
-      cmd: """
+    @execute
+      command: """
       [[ `npm config get prefix` == "~/.npm-global" ]] && exit 42
       npm config set prefix ~/.npm-global
       """
@@ -97,22 +97,22 @@ module.exports = ({options}) ->
       eof: true
       backup: true
   @call
-    header: 'Nodejs'
-    if: options.nodejs
+    metadata: header: 'Nodejs'
+    if: config.nodejs
   , ->
     @service.install
-      header: 'Package nodejs'
+      metadata: header: 'Package nodejs'
       name: 'nodejs'
     @service.install
-      header: 'Package npm'
+      metadata: header: 'Package npm'
       name: 'npm'
-    @system.npm
-      header: 'Global Packages'
+    @tools.npm
+      metadata: header: 'Global Packages'
       name: ['n', 'coffeescript', 'mocha']
       global: true
       sudo: true
     @file
-      header: "N"
+      metadata: header: "N"
       target: "#{home}/.profile"
       from: '#START N'
       to: '#END N'
@@ -124,14 +124,14 @@ module.exports = ({options}) ->
       eof: true
       backup: true
   @call
-    header: 'Atom'
-    if: options.atom
+    metadata: header: 'Atom'
+    if: config.atom
   , ->
     @service.install
-      header: 'Package'
+      metadata: header: 'Package'
       name: 'atom'
-    @system.apm
-      header: 'APM Packages'
+    @tools.apm
+      metadata: header: 'APM Packages'
       name: [
         'stylus', 'sublime-style-column-selection', 'atom-monokai-dark',
         'atom-typescript', 'chester-atom-syntax', 'color-picker', 'git-plus',
@@ -143,12 +143,12 @@ module.exports = ({options}) ->
         'tail', 'teletype', 'linter-coffeelint']
       upgrade: true
     @file.cson
-      header: 'Configuration'
+      metadata: header: 'Configuration'
       target: "#{home}/.atom/config.cson"
-      content: options.atom_config
+      content: config.atom_config
       merge: true
     @file.cson
-      header: 'Keymap'
+      metadata: header: 'Keymap'
       target: "#{home}/.atom/keymap.cson"
       content:
         'atom-workspace':
@@ -161,25 +161,25 @@ module.exports = ({options}) ->
           "ctrl-shift-G": "find-and-replace:find-previous"
       merge: true
   @call
-    header: 'Programming'
-    if: options.programming
+    metadata: header: 'Programming'
+    if: config.programming
   , ->
     @service.install
-      header: 'Neovim'
+      metadata: header: 'Neovim'
       name: 'python-neovim'
     @service.install
-      header: 'Dart'
+      metadata: header: 'Dart'
       name: 'dart'
     @service.install
-      header: 'GIT Crypt'
+      metadata: header: 'GIT Crypt'
       name: 'git-crypt'
     @call
-      header: 'SublimeText'
+      metadata: header: 'SublimeText'
     , ->
-      @system.execute
-        header: 'GPG keys'
+      @execute
+        metadata: header: 'GPG keys'
         sudo: true
-        cmd: """
+        command: """
         curl -O https://download.sublimetext.com/sublimehq-pub.gpg
         pacman-key --add sublimehq-pub.gpg
         pacman-key --lsign-key 8A8F901A
@@ -188,23 +188,23 @@ module.exports = ({options}) ->
         trap: true
         shy: true # todo: add status discovery
       @file.types.pacman_conf
-        header: 'Stable channel'
+        metadata: header: 'Stable channel'
         sudo: true
         # target: '/etc/pacman.conf'
         content: 'sublime-text': 'Server': 'https://download.sublimetext.com/arch/stable/x86_64'
         merge: true
         backup: true
-      @system.execute
+      @execute
         if: -> @status -1
-        cmd: 'pacman --noconfirm -Syu sublime-text'
+        command: 'pacman --noconfirm -Syu sublime-text'
         sudo: true
       @service.install
-        header: 'Package'
+        metadata: header: 'Package'
         name: 'sublime-text'
         pacman_flags: ['u', 'y']
-    # @system.execute
-    #   header: 'K8S kubectl'
-    #   cmd: """
+    # @execute
+    #   metadata: header: 'K8S kubectl'
+    #   command: """
     #   version=`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`
     #   if [ -f /usr/local/bin/kubectl ]; then
     #     current_version=`kubectl version --client -o=json | grep gitVersion | sed 's/.*"\\(.*\\)".*/\\1/'`
@@ -226,8 +226,8 @@ module.exports = ({options}) ->
     #     source <(kubectl completion zsh)
     #   fi
     #   """
-    # @system.execute
-    #   cmd: """
+    # @execute
+    #   command: """
     #   version=`curl -s https://raw.githubusercontent.com/kubernetes/minikube/master/Makefile | grep '^ISO_VERSION ' | sed 's/.* \\(.*\\)/\\1/'`
     #   if [ -f /usr/local/bin/minikube ]; then
     #     current_version=`minikube version | sed 's/.* \\(.*\\)/\\1/'`
@@ -239,39 +239,39 @@ module.exports = ({options}) ->
     #   """
     #   trap: true
     #   code_skipped: 3
-    # @call header: 'K8S Helm', ->
+    # @call metadata: header: 'K8S Helm', ->
     #   @service.install
     #     name: 'kubernetes-helm'
-    #   @system.execute
+    #   @execute
     #     if: -> @status -1
-    #     cmd: 'helm init'
-    #   @system.execute
-    #     cmd: 'helm repo update'
+    #     command: 'helm init'
+    #   @execute
+    #     command: 'helm repo update'
   @call
-    header: 'Docker'
-    if: options.docker
+    metadata: header: 'Docker'
+    if: config.docker
   , ->
     @service
-      header: 'Package docker'
+      metadata: header: 'Package docker'
       name: 'docker'
       action: 'start'
       startup: true
-      sudo: true
+      # sudo: true
     @service.install
-      header: 'Package docker-compose'
+      metadata: header: 'Package docker-compose'
       name: 'docker-compose'
     # Installation is based on  the official documentation
     # [Deploying a registry server](https://docs.docker.com/registry/deploying/)
-    # @system.execute
-    #   cmd: """
+    # @execute
+    #   command: """
     #   docker run -d -p 5000:5000 --restart=always --name registry \
     #     -v `pwd`/data:/var/lib/registry \
     #     registry:2
     #   """
     #   code_skipped: 3
-    # @system.execute (
-    #   header: "Push #{image}"
-    #   cmd: """
+    # @execute (
+    #   metadata: header: "Push #{image}"
+    #   command: """
     #   # Get any image from the hub and tag it to point to your registry
     #   docker pull #{image}
     #   docker tag #{image} localhost:5000/#{image}
@@ -280,8 +280,8 @@ module.exports = ({options}) ->
     #   """
     # ) for image in ['centos']
   @call
-    header: 'VirtualBox'
-    if: options.virtualbox
+    metadata: header: 'VirtualBox'
+    if: config.virtualbox
   , ->
     @service.install 'linux-headers'
     # Note 02/2020: The `virtualbox` package ask to choose between;
@@ -306,5 +306,5 @@ module.exports = ({options}) ->
     @system.mod 'vboxnetflt', sudo: true # Optional, needed to launch a virtual machine using that network interface
     @system.mod 'vboxpci', sudo: true, disabled: true # Optional, needed when your virtual machine needs to pass through a PCI device on your host.
   @service
-    header: 'Vagrant'
+    metadata: header: 'Vagrant'
     name: 'vagrant'
