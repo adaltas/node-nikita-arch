@@ -2,7 +2,6 @@
 module.exports =
   metadata: header: "Disk"
   handler: ({config}) ->
-    return
     # Format the disk into partitions
     config.format ?= true
     # Ensure the disk is erased from any previous data
