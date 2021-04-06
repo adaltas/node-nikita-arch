@@ -81,4 +81,4 @@ module.exports = ->
           productivity: true
           font: true
           office: true
-    fs.writeFileSync target, yaml.safeDump config
+    fs.writeFileSync target, yaml.dump config

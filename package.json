@@ -47,12 +47,11 @@
   ],
   "dependencies": {
     "coffeescript": "~2.5.1",
-    "js-yaml": "^3.13.1",
-    "mixme": "^0.3.5",
-    "nikita": "^0.9.5",
-    "prompts": "^2.3.1",
-    "season": "^6.0.2",
-    "ssh2-fs": "~0.3.8"
+    "js-yaml": "^4.0.0",
+    "mixme": "^0.5.0",
+    "nikita": "^1.0.0-alpha.1",
+    "prompts": "^2.4.0",
+    "season": "^6.0.2"
   },
   "devDependencies": {},
   "main": "./lib",

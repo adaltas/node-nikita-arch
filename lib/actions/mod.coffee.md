@@ -17,8 +17,8 @@ require('nikita').system.mod({
     module.exports = ({options}) ->
       options.name = options.argument if options.argument?
       throw Error "Required Option: name" unless options.name
-      @system.execute
-        cmd: """
+      @execute
+        command: """
         lsmod | grep #{options.name} && exit 3
         sudo modprobe #{options.name}
         """

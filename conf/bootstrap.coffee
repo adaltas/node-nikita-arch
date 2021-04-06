@@ -1,11 +1,11 @@
 
 module.exports =
-  '@nikitajs/core/lib/log/cli':
+  '@nikitajs/core/lib/actions/log/cli':
     pad: host: 20, header: 60
-  '@nikitajs/core/lib/log/md':
+  '@nikitajs/core/lib/actions/log/md':
     basedir: "#{__dirname}/../log"
-  '@nikitajs/core/lib/ssh/open':
-    disabled: true
+  '@nikitajs/core/lib/actions/ssh/open':
+    $disabled: true
     host: 'XXX.XXX.XXX.XXX'
     port: 22
     password: 'XXXXXX'
@@ -28,4 +28,4 @@ module.exports =
       device: '/dev/nvme0n1p2'
     timezone: 'Europe/Paris'
     users: {}
-  '@nikitajs/core/lib/ssh/close': {}
+  '@nikitajs/core/lib/actions/ssh/close': {}

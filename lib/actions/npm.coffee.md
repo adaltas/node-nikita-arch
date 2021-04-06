@@ -21,8 +21,8 @@ Install Node.js packages with NPM.
       outdated = []
       installed = []
       # Note, cant see a difference between update and upgrade after printing help
-      @system.execute
-        cmd: "npm list --outdated --json #{global}"
+      @execute
+        command: "npm list --outdated --json #{global}"
         code: [0, 1]
         stdout_log: false
         shy: true
@@ -30,14 +30,14 @@ Install Node.js packages with NPM.
         throw err if err
         pkgs = JSON.parse stdout
         outdated = Object.keys pkgs.dependencies
-      @system.execute
-        if: -> options.upgrade and outdated.length
-        cmd: "npm update"
+      @execute
+        $if: -> options.upgrade and outdated.length
+        command: "npm update"
       , (err) ->
         throw err if err
         outdated = []
-      @system.execute
-        cmd: "npm list --installed --json #{global}"
+      @execute
+        command: "npm list --installed --json #{global}"
         code: [0, 1]
         stdout_log: false
         shy: true
@@ -49,15 +49,15 @@ Install Node.js packages with NPM.
       @call ->
         upgrade = options.name.filter (pkg) -> pkg in outdated
         install = options.name.filter (pkg) -> pkg not in installed
-        @system.execute
-          if: upgrade.length
-          cmd: "npm update #{global} #{upgrade.join ' '}"
-          sudo: options.sudo
+        @execute
+          $if: upgrade.length
+          command: "npm update #{global} #{upgrade.join ' '}"
+          $sudo: options.sudo
         , (err) =>
           @log message: "NPM Updated Packages: #{upgrade.join ', '}"
-        @system.execute
-          if: install.length
-          cmd: "npm install #{global} #{install.join ' '}"
-          sudo: options.sudo
+        @execute
+          $if: install.length
+          command: "npm install #{global} #{install.join ' '}"
+          $sudo: options.sudo
         , (err) =>
           @log message: "NPM Installed Packages: #{install.join ', '}"

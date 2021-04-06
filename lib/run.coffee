@@ -13,11 +13,11 @@ nikita.registry.register ['system', 'npm'], require './actions/npm'
 
 module.exports = ->
   target = path.resolve __dirname, '../conf/user.yaml'
-  config = yaml.safeLoad fs.readFileSync target
+  user_config = yaml.load fs.readFileSync target
   # Merge user and default configurations
   action = process.argv[2]
-  config = merge require(path.join "#{__dirname}/../conf", action), config[action]
+  base_config = require(path.join "#{__dirname}/../conf", action)
+  config = merge base_config, user_config[action]
   # Execute Nikita
   n = nikita()
-  n.call k, v for k, v of config
-  n.promise()
+  await n.call k, v for k, v of config
