@@ -1,8 +1,8 @@
 
 module.exports =
-  '@nikitajs/core/lib/actions/log/cli':
+  '@nikitajs/log/lib/cli':
     pad: host: 20, header: 60
-  '@nikitajs/core/lib/actions/log/md':
+  '@nikitajs/log/lib/md':
     basedir: "#{__dirname}/../log"
   '@nikitajs/core/lib/actions/ssh/open':
     $disabled: true
