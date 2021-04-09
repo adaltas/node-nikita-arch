@@ -89,7 +89,9 @@ From your host machine
 
 ## Login
 
-Black screen at start-up: `ctrl + alt + f4` or `ctrl + alt + f5`  to access the terminal
+If black screen at start-up: `ctrl + alt + f4` or `ctrl + alt + f5`  to access the terminal
+
+This issue seems to have been fixed after an update on the nvidia package on 2021-04-09 00:51 UTC. The login screen is displayed correctly on first launch and subsequent reboots. 
 
 ## Complementary documentations
 
