@@ -87,14 +87,12 @@ From your host machine
 1. Edit the configuration "./conf/user.yaml" and add your SSH connection settings
 2. Enable sudo passwordless eg `sudo su -; echo '<username> ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers`
 
-## Login
 
-Black screen at start-up: `ctrl + alt + f4` or `ctrl + alt + f5`  to access the terminal
 
 ## Complementary documentations
 
 * [Troubleshooting](./doc/troubleshooting.md)
 * [Dell Precision 5520 specifics](./doc/dell.md)
-* [Nvidia issue](./doc/post_mortem/post_mortem_analysis_nvidia_issue.md)
-* [GDM service autostart](./doc/gdm_autostart_issue.md)
+* [GDM service autostart (fixed)](./doc/gdm_autostart_issue.md)
 * [Virtualbox](./doc/virtualbox.md)
+
