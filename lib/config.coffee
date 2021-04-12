@@ -45,8 +45,8 @@ module.exports = ->
     ]
     config =
       bootstrap:
-        '@nikitajs/core/lib/ssh/open':
-          disabled: response.connection is 'local'
+        '@nikitajs/core/lib/actions/ssh/open':
+          $disabled: response.connection is 'local'
           host: response.ssh_ip or null
           password: response.ssh_password or null
           port: response.ssh_port or null
@@ -62,8 +62,8 @@ module.exports = ->
               sudoer: true
           install_bumblebee: false
       system:
-        '@nikitajs/core/lib/ssh/open':
-          disabled: response.connection is 'local'
+        '@nikitajs/core/lib/actions/ssh/open':
+          $disabled: response.connection is 'local'
           host: response.ssh_ip or null
           username: response.user_username
           password: response.user_password or null
