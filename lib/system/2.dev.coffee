@@ -211,11 +211,13 @@ module.exports =
         # Install the package (from official Sublime documentation)
         # -u, --sysupgrade     upgrade installed packages
         # -y, --refresh        download fresh package databases from the server
-        # TODO: might be worth to try without those flag
+        # Running `yay -Suy` is required or error is thrown when running Yay:
+        # "database file for 'sublime-text' does not exist (use '-Syu' to download)"
         await @service.install
           $header: 'Package'
           $if: $status
           name: 'sublime-text'
+          yay_flags: ['u', 'y']
           pacman_flags: ['u', 'y']
       # await @execute
       #   $header: 'K8S kubectl'
