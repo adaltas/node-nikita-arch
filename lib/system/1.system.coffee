@@ -21,7 +21,7 @@ module.exports =
   metadata: header: 'System'
   handler: ({config, ssh}) ->
     throw Error "Required option: locales" unless config.locales
-    home = if ssh then "/home/#{ssh.config.username}" else '~'
+    home = if ssh then "/home/#{ssh.config.username}" else os.homedir()
     config.locale ?= config.locales[0]
     await @call
       $header: 'Maintenance'
@@ -250,4 +250,5 @@ module.exports =
 
 ## Dependencies
 
+os = require 'os'
 {merge} = require 'mixme'

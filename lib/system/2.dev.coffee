@@ -11,7 +11,7 @@
 module.exports =
   metadata: header: 'Development'
   handler: ({config, ssh}) ->
-    home = if ssh then "/home/#{ssh.config.username}" else '~'
+    home = if ssh then "/home/#{ssh.config.username}" else os.homedir()
     await @call
       $header: 'Gnome'
       $if: config.gnome
@@ -323,3 +323,7 @@ module.exports =
     await @service
       $header: 'Vagrant'
       name: 'vagrant'
+
+# Dependencies
+
+os = require 'os'
