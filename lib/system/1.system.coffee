@@ -111,25 +111,21 @@ module.exports =
       $sudo: true
       # Note, yay requires git soon after
       name: 'git'
+    # No need to install Yay with sudo
     await @execute
       $header: 'YAY'
-      cwd: '/tmp'
+      code_skipped: 42
       command: """
       [ -f /usr/bin/yay ] && exit 42
       [ -d /tmp/yay_build_git ] && rm -rf /tmp/yay_build_git
       git clone https://aur.archlinux.org/yay.git /tmp/yay_build_git
       cd /tmp/yay_build_git
-      makepkg --noconfirm -s
-      for file in `cd pkg/yay/usr && find -type f`; do
-        sudo cp -p pkg/yay/usr/$file /usr/$file;
-      done
+      makepkg --noconfirm -si
       cd ..
       rm -rf /tmp/yay_build_git
       """
-      code_skipped: 42
-      # Virtio modules are not loaded, can't find a solution for now
-      # @execute
-      #   command: "lsmod | grep virtio"
+      cwd: '/tmp'
+      trap: true
     await @call $header: 'Environnment', ->
       await @service.install
         $header: 'zsh'
